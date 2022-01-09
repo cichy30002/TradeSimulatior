@@ -64,7 +64,7 @@ public class ControlPanel {
 
     private Boolean SpecificMarketExist(String name,  Market market)
     {
-        return market.getName() == name;
+        return Objects.equals(market.getName(), name);
     }
 
     public Boolean CurrencyExist(String name)
@@ -101,6 +101,14 @@ public class ControlPanel {
         this.commodityMarkets.add(commodityMarket);
     }
 
+    public void addCurrency(Currency currency){
+        this.currencies.add(currency);
+    }
+
+    public void addCommodity(Commodity commodity){
+        this.commodities.add(commodity);
+    }
+
     public void removeStockMarket(StockMarket stockMarket){
         this.stockMarkets.remove(stockMarket);
     }
@@ -111,6 +119,26 @@ public class ControlPanel {
 
     public void removeCommodityMarket(CommodityMarket commodityMarket){
         this.commodityMarkets.remove(commodityMarket);
+    }
+
+    public void removeCurrency(Currency currency){
+        this.currencies.remove(currency);
+    }
+
+    public void removeCommodity(Commodity commodity){
+        this.commodities.remove(commodity);
+    }
+
+    public Currency getCurrency(String name)
+    {
+        for(Currency currency : this.currencies)
+        {
+            if(Objects.equals(currency.getName(), name))
+            {
+                return currency;
+            }
+        }
+        return null;
     }
     public void forceBuyOut(){}
 }

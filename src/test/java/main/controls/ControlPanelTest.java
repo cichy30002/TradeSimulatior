@@ -1,6 +1,8 @@
 package main.controls;
 
 import app.controls.ControlPanel;
+import app.exceptions.WrongMarketParamException;
+import app.exceptions.WrongValuableParamException;
 import app.markets.CommodityMarket;
 import app.markets.CurrencyMarket;
 import app.markets.StockMarket;
@@ -46,16 +48,33 @@ public class ControlPanelTest {
     }
     void AddFewMarkets()
     {
-        firstStockMarket = new StockMarket("polish Stock", 1.0f, "zloty", new ArrayList<Share>(), "Poland", "Warsaw", "idk", new ArrayList<Index>());
-        secondStockMarket = new StockMarket("polish2 Stock", 1.0f, "zloty", new ArrayList<Share>(), "Poland", "Warsaw", "idk", new ArrayList<Index>());
-        thirdStockMarket = new StockMarket("russian Stock", 5.0f, "ruble", new ArrayList<Share>(), "Russia", "Moscow", "idk", new ArrayList<Index>());
+        ControlPanel.getInstance().removeCurrency(ControlPanel.getInstance().getCurrency("zloty"));
+        ControlPanel.getInstance().removeCurrency(ControlPanel.getInstance().getCurrency("ruble"));
+        try {
+            if(!ControlPanel.getInstance().CurrencyExist("zloty")) {
+                ControlPanel.getInstance().addCurrency(new Currency("zloty", 1, new ArrayList<>()));
+            }
+            if(!ControlPanel.getInstance().CurrencyExist("ruble")) {
+                ControlPanel.getInstance().addCurrency(new Currency("ruble", 1, new ArrayList<>()));
+            }
+        }catch(WrongValuableParamException e)
+        {
+            System.out.println(e.getMessage());
+        }
+        try {
+            firstStockMarket = new StockMarket("polish Stock", 1.0f, "zloty", new ArrayList<>(), "Poland", "Warsaw", "idk", new ArrayList<>());
+            secondStockMarket = new StockMarket("polish2 Stock", 1.0f, "zloty", new ArrayList<>(), "Poland", "Warsaw", "idk", new ArrayList<>());
+            thirdStockMarket = new StockMarket("russian Stock", 5.0f, "ruble", new ArrayList<>(), "Russia", "Moscow", "idk", new ArrayList<>());
 
-        firstCurrencyMarket = new CurrencyMarket("abc currency market", 1.0f, "zloty", new ArrayList<Currency>(), new ArrayList<Integer>());
-        secondCurrencyMarket = new CurrencyMarket("123 currency market", 1.2f, "ruble", new ArrayList<Currency>(), new ArrayList<Integer>());
+            firstCurrencyMarket = new CurrencyMarket("abc currency market", 1.0f, "zloty", new ArrayList<>(), new ArrayList<>());
+            secondCurrencyMarket = new CurrencyMarket("123 currency market", 1.2f, "ruble", new ArrayList<>(), new ArrayList<>());
 
-        firstCommodityMarket = new CommodityMarket("abc commodity market", 1.0f, "zloty", new ArrayList<Commodity>(), new ArrayList<Integer>());
-        secondCommodityMarket = new CommodityMarket("123 commodity market", 1.0f, "zloty", new ArrayList<Commodity>(), new ArrayList<Integer>());
-
+            firstCommodityMarket = new CommodityMarket("abc commodity market", 1.0f, "zloty", new ArrayList<>(), new ArrayList<>());
+            secondCommodityMarket = new CommodityMarket("123 commodity market", 1.0f, "zloty", new ArrayList<>(), new ArrayList<>());
+        }catch (WrongMarketParamException e)
+        {
+            System.out.println(e.getMessage());
+        }
         ControlPanel.getInstance().addStockMarket(firstStockMarket);
         ControlPanel.getInstance().addStockMarket(secondStockMarket);
         ControlPanel.getInstance().addStockMarket(thirdStockMarket);

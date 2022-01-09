@@ -1,5 +1,7 @@
 package app.markets;
 
+import app.controls.ControlPanel;
+import app.exceptions.WrongMarketParamException;
 import app.valuables.Index;
 import app.valuables.Share;
 
@@ -13,13 +15,14 @@ public class StockMarket extends Market{
     private List<Index> listOfIndexes;
     private List<Share> collectionOfProducts;
 
-    public StockMarket(String name, float marginFee, String currency, List<Share> collectionOfProducts, String country, String city, String address, List<Index> listOfIndexes) {
+    public StockMarket(String name, float marginFee, String currency, List<Share> collectionOfProducts, String country, String city, String address, List<Index> listOfIndexes) throws WrongMarketParamException {
         super(name, marginFee, currency);
         this.country = country;
         this.city = city;
         this.address = address;
         this.listOfIndexes = listOfIndexes;
         this.collectionOfProducts = collectionOfProducts;
+        ControlPanel.getInstance().addStockMarket(this);
     }
 
 

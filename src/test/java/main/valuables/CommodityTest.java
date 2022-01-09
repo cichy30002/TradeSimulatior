@@ -1,6 +1,6 @@
 package main.valuables;
 
-import app.exceptions.wrongValuableParamException;
+import app.exceptions.WrongValuableParamException;
 import app.valuables.Commodity;
 import org.junit.jupiter.api.Test;
 
@@ -21,19 +21,19 @@ public class CommodityTest {
     @Test
     void constructorExceptionsTest()
     {
-        assertThrows(wrongValuableParamException.class, () -> new Commodity("", 100, "ounce", 80, 120));
-        assertThrows(wrongValuableParamException.class, () -> new Commodity("gold", 0, "ounce", 80, 120));
-        assertThrows(wrongValuableParamException.class, () -> new Commodity("gold", -100, "ounce", 80, 120));
-        assertThrows(wrongValuableParamException.class, () -> new Commodity("gold", 100, "", 80, 120));
-        assertThrows(wrongValuableParamException.class, () -> new Commodity("gold", 100, "ounce", -80, 120));
-        assertThrows(wrongValuableParamException.class, () -> new Commodity("gold", 100, "ounce", -80, 0));
-        assertThrows(wrongValuableParamException.class, () -> new Commodity("gold", 100, "ounce", 80, 10));
+        assertThrows(WrongValuableParamException.class, () -> new Commodity("", 100, "ounce", 80, 120));
+        assertThrows(WrongValuableParamException.class, () -> new Commodity("gold", 0, "ounce", 80, 120));
+        assertThrows(WrongValuableParamException.class, () -> new Commodity("gold", -100, "ounce", 80, 120));
+        assertThrows(WrongValuableParamException.class, () -> new Commodity("gold", 100, "", 80, 120));
+        assertThrows(WrongValuableParamException.class, () -> new Commodity("gold", 100, "ounce", -80, 120));
+        assertThrows(WrongValuableParamException.class, () -> new Commodity("gold", 100, "ounce", -80, 0));
+        assertThrows(WrongValuableParamException.class, () -> new Commodity("gold", 100, "ounce", 80, 10));
     }
     void setUpValid()
     {
         try {
             commodity = new Commodity("gold", 100, "ounce", 80, 120);
-        }catch(wrongValuableParamException e)
+        }catch(WrongValuableParamException e)
         {
             System.out.println(e.getMessage());
         }

@@ -1,6 +1,6 @@
 package app.valuables;
 
-import app.exceptions.wrongValuableParamException;
+import app.exceptions.WrongValuableParamException;
 import app.world.Company;
 
 import java.util.List;
@@ -8,11 +8,11 @@ import java.util.List;
 public class Index extends Valuable{
     private List<Company> listOfCompanies;
 
-    public Index(String name, Integer price, List<Company> listOfCompanies)  throws wrongValuableParamException {
+    public Index(String name, Integer price, List<Company> listOfCompanies)  throws WrongValuableParamException {
         super(name, price);
         if(listOfCompanies.size() == 0)
         {
-            throw new wrongValuableParamException("Index consist of no companies!");
+            throw new WrongValuableParamException("Index consist of no companies!");
         }
         this.listOfCompanies = listOfCompanies;
     }

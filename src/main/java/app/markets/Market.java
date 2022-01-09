@@ -1,9 +1,9 @@
 package app.markets;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
+import app.controls.ControlPanel;
+import app.exceptions.WrongMarketParamException;
 import app.valuables.Valuable;
 
 public abstract class Market {
@@ -12,11 +12,17 @@ public abstract class Market {
     private final String currency;
     private Collection<Valuable> collectionOfProducts;
 
-    protected Market(String name, float marginFee, String currency) {
-        //TODO check if name is unique
+    protected Market(String name, float marginFee, String currency) throws WrongMarketParamException {
+        if(ControlPanel.getInstance().MarketExist(name))
+        {
+            throw new WrongMarketParamException("That market already exist!");
+        }
         this.name = name;
         this.marginFee = marginFee;
-        //TODO check if currency exist
+        if(!ControlPanel.getInstance().CurrencyExist(currency))
+        {
+            throw new WrongMarketParamException("Currency " + currency + " does not exist!");
+        }
         this.currency = currency;
     }
 

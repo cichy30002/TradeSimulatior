@@ -1,6 +1,6 @@
 package main.valuables;
 
-import app.exceptions.wrongValuableParamException;
+import app.exceptions.WrongValuableParamException;
 import app.world.Company;
 import app.valuables.Share;
 import org.junit.jupiter.api.Test;
@@ -26,16 +26,16 @@ public class ShareTest {
     {
         ArrayList<Company> validCompanies = new ArrayList<>();
         validCompanies.add(new Company());
-        assertThrows(wrongValuableParamException.class, () -> new Share("", 100,  new Company()));
-        assertThrows(wrongValuableParamException.class, () -> new Share("CD Projekt SA", 0,  new Company()));
-        assertThrows(wrongValuableParamException.class, () -> new Share("CD Projekt SA", -100,  new Company()));
-        assertThrows(wrongValuableParamException.class, () -> new Share("CD Projekt SA", 100,  null));
+        assertThrows(WrongValuableParamException.class, () -> new Share("", 100,  new Company()));
+        assertThrows(WrongValuableParamException.class, () -> new Share("CD Projekt SA", 0,  new Company()));
+        assertThrows(WrongValuableParamException.class, () -> new Share("CD Projekt SA", -100,  new Company()));
+        assertThrows(WrongValuableParamException.class, () -> new Share("CD Projekt SA", 100,  null));
     }
     void setUpValid()
     {
         try {
             share = new Share("CD Projekt SA", 100,  new Company());
-        }catch(wrongValuableParamException e)
+        }catch(WrongValuableParamException e)
         {
             System.out.println(e.getMessage());
         }

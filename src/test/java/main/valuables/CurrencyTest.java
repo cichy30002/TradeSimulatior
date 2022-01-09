@@ -1,6 +1,6 @@
 package main.valuables;
 
-import app.exceptions.wrongValuableParamException;
+import app.exceptions.WrongValuableParamException;
 import app.valuables.Currency;
 import org.junit.jupiter.api.Test;
 
@@ -23,15 +23,15 @@ public class CurrencyTest {
     @Test
     void constructorExceptionsTest()
     {
-        assertThrows(wrongValuableParamException.class, () -> new Currency("", 100, new ArrayList<>()));
-        assertThrows(wrongValuableParamException.class, () -> new Currency("euro", -20, new ArrayList<>()));
-        assertThrows(wrongValuableParamException.class, () -> new Currency("euro", 0, new ArrayList<>()));
+        assertThrows(WrongValuableParamException.class, () -> new Currency("", 100, new ArrayList<>()));
+        assertThrows(WrongValuableParamException.class, () -> new Currency("euro", -20, new ArrayList<>()));
+        assertThrows(WrongValuableParamException.class, () -> new Currency("euro", 0, new ArrayList<>()));
     }
     void setUpValid()
     {
         try {
             currency = new Currency("euro", 100, new ArrayList<>() );
-        }catch(wrongValuableParamException e)
+        }catch(WrongValuableParamException e)
         {
             System.out.println(e.getMessage());
         }

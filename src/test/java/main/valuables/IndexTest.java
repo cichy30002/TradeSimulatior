@@ -1,6 +1,6 @@
 package main.valuables;
 
-import app.exceptions.wrongValuableParamException;
+import app.exceptions.WrongValuableParamException;
 import app.valuables.Index;
 import app.world.Company;
 import org.junit.jupiter.api.Test;
@@ -26,10 +26,10 @@ public class IndexTest {
     {
         ArrayList<Company> validCompanies = new ArrayList<>();
         validCompanies.add(new Company());
-        assertThrows(wrongValuableParamException.class, () -> new Index("", 100, validCompanies));
-        assertThrows(wrongValuableParamException.class, () -> new Index("wig20", -20, validCompanies));
-        assertThrows(wrongValuableParamException.class, () -> new Index("wig20", 0, validCompanies));
-        assertThrows(wrongValuableParamException.class, () -> new Index("wig20", 100, new ArrayList<>()));
+        assertThrows(WrongValuableParamException.class, () -> new Index("", 100, validCompanies));
+        assertThrows(WrongValuableParamException.class, () -> new Index("wig20", -20, validCompanies));
+        assertThrows(WrongValuableParamException.class, () -> new Index("wig20", 0, validCompanies));
+        assertThrows(WrongValuableParamException.class, () -> new Index("wig20", 100, new ArrayList<>()));
     }
     void setUpValid()
     {
@@ -37,7 +37,7 @@ public class IndexTest {
             ArrayList<Company> companies = new ArrayList<>();
             companies.add(new Company());
             index = new Index("wig20", 100,  companies);
-        }catch(wrongValuableParamException e)
+        }catch(WrongValuableParamException e)
         {
             System.out.println(e.getMessage());
         }
