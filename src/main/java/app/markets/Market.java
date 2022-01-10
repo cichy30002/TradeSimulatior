@@ -1,6 +1,8 @@
 package app.markets;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import app.controls.ControlPanel;
 import app.exceptions.WrongMarketParamException;
@@ -41,5 +43,14 @@ public abstract class Market {
 
     public String getCurrency() {
         return currency;
+    }
+    protected List<Integer> parseList(List<String> listOfStrings)
+    {
+        List<Integer> result = new ArrayList<>();
+        for(String s : listOfStrings)
+        {
+            result.add(Integer.parseInt(s));
+        }
+        return result;
     }
 }

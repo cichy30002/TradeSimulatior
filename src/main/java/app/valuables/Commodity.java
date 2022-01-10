@@ -1,5 +1,6 @@
 package app.valuables;
 
+import app.controls.ControlPanel;
 import app.exceptions.WrongValuableParamException;
 
 public class Commodity extends Valuable{
@@ -19,6 +20,7 @@ public class Commodity extends Valuable{
         }
         this.minPrice = minPrice;
         this.maxPrice = maxPrice;
+        ControlPanel.getInstance().addCommodity(this);
     }
 
     public String getTradingUnit() {

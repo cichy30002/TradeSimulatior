@@ -2,13 +2,15 @@ package app.world;
 
 import app.valuables.Valuable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Investor extends MarketClient{
-    private String name;
-    private String surname;
-    private Float budget;
-    private List<Valuable> wallet;
+
+
+    public Investor(String name) {
+        super(name);
+    }
 
     public void bonusFounds(){}
 }

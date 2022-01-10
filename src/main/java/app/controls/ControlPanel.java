@@ -6,6 +6,8 @@ import app.markets.Market;
 import app.markets.StockMarket;
 import app.valuables.Commodity;
 import app.valuables.Currency;
+import app.valuables.Index;
+import app.valuables.Share;
 import app.world.Company;
 import app.world.Investor;
 
@@ -23,6 +25,8 @@ public class ControlPanel {
     private List<Company> companies;
     private List<Commodity> commodities;
     private List<Currency> currencies;
+    private List<Index> indexes;
+    private List<Share> shares;
 
     public ControlPanel() {
         this.stockMarkets = new ArrayList<>();
@@ -89,6 +93,10 @@ public class ControlPanel {
         return false;
     }
 
+    public Boolean CompanyExist(String name)
+    {
+        return findCompanyByName(name) != null;
+    }
     public void addStockMarket(StockMarket stockMarket){
         this.stockMarkets.add(stockMarket);
     }
@@ -102,11 +110,17 @@ public class ControlPanel {
     }
 
     public void addCurrency(Currency currency){
-        this.currencies.add(currency);
+        if(!CurrencyExist(currency.getName()))
+        {
+            this.currencies.add(currency);
+        }
     }
 
     public void addCommodity(Commodity commodity){
-        this.commodities.add(commodity);
+        if(!CommodityExist(commodity.getName()))
+        {
+            this.commodities.add(commodity);
+        }
     }
 
     public void removeStockMarket(StockMarket stockMarket){
@@ -141,4 +155,54 @@ public class ControlPanel {
         return null;
     }
     public void forceBuyOut(){}
+
+    public Company findCompanyByName(String name) {
+        for (Company company: this.companies) {
+            if(Objects.equals(company.getName(), name))
+            {
+                return company;
+            }
+        }
+        return null;
+    }
+
+    public void addCompany(Company company) {
+        if(!getInstance().CompanyExist(company.getName()))
+        {
+            this.companies.add(company);
+        }
+    }
+
+    public Commodity getCommodity(String name) {
+        for(Commodity commodity : this.commodities)
+        {
+            if(Objects.equals(commodity.getName(), name))
+            {
+                return commodity;
+            }
+        }
+        return null;
+    }
+
+    public Index getIndex(String name) {
+        for(Index index : this.indexes)
+        {
+            if(Objects.equals(index.getName(), name))
+            {
+                return index;
+            }
+        }
+        return null;
+    }
+
+    public Share getShare(String name) {
+        for(Share share : this.shares)
+        {
+            if(Objects.equals(share.getName(), name))
+            {
+                return share;
+            }
+        }
+        return null;
+    }
 }

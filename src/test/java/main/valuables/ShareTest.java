@@ -14,30 +14,14 @@ public class ShareTest {
     Share share;
 
 
-    @Test
-    void constructorValidTest()
-    {
-        setUpValid();
-        assertEquals("CD Projekt SA", share.getName());
-        assertEquals(100, share.getPrice());
-    }
+
     @Test
     void constructorExceptionsTest()
     {
-        ArrayList<Company> validCompanies = new ArrayList<>();
-        validCompanies.add(new Company());
-        assertThrows(WrongValuableParamException.class, () -> new Share("", 100,  new Company()));
-        assertThrows(WrongValuableParamException.class, () -> new Share("CD Projekt SA", 0,  new Company()));
-        assertThrows(WrongValuableParamException.class, () -> new Share("CD Projekt SA", -100,  new Company()));
-        assertThrows(WrongValuableParamException.class, () -> new Share("CD Projekt SA", 100,  null));
+        assertThrows(WrongValuableParamException.class, () -> new Share("", 100));
+        assertThrows(WrongValuableParamException.class, () -> new Share("CD Projekt SA", 0));
+        assertThrows(WrongValuableParamException.class, () -> new Share("CD Projekt SA", -100));
+        assertThrows(WrongValuableParamException.class, () -> new Share("CD Projekt SA", 100));
     }
-    void setUpValid()
-    {
-        try {
-            share = new Share("CD Projekt SA", 100,  new Company());
-        }catch(WrongValuableParamException e)
-        {
-            System.out.println(e.getMessage());
-        }
-    }
+
 }

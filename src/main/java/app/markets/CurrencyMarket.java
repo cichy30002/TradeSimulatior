@@ -12,13 +12,29 @@ import java.util.List;
 
 public class CurrencyMarket extends Market{
     private List<Integer> listOfBuySellPrices;
-    private List<Currency> collectionOfProducts;
-    public CurrencyMarket(String name, float marginFee, String currency, List<Currency> collectionOfProducts, List<Integer> listOfBuySellPrices) throws WrongMarketParamException {
+    private List<Currency> listOfProducts;
+    public CurrencyMarket(String name, float marginFee, String currency, List<String> listOfProductsNames, List<String> listOfBuySellPrices) throws WrongMarketParamException {
         super(name, marginFee, currency);
-        this.listOfBuySellPrices = listOfBuySellPrices;
-        this.collectionOfProducts = collectionOfProducts;
+        this.listOfProducts = findCurrencies(listOfProductsNames);
+        this.listOfBuySellPrices = parseList(listOfBuySellPrices);
+
         ControlPanel.getInstance().addCurrencyMarket(this);
     }
+    private List<Currency> findCurrencies(List<String> listOfProductsNames) throws WrongMarketParamException {
+        List<Currency> result = new ArrayList<>();
+        for(String currencyName : listOfProductsNames)
+        {
+            Currency nextCurrency = ControlPanel.getInstance().getCurrency(currencyName);
+            if(nextCurrency == null)
+            {
+                throw new WrongMarketParamException("Tried to add currency that does not exist to currency market: " + currencyName);
+            }
+            result.add(nextCurrency);
+        }
+        return result;
+
+    }
+
 
     public List<Integer> getListOfBuySellPrices() {
         return listOfBuySellPrices;
