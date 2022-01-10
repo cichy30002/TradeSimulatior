@@ -11,15 +11,27 @@ public class Company extends MarketClient{
     private Integer openingPrice;
     private Integer maxPrice;
     private Integer minPrice;
-    private Share share;
     private Float profit;
     private Float revenue;
     private Float capital;
     private Integer tradingVolume;
     private Float totalSales;
 
-    public Company(String name) {
+    private Share share;
+
+    public Company(String name, String IPODate, Integer IPOShareValue, Integer openingPrice, Integer maxPrice, Integer minPrice, Float profit, Float revenue, Float capital, Integer tradingVolume, Float totalSales) {
         super(name);
+        this.IPODate = new Date(IPODate);
+        this.IPOShareValue = IPOShareValue;
+        this.openingPrice = openingPrice;
+        this.maxPrice = maxPrice;
+        this.minPrice = minPrice;
+        this.profit = profit;
+        this.revenue = revenue;
+        this.capital = capital;
+        this.tradingVolume = tradingVolume;
+        this.totalSales = totalSales;
+
         ControlPanel.getInstance().addCompany(this);
     }
 }

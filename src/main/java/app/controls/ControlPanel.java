@@ -9,6 +9,7 @@ import app.valuables.Currency;
 import app.valuables.Index;
 import app.valuables.Share;
 import app.world.Company;
+import app.world.InvestmentFound;
 import app.world.Investor;
 
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ public class ControlPanel {
     private Float bearBullRatio;
     private List<Investor> investors;
     private List<Company> companies;
+    private List<InvestmentFound> investmentFounds;
     private List<Commodity> commodities;
     private List<Currency> currencies;
     private List<Index> indexes;
@@ -92,7 +94,25 @@ public class ControlPanel {
         }
         return false;
     }
+    public boolean investorExist(String name) {
+        for (Investor investor: this.investors) {
+            if(Objects.equals(investor.getName(), name))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 
+    private boolean InvestmentFoundExist(String name) {
+        for (InvestmentFound investmentFound: this.investmentFounds) {
+            if(Objects.equals(investmentFound.getName(), name))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
     public Boolean CompanyExist(String name)
     {
         return findCompanyByName(name) != null;
@@ -122,6 +142,30 @@ public class ControlPanel {
             this.commodities.add(commodity);
         }
     }
+
+    public void addInvestor(Investor investor)
+    {
+        if(!getInstance().investorExist(investor.getName())) {
+            this.investors.add(investor);
+        }
+    }
+
+    public void addCompany(Company company) {
+        if(!getInstance().CompanyExist(company.getName()))
+        {
+            this.companies.add(company);
+        }
+    }
+
+    public void addInvestmentFound(InvestmentFound investmentFound)
+    {
+        if(!getInstance().InvestmentFoundExist(investmentFound.getName()))
+        {
+            this.investmentFounds.add(investmentFound);
+        }
+    }
+
+
 
     public void removeStockMarket(StockMarket stockMarket){
         this.stockMarkets.remove(stockMarket);
@@ -166,12 +210,7 @@ public class ControlPanel {
         return null;
     }
 
-    public void addCompany(Company company) {
-        if(!getInstance().CompanyExist(company.getName()))
-        {
-            this.companies.add(company);
-        }
-    }
+
 
     public Commodity getCommodity(String name) {
         for(Commodity commodity : this.commodities)

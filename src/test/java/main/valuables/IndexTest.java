@@ -15,13 +15,6 @@ public class IndexTest {
 
 
     @Test
-    void constructorValidTest()
-    {
-        setUpValid();
-        assertEquals("wig20", index.getName());
-        assertEquals(100, index.getPrice());
-    }
-    @Test
     void constructorExceptionsTest()
     {
         ArrayList<String> validCompanies = new ArrayList<>();
@@ -31,16 +24,5 @@ public class IndexTest {
         assertThrows(WrongValuableParamException.class, () -> new Index("wig20", 0, validCompanies));
         assertThrows(WrongValuableParamException.class, () -> new Index("wig20", 100, new ArrayList<>()));
     }
-    void setUpValid()
-    {
-        try {
-            ArrayList<String> companies = new ArrayList<>();
-            companies.add("x");
-            new Company("x");
-            index = new Index("wig20", 100,  companies);
-        }catch(WrongValuableParamException e)
-        {
-            System.out.println(e.getMessage());
-        }
-    }
+
 }
