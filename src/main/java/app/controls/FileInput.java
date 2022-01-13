@@ -22,10 +22,9 @@ import java.util.List;
 public class FileInput {
     public static void readFromBasicFile()
     {
-        try (BufferedReader reader = new BufferedReader(new FileReader("BasicInput.txt"))){
+        try (BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/inputFiles/BasicInput.txt"))){
             readInput(reader, "MarketClient", "Company");
             readInput(reader, "MarketClient", "Investor");
-            readInput(reader, "MarketClient", "InvestmentFound");
 
             readInput(reader, "Valuable", "Currency");
             readInput(reader, "Valuable", "Commodity");
@@ -35,6 +34,8 @@ public class FileInput {
             readInput(reader, "Market", "Currency");
             readInput(reader, "Market", "Commodity");
             readInput(reader, "Market", "Stock");
+
+            readInput(reader, "MarketClient", "InvestmentFound");
         } catch (IOException | WrongValuableParamException | WrongMarketParamException e) {
             e.printStackTrace();
         }
@@ -43,6 +44,7 @@ public class FileInput {
 
 
     private static void readInput(BufferedReader reader, String type, String specificType) throws IOException, WrongValuableParamException, WrongMarketParamException {
+
         int noValuables = Integer.parseInt(reader.readLine());
         for (int i=0; i<noValuables; i++)
         {

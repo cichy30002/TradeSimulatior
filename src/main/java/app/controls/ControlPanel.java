@@ -39,6 +39,9 @@ public class ControlPanel {
         this.companies = new ArrayList<>();
         this.commodities = new ArrayList<>();
         this.currencies = new ArrayList<>();
+        this.indexes = new ArrayList<>();
+        this.shares = new ArrayList<>();
+        this.investmentFounds = new ArrayList<>();
     }
 
     public static ControlPanel getInstance()
@@ -117,6 +120,26 @@ public class ControlPanel {
     {
         return findCompanyByName(name) != null;
     }
+    private boolean IndexExist(String name) {
+        for(Index index: this.indexes)
+        {
+            if(Objects.equals(index.getName(),name))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    private boolean ShareExist(String name) {
+        for(Share share: this.shares)
+        {
+            if(Objects.equals(share.getName(),name))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
     public void addStockMarket(StockMarket stockMarket){
         this.stockMarkets.add(stockMarket);
     }
@@ -162,6 +185,20 @@ public class ControlPanel {
         if(!getInstance().InvestmentFoundExist(investmentFound.getName()))
         {
             this.investmentFounds.add(investmentFound);
+        }
+    }
+
+    public void addIndex(Index index) {
+        if(!getInstance().IndexExist(index.getName()))
+        {
+            this.indexes.add(index);
+        }
+    }
+
+    public void addShare(Share share) {
+        if(!getInstance().ShareExist(share.getName()))
+        {
+            this.shares.add(share);
         }
     }
 
@@ -244,4 +281,7 @@ public class ControlPanel {
         }
         return null;
     }
+
+
+
 }

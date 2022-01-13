@@ -6,7 +6,7 @@ import app.valuables.Share;
 import java.util.Date;
 
 public class Company extends MarketClient{
-    private Date IPODate;
+    private String IPODate;
     private Integer IPOShareValue;
     private Integer openingPrice;
     private Integer maxPrice;
@@ -21,7 +21,7 @@ public class Company extends MarketClient{
 
     public Company(String name, String IPODate, Integer IPOShareValue, Integer openingPrice, Integer maxPrice, Integer minPrice, Float profit, Float revenue, Float capital, Integer tradingVolume, Float totalSales) {
         super(name);
-        this.IPODate = new Date(IPODate);
+        this.IPODate = IPODate;
         this.IPOShareValue = IPOShareValue;
         this.openingPrice = openingPrice;
         this.maxPrice = maxPrice;

@@ -18,7 +18,6 @@ public class InvestmentFound extends MarketClient{
         this.investorsNeeded = investorsNeeded;
         this.managerName = managerName;
         this.managerSurname = managerSurname;
-
         ControlPanel.getInstance().addInvestmentFound(this);
     }
     private List<Valuable> findValuables( List<String> names)

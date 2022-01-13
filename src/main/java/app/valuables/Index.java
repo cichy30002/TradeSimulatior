@@ -26,7 +26,7 @@ public class Index extends Valuable{
             }
             this.listOfCompanies.add(nextCompany);
         }
-
+        ControlPanel.getInstance().addIndex(this);
     }
 
     public void update(){}

@@ -11,6 +11,7 @@ public class Share extends Valuable{
     public Share(String name, Integer price)  throws WrongValuableParamException {
         super(name, price);
         this.company = findYourCompany();
+        ControlPanel.getInstance().addShare(this);
     }
 
     private Company findYourCompany() throws WrongValuableParamException {

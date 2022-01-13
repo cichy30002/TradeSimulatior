@@ -32,7 +32,7 @@ public class StockMarket extends Market{
             Share nextShare = ControlPanel.getInstance().getShare(shareName);
             if(nextShare == null)
             {
-                throw new WrongMarketParamException("Tried to add currency that does not exist to currency market: " + shareName);
+                throw new WrongMarketParamException("Tried to add share that does not exist to stock market: " + shareName);
             }
             result.add(nextShare);
         }
@@ -46,7 +46,7 @@ public class StockMarket extends Market{
             Index nextIndex = ControlPanel.getInstance().getIndex(indexName);
             if(nextIndex == null)
             {
-                throw new WrongMarketParamException("Tried to add currency that does not exist to currency market: " + indexName);
+                throw new WrongMarketParamException("Tried to add index that does not exist to stock market: " + indexName);
             }
             result.add(nextIndex);
         }
