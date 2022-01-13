@@ -17,8 +17,10 @@ platinum 98300 ounce 70000 130000
 palladium 191600 ounce 160000 250000
 oil 8246 barrel 3000 20000
 uranium 4550 250_Pfund_U308 1000 10000
-1
+3
 Orlen 56
+Lotos 66
+Orlen&Lotos 121
 1
 pap3 300 Orlen;Lotos;Orlen&Lotos
 1

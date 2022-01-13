@@ -4,11 +4,7 @@ import app.controls.ControlPanel;
 import app.exceptions.WrongMarketParamException;
 import app.exceptions.WrongValuableParamException;
 import app.markets.CommodityMarket;
-import app.markets.StockMarket;
-import app.valuables.Commodity;
 import app.valuables.Currency;
-import app.valuables.Index;
-import app.valuables.Share;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -23,7 +19,7 @@ public class CommodityMarketTest {
         ControlPanel.getInstance().removeCurrency(ControlPanel.getInstance().getCurrency("zloty"));
         assertThrows(WrongMarketParamException.class, () -> new CommodityMarket("abcd commodity market", 1.0f, "zloty", new ArrayList<>(), new ArrayList<>()));
         try {
-            if(!ControlPanel.getInstance().CurrencyExist("zloty")) {
+            if(!ControlPanel.getInstance().currencyExist("zloty")) {
                 ControlPanel.getInstance().addCurrency(new Currency("zloty", 1, new ArrayList<>()));
             }
         }catch(WrongValuableParamException e)

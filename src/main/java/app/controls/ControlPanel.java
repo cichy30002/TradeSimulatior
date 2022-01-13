@@ -53,30 +53,30 @@ public class ControlPanel {
         return ControlPanel.instance;
     }
 
-    public Boolean MarketExist(String name)
+    public Boolean marketExist(String name)
     {
         boolean result = false;
         for (Market market:stockMarkets) {
-            if (SpecificMarketExist(name, market))
+            if (specificMarketExist(name, market))
                 result = true;
         }
         for (Market market:currencyMarkets) {
-            if (SpecificMarketExist(name, market))
+            if (specificMarketExist(name, market))
                 result = true;
         }
         for (Market market:commodityMarkets) {
-            if (SpecificMarketExist(name, market))
+            if (specificMarketExist(name, market))
                 result = true;
         }
         return result;
     }
 
-    private Boolean SpecificMarketExist(String name,  Market market)
+    private Boolean specificMarketExist(String name, Market market)
     {
         return Objects.equals(market.getName(), name);
     }
 
-    public Boolean CurrencyExist(String name)
+    public Boolean currencyExist(String name)
     {
         for (Currency currency: this.currencies) {
             if(Objects.equals(currency.getName(), name))
@@ -87,7 +87,7 @@ public class ControlPanel {
         return false;
     }
 
-    public Boolean CommodityExist(String name)
+    public Boolean commodityExist(String name)
     {
         for (Commodity commodity: this.commodities) {
             if(Objects.equals(commodity.getName(), name))
@@ -107,7 +107,7 @@ public class ControlPanel {
         return false;
     }
 
-    private boolean InvestmentFoundExist(String name) {
+    public boolean investmentFoundExist(String name) {
         for (InvestmentFound investmentFound: this.investmentFounds) {
             if(Objects.equals(investmentFound.getName(), name))
             {
@@ -116,11 +116,11 @@ public class ControlPanel {
         }
         return false;
     }
-    public Boolean CompanyExist(String name)
+    public boolean companyExist(String name)
     {
         return findCompanyByName(name) != null;
     }
-    private boolean IndexExist(String name) {
+    public boolean indexExist(String name) {
         for(Index index: this.indexes)
         {
             if(Objects.equals(index.getName(),name))
@@ -130,7 +130,7 @@ public class ControlPanel {
         }
         return false;
     }
-    private boolean ShareExist(String name) {
+    public boolean shareExist(String name) {
         for(Share share: this.shares)
         {
             if(Objects.equals(share.getName(),name))
@@ -153,14 +153,14 @@ public class ControlPanel {
     }
 
     public void addCurrency(Currency currency){
-        if(!CurrencyExist(currency.getName()))
+        if(!currencyExist(currency.getName()))
         {
             this.currencies.add(currency);
         }
     }
 
     public void addCommodity(Commodity commodity){
-        if(!CommodityExist(commodity.getName()))
+        if(!commodityExist(commodity.getName()))
         {
             this.commodities.add(commodity);
         }
@@ -174,7 +174,7 @@ public class ControlPanel {
     }
 
     public void addCompany(Company company) {
-        if(!getInstance().CompanyExist(company.getName()))
+        if(!getInstance().companyExist(company.getName()))
         {
             this.companies.add(company);
         }
@@ -182,21 +182,21 @@ public class ControlPanel {
 
     public void addInvestmentFound(InvestmentFound investmentFound)
     {
-        if(!getInstance().InvestmentFoundExist(investmentFound.getName()))
+        if(!getInstance().investmentFoundExist(investmentFound.getName()))
         {
             this.investmentFounds.add(investmentFound);
         }
     }
 
     public void addIndex(Index index) {
-        if(!getInstance().IndexExist(index.getName()))
+        if(!getInstance().indexExist(index.getName()))
         {
             this.indexes.add(index);
         }
     }
 
     public void addShare(Share share) {
-        if(!getInstance().ShareExist(share.getName()))
+        if(!getInstance().shareExist(share.getName()))
         {
             this.shares.add(share);
         }
@@ -282,6 +282,28 @@ public class ControlPanel {
         return null;
     }
 
+    public static void removeInstance()
+    {
+        instance = null;
+    }
 
+    public void removeShare(Share share) {
+        this.shares.remove(share);
+    }
 
+    public void removeCompany(Company company) {
+        this.companies.remove(company);
+    }
+
+    public void removeIndex(Index index) {
+        this.indexes.remove(index);
+    }
+
+    public void removeInvestor(Investor investor) {
+        this.investors.remove(investor);
+    }
+    public void removeInvestmentFound(InvestmentFound investmentFound)
+    {
+        this.investmentFounds.remove(investmentFound);
+    }
 }

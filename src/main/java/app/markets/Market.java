@@ -15,13 +15,13 @@ public abstract class Market {
     private Collection<Valuable> collectionOfProducts;
 
     protected Market(String name, float marginFee, String currency) throws WrongMarketParamException {
-        if(ControlPanel.getInstance().MarketExist(name))
+        if(ControlPanel.getInstance().marketExist(name))
         {
             throw new WrongMarketParamException("That market already exist!");
         }
         this.name = name;
         this.marginFee = marginFee;
-        if(!ControlPanel.getInstance().CurrencyExist(currency))
+        if(!ControlPanel.getInstance().currencyExist(currency))
         {
             throw new WrongMarketParamException("Currency " + currency + " does not exist!");
         }
