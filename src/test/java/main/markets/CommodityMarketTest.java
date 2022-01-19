@@ -4,6 +4,8 @@ import app.controls.ControlPanel;
 import app.exceptions.WrongMarketParamException;
 import app.exceptions.WrongValuableParamException;
 import app.markets.CommodityMarket;
+import app.markets.CurrencyMarket;
+import app.valuables.Commodity;
 import app.valuables.Currency;
 import org.junit.jupiter.api.Test;
 
@@ -13,20 +15,56 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class CommodityMarketTest {
+    CommodityMarket commodityMarket;
+    Commodity commodity1;
+    Commodity commodity2;
+    Currency currency;
+    ArrayList<String> commodities;
+    ArrayList<String> prices;
+
     @Test
     public void constructorTest()
     {
-        ControlPanel.getInstance().removeCurrency("zloty");
-        assertThrows(WrongMarketParamException.class, () -> new CommodityMarket("abcd commodity market", 1.0f, "zloty", new ArrayList<>(), new ArrayList<>()));
+        makeCommodityMarket();
+
+        assertThrows(WrongMarketParamException.class, ()-> new CommodityMarket("blyskotki", 1f, "zloty", commodities, prices));
+        assertDoesNotThrow(()-> new CommodityMarket("blyskotkiw", 1f, "zloty", commodities, prices));
+        ControlPanel.getInstance().removeCommodityMarket("blyskotki2");
+        assertThrows(WrongMarketParamException.class, ()-> new CommodityMarket("blyskotki2", -1f, "zloty", commodities, prices));
+        assertThrows(WrongMarketParamException.class, ()-> new CommodityMarket("blyskotki2", 1f, "xd", commodities, prices));
+        assertThrows(WrongMarketParamException.class, ()-> new CommodityMarket("", 1f, "zloty", commodities, prices));
+
+        assertThrows(WrongMarketParamException.class, ()-> new CommodityMarket("blyskotki", 1f, "zloty", new ArrayList<>(), prices));
+
+        clearCommodityMarket();
+    }
+    void makeCommodityMarket()
+    {
+        ArrayList<String> countries = new ArrayList<>();
+        countries.add("Poland");
         try {
-            if(!ControlPanel.getInstance().currencyExist("zloty")) {
-                ControlPanel.getInstance().addCurrency(new Currency("zloty", 1, new ArrayList<>()));
-            }
-        }catch(WrongValuableParamException e)
-        {
-            System.out.println(e.getMessage());
+            currency = new Currency("zloty", 20, countries);
+            commodity1 = new Commodity("gold", 40000, "ounce", 30000, 50000);
+            commodity2 = new Commodity("silver", 4000, "ounce", 3000, 5000);
+        } catch (WrongValuableParamException e) {
+            System.out.println("Failed makeCurrencyMarket");
         }
-        assertDoesNotThrow(()->new CommodityMarket("abcd commodity market", 1.0f, "zloty", new ArrayList<>(), new ArrayList<>()));
-        assertThrows(WrongMarketParamException.class, () -> new CommodityMarket("abcd commodity market", 1.0f, "zloty", new ArrayList<>(), new ArrayList<>()));
+        commodities = new ArrayList<>();
+        commodities.add(commodity1.getName());
+        commodities.add(commodity2.getName());
+        prices = new ArrayList<>();
+        prices.add("1");
+        try {
+            commodityMarket = new CommodityMarket("blyskotki", 1f, "zloty", commodities, prices);
+        } catch (WrongMarketParamException e) {
+            System.out.println("Failed makeCurrencyMarket");
+        }
+    }
+    void clearCommodityMarket()
+    {
+        ControlPanel.getInstance().removeCurrency(currency.getName());
+        ControlPanel.getInstance().removeCommodity(commodity1.getName());
+        ControlPanel.getInstance().removeCommodity(commodity2.getName());
+        ControlPanel.getInstance().removeCommodityMarket(commodityMarket.getName());
     }
 }

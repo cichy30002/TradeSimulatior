@@ -29,6 +29,10 @@ public class CommodityMarket extends Market{
             }
             result.add(nextCommodity);
         }
+        if(result.size() == 0)
+        {
+            throw new WrongMarketParamException("Tried to make commodity market without commodities");
+        }
         return result;
 
     }

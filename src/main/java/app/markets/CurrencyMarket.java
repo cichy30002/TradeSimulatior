@@ -31,6 +31,10 @@ public class CurrencyMarket extends Market{
             }
             result.add(nextCurrency);
         }
+        if(result.size() == 0)
+        {
+            throw new WrongMarketParamException("Tried to make currency market without currencies");
+        }
         return result;
 
     }

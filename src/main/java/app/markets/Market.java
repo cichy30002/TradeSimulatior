@@ -19,7 +19,15 @@ public abstract class Market {
         {
             throw new WrongMarketParamException("That market already exist!");
         }
+        if(name.length()==0 || name.length()>20)
+        {
+            throw new WrongMarketParamException("Wrong markets name");
+        }
         this.name = name;
+        if(marginFee < 0f)
+        {
+            throw new WrongMarketParamException("Wrong market fee value");
+        }
         this.marginFee = marginFee;
         if(!ControlPanel.getInstance().currencyExist(currency))
         {

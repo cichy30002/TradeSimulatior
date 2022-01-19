@@ -36,6 +36,10 @@ public class StockMarket extends Market{
             }
             result.add(nextShare);
         }
+        if(result.size() == 0)
+        {
+            throw new WrongMarketParamException("Tried to init StockMarket without shares");
+        }
         return result;
 
     }

@@ -40,17 +40,25 @@ public class ControlPanelTest {
     Investor firstInvestor;
     InvestmentFound firstInvestmentFound;
     InvestmentFound secondInvestmentFound;
+    Company company;
+    Share share;
+    ArrayList<String> shares;
+    Currency currency1;
+    Currency currency2;
+    ArrayList<String> currencies;
+    Commodity commodity;
+    ArrayList<String> commodities;
 
     @Test
-    void ConstructorTest(){
+    void constructorTest(){
         assertNotEquals(ControlPanel.getInstance(), null);
         assertEquals(ControlPanel.getInstance(), ControlPanel.getInstance());
 
     }
     @Test
-    void MarketCollectionsTest()
+    void marketCollectionsTest()
     {
-        AddFewMarkets();
+        addFewMarkets();
 
         assertTrue(ControlPanel.getInstance().marketExist("polish Stock"));
         assertTrue(ControlPanel.getInstance().marketExist("russian Stock"));
@@ -62,33 +70,21 @@ public class ControlPanelTest {
         assertFalse(ControlPanel.getInstance().marketExist("xd"));
         assertFalse(ControlPanel.getInstance().marketExist("polish Stock2"));
         assertFalse(ControlPanel.getInstance().marketExist("polish3 Stock"));
-        RemoveFewMarkets();
+        removeFewMarkets();
     }
-    void AddFewMarkets()
+    void addFewMarkets()
     {
-        ControlPanel.getInstance().removeCurrency("zloty");
-        ControlPanel.getInstance().removeCurrency("ruble");
+        addValuablesForMarkets();
         try {
-            if(!ControlPanel.getInstance().currencyExist("zloty")) {
-                ControlPanel.getInstance().addCurrency(new Currency("zloty", 1, new ArrayList<>()));
-            }
-            if(!ControlPanel.getInstance().currencyExist("ruble")) {
-                ControlPanel.getInstance().addCurrency(new Currency("ruble", 1, new ArrayList<>()));
-            }
-        }catch(WrongValuableParamException e)
-        {
-            System.out.println(e.getMessage());
-        }
-        try {
-            firstStockMarket = new StockMarket("polish Stock", 1.0f, "zloty", new ArrayList<>(), "Poland", "Warsaw", "idk", new ArrayList<>());
-            secondStockMarket = new StockMarket("polish2 Stock", 1.0f, "zloty", new ArrayList<>(), "Poland", "Warsaw", "idk", new ArrayList<>());
-            thirdStockMarket = new StockMarket("russian Stock", 5.0f, "ruble", new ArrayList<>(), "Russia", "Moscow", "idk", new ArrayList<>());
+            firstStockMarket = new StockMarket("polish Stock", 1.0f, "zloty", shares, "Poland", "Warsaw", "idk", new ArrayList<>());
+            secondStockMarket = new StockMarket("polish2 Stock", 1.0f, "zloty", shares, "Poland", "Warsaw", "idk", new ArrayList<>());
+            thirdStockMarket = new StockMarket("russian Stock", 5.0f, "ruble", shares, "Russia", "Moscow", "idk", new ArrayList<>());
 
-            firstCurrencyMarket = new CurrencyMarket("abc currency market", 1.0f, "zloty", new ArrayList<>(), new ArrayList<>());
-            secondCurrencyMarket = new CurrencyMarket("123 currency market", 1.2f, "ruble", new ArrayList<>(), new ArrayList<>());
+            firstCurrencyMarket = new CurrencyMarket("abc currency market", 1.0f, "zloty", currencies, new ArrayList<>());
+            secondCurrencyMarket = new CurrencyMarket("123 currency market", 1.2f, "ruble", currencies, new ArrayList<>());
 
-            firstCommodityMarket = new CommodityMarket("abc commodity market", 1.0f, "zloty", new ArrayList<>(), new ArrayList<>());
-            secondCommodityMarket = new CommodityMarket("123 commodity market", 1.0f, "zloty", new ArrayList<>(), new ArrayList<>());
+            firstCommodityMarket = new CommodityMarket("abc commodity market", 1.0f, "zloty", commodities, new ArrayList<>());
+            secondCommodityMarket = new CommodityMarket("123 commodity market", 1.0f, "zloty", commodities, new ArrayList<>());
         }catch (WrongMarketParamException e)
         {
             System.out.println(e.getMessage());
@@ -106,7 +102,29 @@ public class ControlPanelTest {
         ControlPanel.getInstance().removeCurrency("zloty");
         ControlPanel.getInstance().removeCurrency("ruble");
     }
-    void RemoveFewMarkets()
+
+    private void addValuablesForMarkets() {
+        company  = new Company("CD Projekt SA", "13.09.1775", 30, 40, 50, 30, 687.9f, 789.0f,56.8f, 300, 132.4f);
+        try {
+            ArrayList<String> countries = new ArrayList<>();
+            countries.add("Poland");
+            currency1 = new Currency("zloty", 20, countries);
+            currency2 = new Currency("ruble", 20, countries);
+            share = new Share("CD Projekt SA", 50);
+            commodity = new Commodity("silver", 4000, "ounce", 3000, 5000);
+        } catch (WrongValuableParamException e) {
+            System.out.println("Failed addSharesForStockMarket");
+        }
+        shares = new ArrayList<>();
+        shares.add(share.getName());
+        currencies = new ArrayList<>();
+        currencies.add(currency1.getName());
+        currencies.add(currency2.getName());
+        commodities = new ArrayList<>();
+        commodities.add(commodity.getName());
+    }
+
+    void removeFewMarkets()
     {
         ControlPanel.getInstance().removeStockMarket(firstStockMarket.getName());
         ControlPanel.getInstance().removeStockMarket(secondStockMarket.getName());
@@ -117,11 +135,21 @@ public class ControlPanelTest {
 
         ControlPanel.getInstance().removeCommodityMarket(firstCommodityMarket.getName());
         ControlPanel.getInstance().removeCommodityMarket(secondCommodityMarket.getName());
+        removeValuablesForMarkets();
     }
+
+    private void removeValuablesForMarkets() {
+        ControlPanel.getInstance().removeShare(share.getName());
+        ControlPanel.getInstance().removeCompany(company.getName());
+        ControlPanel.getInstance().removeCurrency(currency1.getName());
+        ControlPanel.getInstance().removeCurrency(currency2.getName());
+        ControlPanel.getInstance().removeCommodity(commodity.getName());
+    }
+
     @Test
-    void ValuableCollectionsTest()
+    void valuableCollectionsTest()
     {
-        AddFewValuables();
+        addFewValuables();
 
         assertTrue(ControlPanel.getInstance().currencyExist("zloty"));
         assertTrue(ControlPanel.getInstance().currencyExist("ruble"));
@@ -140,9 +168,9 @@ public class ControlPanelTest {
         assertFalse(ControlPanel.getInstance().shareExist("xd"));
         assertFalse(ControlPanel.getInstance().indexExist("xd"));
 
-        RemoveFewValuables();
+        removeFewValuables();
     }
-    private void AddFewValuables() {
+    private void addFewValuables() {
         try{
             firstCurrency = new Currency("zloty", 1, new ArrayList<>());
             secondCurrency = new Currency("ruble", 1, new ArrayList<>());
@@ -166,7 +194,7 @@ public class ControlPanelTest {
 
     }
 
-    private void RemoveFewValuables() {
+    private void removeFewValuables() {
         ControlPanel.getInstance().removeCurrency(firstCurrency.getName());
         ControlPanel.getInstance().removeCurrency(secondCurrency.getName());
 
@@ -182,9 +210,9 @@ public class ControlPanelTest {
         ControlPanel.getInstance().removeIndex(secondIndex.getName());
     }
     @Test
-    void MarketClientsCollectionsTest()
+    void marketClientsCollectionsTest()
     {
-        AddFewMarketClients();
+        addFewMarketClients();
 
         assertTrue(ControlPanel.getInstance().investorExist("Jan_Kiwlenko"));
         assertTrue(ControlPanel.getInstance().investorExist("Jakub_Cichy"));
@@ -199,9 +227,9 @@ public class ControlPanelTest {
         assertFalse(ControlPanel.getInstance().companyExist("xd"));
         assertFalse(ControlPanel.getInstance().investmentFoundExist("xd"));
 
-        RemoveFewMarketClients();
+        removeFewMarketClients();
     }
-    private void AddFewMarketClients() {
+    private void addFewMarketClients() {
         firstInvestor = new Investor("Jan_Kiwlenko");
         secondInvestor = new Investor("Jakub_Cichy");
 
@@ -220,7 +248,7 @@ public class ControlPanelTest {
         secondInvestmentFound = new InvestmentFound("bad_idea", list, 10, "dsf", "sdgf");
     }
 
-    private void RemoveFewMarketClients() {
+    private void removeFewMarketClients() {
         ControlPanel.getInstance().removeInvestor(firstInvestor.getName());
         ControlPanel.getInstance().removeInvestor(secondInvestor.getName());
         ControlPanel.getInstance().removeCompany(firstCompany.getName());
