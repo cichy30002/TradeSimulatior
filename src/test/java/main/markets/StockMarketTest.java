@@ -16,7 +16,7 @@ public class StockMarketTest {
     @Test
     public void constructorTest()
     {
-        ControlPanel.getInstance().removeCurrency(ControlPanel.getInstance().getCurrency("zloty"));
+        ControlPanel.getInstance().removeCurrency("zloty");
         assertThrows(WrongMarketParamException.class, () -> new StockMarket("polish Stock3", 1.0f, "zloty", new ArrayList<>(), "Poland", "Warsaw", "idk", new ArrayList<>()));
         try {
             if(!ControlPanel.getInstance().currencyExist("zloty")) {

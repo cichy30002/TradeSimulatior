@@ -1,5 +1,6 @@
 package main.valuables;
 
+import app.controls.ControlPanel;
 import app.exceptions.WrongValuableParamException;
 import app.valuables.Commodity;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,10 @@ public class CommodityTest {
         setUpValid();
         assertEquals("gold", commodity.getName());
         assertEquals(100, commodity.getPrice());
+        assertEquals(120, commodity.getMaxPrice());
+        assertEquals(80, commodity.getMinPrice());
+        assertEquals("ounce", commodity.getTradingUnit());
+        cleanUpValid();
     }
     @Test
     void constructorExceptionsTest()
@@ -35,7 +40,11 @@ public class CommodityTest {
             commodity = new Commodity("gold", 100, "ounce", 80, 120);
         }catch(WrongValuableParamException e)
         {
-            System.out.println(e.getMessage());
+            System.out.println("failed set up valid");
         }
+    }
+    void cleanUpValid()
+    {
+        ControlPanel.getInstance().removeCommodity(commodity.getName());
     }
 }

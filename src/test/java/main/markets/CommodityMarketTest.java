@@ -16,7 +16,7 @@ public class CommodityMarketTest {
     @Test
     public void constructorTest()
     {
-        ControlPanel.getInstance().removeCurrency(ControlPanel.getInstance().getCurrency("zloty"));
+        ControlPanel.getInstance().removeCurrency("zloty");
         assertThrows(WrongMarketParamException.class, () -> new CommodityMarket("abcd commodity market", 1.0f, "zloty", new ArrayList<>(), new ArrayList<>()));
         try {
             if(!ControlPanel.getInstance().currencyExist("zloty")) {

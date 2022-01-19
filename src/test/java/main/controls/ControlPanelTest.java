@@ -66,8 +66,8 @@ public class ControlPanelTest {
     }
     void AddFewMarkets()
     {
-        ControlPanel.getInstance().removeCurrency(ControlPanel.getInstance().getCurrency("zloty"));
-        ControlPanel.getInstance().removeCurrency(ControlPanel.getInstance().getCurrency("ruble"));
+        ControlPanel.getInstance().removeCurrency("zloty");
+        ControlPanel.getInstance().removeCurrency("ruble");
         try {
             if(!ControlPanel.getInstance().currencyExist("zloty")) {
                 ControlPanel.getInstance().addCurrency(new Currency("zloty", 1, new ArrayList<>()));
@@ -103,20 +103,20 @@ public class ControlPanelTest {
         ControlPanel.getInstance().addCommodityMarket(firstCommodityMarket);
         ControlPanel.getInstance().addCommodityMarket(secondCommodityMarket);
 
-        ControlPanel.getInstance().removeCurrency(ControlPanel.getInstance().getCurrency("zloty"));
-        ControlPanel.getInstance().removeCurrency(ControlPanel.getInstance().getCurrency("ruble"));
+        ControlPanel.getInstance().removeCurrency("zloty");
+        ControlPanel.getInstance().removeCurrency("ruble");
     }
     void RemoveFewMarkets()
     {
-        ControlPanel.getInstance().removeStockMarket(firstStockMarket);
-        ControlPanel.getInstance().removeStockMarket(secondStockMarket);
-        ControlPanel.getInstance().removeStockMarket(thirdStockMarket);
+        ControlPanel.getInstance().removeStockMarket(firstStockMarket.getName());
+        ControlPanel.getInstance().removeStockMarket(secondStockMarket.getName());
+        ControlPanel.getInstance().removeStockMarket(thirdStockMarket.getName());
 
-        ControlPanel.getInstance().removeCurrencyMarket(firstCurrencyMarket);
-        ControlPanel.getInstance().removeCurrencyMarket(secondCurrencyMarket);
+        ControlPanel.getInstance().removeCurrencyMarket(firstCurrencyMarket.getName());
+        ControlPanel.getInstance().removeCurrencyMarket(secondCurrencyMarket.getName());
 
-        ControlPanel.getInstance().removeCommodityMarket(firstCommodityMarket);
-        ControlPanel.getInstance().removeCommodityMarket(secondCommodityMarket);
+        ControlPanel.getInstance().removeCommodityMarket(firstCommodityMarket.getName());
+        ControlPanel.getInstance().removeCommodityMarket(secondCommodityMarket.getName());
     }
     @Test
     void ValuableCollectionsTest()
@@ -167,19 +167,19 @@ public class ControlPanelTest {
     }
 
     private void RemoveFewValuables() {
-        ControlPanel.getInstance().removeCurrency(firstCurrency);
-        ControlPanel.getInstance().removeCurrency(secondCurrency);
+        ControlPanel.getInstance().removeCurrency(firstCurrency.getName());
+        ControlPanel.getInstance().removeCurrency(secondCurrency.getName());
 
-        ControlPanel.getInstance().removeCommodity(firstCommodity);
-        ControlPanel.getInstance().removeCommodity(secondCommodity);
+        ControlPanel.getInstance().removeCommodity(firstCommodity.getName());
+        ControlPanel.getInstance().removeCommodity(secondCommodity.getName());
 
-        ControlPanel.getInstance().removeShare(firstShare);
-        ControlPanel.getInstance().removeShare(secondShare);
-        ControlPanel.getInstance().removeCompany(firstCompany);
-        ControlPanel.getInstance().removeCompany(secondCompany);
+        ControlPanel.getInstance().removeShare(firstShare.getName());
+        ControlPanel.getInstance().removeShare(secondShare.getName());
+        ControlPanel.getInstance().removeCompany(firstCompany.getName());
+        ControlPanel.getInstance().removeCompany(secondCompany.getName());
 
-        ControlPanel.getInstance().removeIndex(firstIndex);
-        ControlPanel.getInstance().removeIndex(secondIndex);
+        ControlPanel.getInstance().removeIndex(firstIndex.getName());
+        ControlPanel.getInstance().removeIndex(secondIndex.getName());
     }
     @Test
     void MarketClientsCollectionsTest()
@@ -221,14 +221,14 @@ public class ControlPanelTest {
     }
 
     private void RemoveFewMarketClients() {
-        ControlPanel.getInstance().removeInvestor(firstInvestor);
-        ControlPanel.getInstance().removeInvestor(secondInvestor);
-        ControlPanel.getInstance().removeCompany(firstCompany);
-        ControlPanel.getInstance().removeCompany(secondCompany);
-        ControlPanel.getInstance().removeShare(firstShare);
-        ControlPanel.getInstance().removeShare(secondShare);
-        ControlPanel.getInstance().removeInvestmentFound(firstInvestmentFound);
-        ControlPanel.getInstance().removeInvestmentFound(secondInvestmentFound);
+        ControlPanel.getInstance().removeInvestor(firstInvestor.getName());
+        ControlPanel.getInstance().removeInvestor(secondInvestor.getName());
+        ControlPanel.getInstance().removeCompany(firstCompany.getName());
+        ControlPanel.getInstance().removeCompany(secondCompany.getName());
+        ControlPanel.getInstance().removeShare(firstShare.getName());
+        ControlPanel.getInstance().removeShare(secondShare.getName());
+        ControlPanel.getInstance().removeInvestmentFound(firstInvestmentFound.getName());
+        ControlPanel.getInstance().removeInvestmentFound(secondInvestmentFound.getName());
     }
 
 

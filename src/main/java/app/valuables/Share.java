@@ -15,7 +15,7 @@ public class Share extends Valuable{
     }
 
     private Company findYourCompany() throws WrongValuableParamException {
-        Company yourCompany = ControlPanel.getInstance().findCompanyByName(getName());
+        Company yourCompany = ControlPanel.getInstance().getCompany(getName());
         if(yourCompany==null){
             throw new WrongValuableParamException("Can't create share for company that does not exist!");
         }

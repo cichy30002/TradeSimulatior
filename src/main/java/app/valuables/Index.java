@@ -19,7 +19,7 @@ public class Index extends Valuable{
         this.listOfCompanies = new ArrayList<>();
         for(String companyName : listOfCompaniesNames)
         {
-            Company nextCompany = ControlPanel.getInstance().findCompanyByName(companyName);
+            Company nextCompany = ControlPanel.getInstance().getCompany(companyName);
             if(nextCompany == null)
             {
                 throw new WrongValuableParamException("Index list of companies names consist of wrong company name: " + companyName);

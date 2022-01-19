@@ -33,7 +33,7 @@ public class CurrencyTest {
             currency = new Currency("euro", 100, new ArrayList<>() );
         }catch(WrongValuableParamException e)
         {
-            System.out.println(e.getMessage());
+            System.out.println("failed set up valid");
         }
     }
 }

@@ -13,35 +13,36 @@ import app.world.InvestmentFound;
 import app.world.Investor;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
 public class ControlPanel {
     private static ControlPanel instance;
-    private List<StockMarket> stockMarkets;
-    private List<CurrencyMarket> currencyMarkets;
-    private List<CommodityMarket> commodityMarkets;
+    private HashMap<String, StockMarket> stockMarkets;
+    private HashMap<String, CurrencyMarket> currencyMarkets;
+    private HashMap<String, CommodityMarket> commodityMarkets;
     private Float bearBullRatio;
-    private List<Investor> investors;
-    private List<Company> companies;
-    private List<InvestmentFound> investmentFounds;
-    private List<Commodity> commodities;
-    private List<Currency> currencies;
-    private List<Index> indexes;
-    private List<Share> shares;
+    private HashMap<String, Investor> investors;
+    private HashMap<String, Company> companies;
+    private HashMap<String, InvestmentFound> investmentFounds;
+    private HashMap<String, Commodity> commodities;
+    private HashMap<String, Currency> currencies;
+    private HashMap<String, Index> indexes;
+    private HashMap<String, Share> shares;
 
     public ControlPanel() {
-        this.stockMarkets = new ArrayList<>();
-        this.currencyMarkets = new ArrayList<>();
-        this.commodityMarkets = new ArrayList<>();
+        this.stockMarkets = new HashMap<>();
+        this.currencyMarkets = new HashMap<>();
+        this.commodityMarkets = new HashMap<>();
         this.bearBullRatio = 1.0f;
-        this.investors = new ArrayList<>();
-        this.companies = new ArrayList<>();
-        this.commodities = new ArrayList<>();
-        this.currencies = new ArrayList<>();
-        this.indexes = new ArrayList<>();
-        this.shares = new ArrayList<>();
-        this.investmentFounds = new ArrayList<>();
+        this.investors = new HashMap<>();
+        this.companies = new HashMap<>();
+        this.commodities = new HashMap<>();
+        this.currencies = new HashMap<>();
+        this.indexes = new HashMap<>();
+        this.shares = new HashMap<>();
+        this.investmentFounds = new HashMap<>();
     }
 
     public static ControlPanel getInstance()
@@ -55,231 +56,118 @@ public class ControlPanel {
 
     public Boolean marketExist(String name)
     {
-        boolean result = false;
-        for (Market market:stockMarkets) {
-            if (specificMarketExist(name, market))
-                result = true;
-        }
-        for (Market market:currencyMarkets) {
-            if (specificMarketExist(name, market))
-                result = true;
-        }
-        for (Market market:commodityMarkets) {
-            if (specificMarketExist(name, market))
-                result = true;
-        }
-        return result;
-    }
-
-    private Boolean specificMarketExist(String name, Market market)
-    {
-        return Objects.equals(market.getName(), name);
+        return stockMarkets.containsKey(name) || currencyMarkets.containsKey(name) || commodityMarkets.containsKey(name);
     }
 
     public Boolean currencyExist(String name)
     {
-        for (Currency currency: this.currencies) {
-            if(Objects.equals(currency.getName(), name))
-            {
-                return true;
-            }
-        }
-        return false;
+        return currencies.containsKey(name);
     }
 
     public Boolean commodityExist(String name)
     {
-        for (Commodity commodity: this.commodities) {
-            if(Objects.equals(commodity.getName(), name))
-            {
-                return true;
-            }
-        }
-        return false;
+        return commodities.containsKey(name);
     }
     public boolean investorExist(String name) {
-        for (Investor investor: this.investors) {
-            if(Objects.equals(investor.getName(), name))
-            {
-                return true;
-            }
-        }
-        return false;
+        return investors.containsKey(name);
     }
 
     public boolean investmentFoundExist(String name) {
-        for (InvestmentFound investmentFound: this.investmentFounds) {
-            if(Objects.equals(investmentFound.getName(), name))
-            {
-                return true;
-            }
-        }
-        return false;
+        return investmentFounds.containsKey(name);
     }
     public boolean companyExist(String name)
     {
-        return findCompanyByName(name) != null;
+        return companies.containsKey(name);
     }
     public boolean indexExist(String name) {
-        for(Index index: this.indexes)
-        {
-            if(Objects.equals(index.getName(),name))
-            {
-                return true;
-            }
-        }
-        return false;
+        return indexes.containsKey(name);
     }
     public boolean shareExist(String name) {
-        for(Share share: this.shares)
-        {
-            if(Objects.equals(share.getName(),name))
-            {
-                return true;
-            }
-        }
-        return false;
+        return shares.containsKey(name);
     }
     public void addStockMarket(StockMarket stockMarket){
-        this.stockMarkets.add(stockMarket);
+        this.stockMarkets.put(stockMarket.getName(), stockMarket);
     }
 
     public void addCurrencyMarket(CurrencyMarket currencyMarket){
-        this.currencyMarkets.add(currencyMarket);
+        this.currencyMarkets.put(currencyMarket.getName(), currencyMarket);
     }
 
     public void addCommodityMarket(CommodityMarket commodityMarket){
-        this.commodityMarkets.add(commodityMarket);
+        this.commodityMarkets.put(commodityMarket.getName(), commodityMarket);
     }
 
     public void addCurrency(Currency currency){
         if(!currencyExist(currency.getName()))
         {
-            this.currencies.add(currency);
+            this.currencies.put(currency.getName(), currency);
         }
     }
 
     public void addCommodity(Commodity commodity){
         if(!commodityExist(commodity.getName()))
         {
-            this.commodities.add(commodity);
+            this.commodities.put(commodity.getName(), commodity);
         }
     }
 
     public void addInvestor(Investor investor)
     {
-        if(!getInstance().investorExist(investor.getName())) {
-            this.investors.add(investor);
+        if(!investorExist(investor.getName())) {
+            this.investors.put(investor.getName(), investor);
         }
     }
 
     public void addCompany(Company company) {
-        if(!getInstance().companyExist(company.getName()))
+        if(!companyExist(company.getName()))
         {
-            this.companies.add(company);
+            this.companies.put(company.getName(), company);
         }
     }
 
     public void addInvestmentFound(InvestmentFound investmentFound)
     {
-        if(!getInstance().investmentFoundExist(investmentFound.getName()))
+        if(!investmentFoundExist(investmentFound.getName()))
         {
-            this.investmentFounds.add(investmentFound);
+            this.investmentFounds.put(investmentFound.getName(), investmentFound);
         }
     }
 
     public void addIndex(Index index) {
         if(!getInstance().indexExist(index.getName()))
         {
-            this.indexes.add(index);
+            this.indexes.put(index.getName(), index);
         }
     }
 
     public void addShare(Share share) {
         if(!getInstance().shareExist(share.getName()))
         {
-            this.shares.add(share);
+            this.shares.put(share.getName(), share);
         }
     }
 
-
-
-    public void removeStockMarket(StockMarket stockMarket){
-        this.stockMarkets.remove(stockMarket);
-    }
-
-    public void removeCurrencyMarket(CurrencyMarket currencyMarket){
-        this.currencyMarkets.remove(currencyMarket);
-    }
-
-    public void removeCommodityMarket(CommodityMarket commodityMarket){
-        this.commodityMarkets.remove(commodityMarket);
-    }
-
-    public void removeCurrency(Currency currency){
-        this.currencies.remove(currency);
-    }
-
-    public void removeCommodity(Commodity commodity){
-        this.commodities.remove(commodity);
-    }
 
     public Currency getCurrency(String name)
     {
-        for(Currency currency : this.currencies)
-        {
-            if(Objects.equals(currency.getName(), name))
-            {
-                return currency;
-            }
-        }
-        return null;
+        return currencies.get(name);
     }
     public void forceBuyOut(){}
 
-    public Company findCompanyByName(String name) {
-        for (Company company: this.companies) {
-            if(Objects.equals(company.getName(), name))
-            {
-                return company;
-            }
-        }
-        return null;
+    public Company getCompany(String name) {
+        return companies.get(name);
     }
 
-
-
     public Commodity getCommodity(String name) {
-        for(Commodity commodity : this.commodities)
-        {
-            if(Objects.equals(commodity.getName(), name))
-            {
-                return commodity;
-            }
-        }
-        return null;
+        return commodities.get(name);
     }
 
     public Index getIndex(String name) {
-        for(Index index : this.indexes)
-        {
-            if(Objects.equals(index.getName(), name))
-            {
-                return index;
-            }
-        }
-        return null;
+        return indexes.get(name);
     }
 
     public Share getShare(String name) {
-        for(Share share : this.shares)
-        {
-            if(Objects.equals(share.getName(), name))
-            {
-                return share;
-            }
-        }
-        return null;
+        return shares.get(name);
     }
 
     public static void removeInstance()
@@ -287,23 +175,43 @@ public class ControlPanel {
         instance = null;
     }
 
-    public void removeShare(Share share) {
-        this.shares.remove(share);
+    public void removeStockMarket(String stockMarketName){
+        this.stockMarkets.remove(stockMarketName);
     }
 
-    public void removeCompany(Company company) {
-        this.companies.remove(company);
+    public void removeCurrencyMarket(String currencyMarketName){
+        this.currencyMarkets.remove(currencyMarketName);
     }
 
-    public void removeIndex(Index index) {
-        this.indexes.remove(index);
+    public void removeCommodityMarket(String commodityMarketName){
+        this.commodityMarkets.remove(commodityMarketName);
     }
 
-    public void removeInvestor(Investor investor) {
-        this.investors.remove(investor);
+    public void removeCurrency(String currencyName){
+        this.currencies.remove(currencyName);
     }
-    public void removeInvestmentFound(InvestmentFound investmentFound)
+
+    public void removeCommodity(String commodityName){
+        this.commodities.remove(commodityName);
+    }
+    public void removeShare(String shareName) {
+        this.shares.remove(shareName);
+    }
+
+    public void removeIndex(String indexName) {
+        this.indexes.remove(indexName);
+    }
+
+    public void removeCompany(String companyName) {
+        this.companies.remove(companyName);
+    }
+
+    public void removeInvestor(String investorName) {
+        this.investors.remove(investorName);
+    }
+
+    public void removeInvestmentFound(String investmentFoundName)
     {
-        this.investmentFounds.remove(investmentFound);
+        this.investmentFounds.remove(investmentFoundName);
     }
 }
