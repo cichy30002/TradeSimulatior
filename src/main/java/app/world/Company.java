@@ -1,9 +1,10 @@
 package app.world;
 
 import app.controls.ControlPanel;
+import app.exceptions.TransactionException;
+import app.valuables.Currency;
 import app.valuables.Share;
 
-import java.util.Date;
 
 public class Company extends MarketClient{
     private String IPODate;
@@ -33,5 +34,8 @@ public class Company extends MarketClient{
         this.totalSales = totalSales;
 
         ControlPanel.getInstance().addCompany(this);
+    }
+    public void addFunds(String currencyName, Integer amount) throws TransactionException {
+        this.addToWallet(currencyName, amount);
     }
 }

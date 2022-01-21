@@ -12,10 +12,7 @@ import app.world.Company;
 import app.world.InvestmentFound;
 import app.world.Investor;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
 
 public class ControlPanel {
     private static ControlPanel instance;

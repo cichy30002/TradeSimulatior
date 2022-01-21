@@ -49,6 +49,7 @@ public class ControlPanelTest {
     Commodity commodity;
     ArrayList<String> commodities;
     ArrayList<String> prices;
+    ArrayList<String> prices1;
 
     @Test
     void constructorTest(){
@@ -84,8 +85,8 @@ public class ControlPanelTest {
             firstCurrencyMarket = new CurrencyMarket("abc currency market", 1.0f, "zloty", currencies, prices);
             secondCurrencyMarket = new CurrencyMarket("123 currency market", 1.2f, "ruble", currencies, prices);
 
-            firstCommodityMarket = new CommodityMarket("abc commodity market", 1.0f, "zloty", commodities, new ArrayList<>());
-            secondCommodityMarket = new CommodityMarket("123 commodity market", 1.0f, "zloty", commodities, new ArrayList<>());
+            firstCommodityMarket = new CommodityMarket("abc commodity market", 1.0f, "zloty", commodities, prices1);
+            secondCommodityMarket = new CommodityMarket("123 commodity market", 1.0f, "zloty", commodities, prices1);
         }catch (WrongMarketParamException e)
         {
             System.out.println(e.getMessage());
@@ -126,6 +127,8 @@ public class ControlPanelTest {
         prices = new ArrayList<>();
         prices.add("1");
         prices.add("1");
+        prices1 = new ArrayList<>();
+        prices1.add("1");
     }
 
     void removeFewMarkets()

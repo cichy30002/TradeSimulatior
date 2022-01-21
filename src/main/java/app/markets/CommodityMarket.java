@@ -6,15 +6,14 @@ import app.valuables.Commodity;
 import app.valuables.Currency;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class CommodityMarket extends Market{
     private List<Integer> listOfPrices;
-    private List<Commodity> collectionOfProducts;
     public CommodityMarket(String name, float marginFee, String currency, ArrayList<String> listOfProductNames, List<String> listOfPrices) throws WrongMarketParamException {
         super(name, marginFee, currency);
-        this.listOfPrices = parseList(listOfPrices);
-        this.collectionOfProducts = findCommodities(listOfProductNames);
+        this.productsWithPrices = makeProductsWithPrices(findCommodities(listOfProductNames), parseList(listOfPrices));
         ControlPanel.getInstance().addCommodityMarket(this);
     }
 
@@ -36,7 +35,17 @@ public class CommodityMarket extends Market{
         return result;
 
     }
-    public List<Integer> getListOfPrices() {
-        return listOfPrices;
+
+    private HashMap<String, Integer> makeProductsWithPrices(List<Commodity> commodities, List<Integer> prices) throws WrongMarketParamException {
+        if(commodities.size() != prices.size())
+        {
+            throw new WrongMarketParamException("List of currencies does not match list of prices!");
+        }
+        HashMap<String,Integer> result = new HashMap<>();
+        for(int i=0;i<commodities.size();i++)
+        {
+            result.put(commodities.get(i).getName(), prices.get(i));
+        }
+        return result;
     }
 }

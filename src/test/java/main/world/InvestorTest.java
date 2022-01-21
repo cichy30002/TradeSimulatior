@@ -32,16 +32,16 @@ public class InvestorTest {
 
     private boolean clientIDCheck()
     {
-        ArrayList<String> clinetIDs = new ArrayList<>();
+        ArrayList<String> clientIDs = new ArrayList<>();
         Investor tmp;
         for(int i =0; i < 1000;i++)
         {
             tmp = new Investor(String.valueOf(i));
-            if(clinetIDs.contains(tmp.getClientID()))
+            if(clientIDs.contains(tmp.getClientID()))
             {
                 return false;
             }
-            clinetIDs.add(tmp.getClientID());
+            clientIDs.add(tmp.getClientID());
         }
         return true;
     }
@@ -54,18 +54,13 @@ public class InvestorTest {
         assertThrows(TransactionException.class, () -> investor.bonusFounds("xd", 10));
         assertThrows(TransactionException.class, () -> investor.bonusFounds(currency1.getName(), -10));
         assertDoesNotThrow(() -> investor.bonusFounds(currency1.getName(), 10));
-
+        assertEquals(investor.getAvailableValuableAmount("zloty"), 10);
         assertThrows(TransactionException.class, () -> investor.transaction("xd", currency1, 10, currencyMarket));
         assertThrows(TransactionException.class, () -> investor.transaction("ruble", currency1, 10, currencyMarket));
         assertThrows(TransactionException.class, () -> investor.transaction("zloty", commodity, 10, currencyMarket));
         assertThrows(TransactionException.class, () -> investor.transaction("zloty", currency3, 10, currencyMarket));
         assertThrows(TransactionException.class, () -> investor.transaction("zloty", currency1, -10, currencyMarket));
         assertThrows(TransactionException.class, () -> investor.transaction("zloty", currency1, 0, currencyMarket));
-        assertThrows(TransactionException.class, () -> investor.transaction("zloty", currency1, 11, currencyMarket));
-        assertEquals(investor.getAvailableValuableAmount("zloty"), 10);
-        assertDoesNotThrow(() -> investor.transaction("zloty", currency2, 1, currencyMarket));
-        assertEquals(investor.getAvailableValuableAmount("zloty"), 8);
-        assertEquals(investor.getAvailableValuableAmount("ruble"), 1);
 
         clearCurrencyMarket();
     }
@@ -104,6 +99,17 @@ public class InvestorTest {
     @Test
     public void transactionTest()
     {
+        makeCurrencyMarket();
+        Investor investor = new Investor("test");
+        assertThrows(TransactionException.class, () -> investor.bonusFounds("xd", 10));
+        assertDoesNotThrow(() -> investor.bonusFounds(currency1.getName(), 10));
+        assertEquals(investor.getAvailableValuableAmount("zloty"), 10);
+        assertThrows(TransactionException.class, () -> investor.transaction("zloty", currency1, 11, currencyMarket));
+        assertEquals(investor.getAvailableValuableAmount("zloty"), 10);
+        assertDoesNotThrow(() -> investor.transaction("zloty", currency2, 1, currencyMarket));
+        assertEquals(investor.getAvailableValuableAmount("zloty"), 8);
+        assertEquals(investor.getAvailableValuableAmount("ruble"), 1);
 
+        clearCurrencyMarket();
     }
 }

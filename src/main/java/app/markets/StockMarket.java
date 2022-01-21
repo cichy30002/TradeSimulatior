@@ -4,6 +4,7 @@ import app.controls.ControlPanel;
 import app.exceptions.WrongMarketParamException;
 import app.valuables.Index;
 import app.valuables.Share;
+import app.valuables.Valuable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,7 @@ public class StockMarket extends Market{
     private final String city;
     private final String address;
     private List<Index> listOfIndexes;
-    private List<Share> listOfProducts;
+    private List<Share> listOfShares;
 
     public StockMarket(String name, float marginFee, String currency, List<String> listOfProductsNames, String country, String city, String address, List<String> listOfIndexesNames) throws WrongMarketParamException {
         super(name, marginFee, currency);
@@ -21,10 +22,45 @@ public class StockMarket extends Market{
         this.city = city;
         this.address = address;
         this.listOfIndexes = findIndexes(listOfIndexesNames);
-        this.listOfProducts = findShares(listOfProductsNames);
+        this.listOfShares = findShares(listOfProductsNames);
         ControlPanel.getInstance().addStockMarket(this);
+        generateInitialPrices();
     }
 
+    private void generateInitialPrices() {
+        for(Share share : this.listOfShares)
+        {
+            this.productsWithPrices.put(share.getName(), generatePrice(share));
+        }
+        for(Index index: this.listOfIndexes)
+        {
+            this.productsWithPrices.put(index.getName(), generatePrice(index));
+        }
+    }
+
+    private Integer generatePrice(Valuable valuable) {
+        return 1;
+    }
+
+
+    public StockMarket(String name, float marginFee, String currency, List<String> listOfShareNames, ArrayList<String> listOfSharePrices, String country, String city, String address, List<String> listOfIndexesNames, ArrayList<String> listOfIndexesPrices) throws WrongMarketParamException {
+        this(name, marginFee, currency, listOfShareNames, country, city, address, listOfIndexesNames);
+        if(listOfSharePrices.size() != listOfShareNames.size() || listOfIndexesNames.size() != listOfIndexesPrices.size())
+        {
+            throw new WrongMarketParamException("Wrong list of prices for stock market");
+        }
+        List<Integer> sharePrices = parseList(listOfSharePrices);
+        List<Integer> indexPrices = parseList(listOfIndexesPrices);
+        for(int i=0;i<this.listOfShares.size();i++)
+        {
+            this.productsWithPrices.put(listOfShareNames.get(i), sharePrices.get(i));
+        }
+        for(int i=0;i<this.listOfIndexes.size();i++)
+        {
+            this.productsWithPrices.put(listOfIndexesNames.get(i), indexPrices.get(i));
+        }
+
+    }
     private List<Share> findShares(List<String> listOfProductsNames) throws WrongMarketParamException {
         List<Share> result = new ArrayList<>();
         for(String shareName : listOfProductsNames)

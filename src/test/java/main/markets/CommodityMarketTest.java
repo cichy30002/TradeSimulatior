@@ -54,6 +54,7 @@ public class CommodityMarketTest {
         commodities.add(commodity2.getName());
         prices = new ArrayList<>();
         prices.add("1");
+        prices.add("2");
         try {
             commodityMarket = new CommodityMarket("blyskotki", 1f, "zloty", commodities, prices);
         } catch (WrongMarketParamException e) {

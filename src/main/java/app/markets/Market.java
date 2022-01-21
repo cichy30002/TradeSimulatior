@@ -1,7 +1,6 @@
 package app.markets;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -34,6 +33,7 @@ public abstract class Market {
             throw new WrongMarketParamException("Currency " + currency + " does not exist!");
         }
         this.currency = currency;
+        this.productsWithPrices = new HashMap<>();
     }
 
 

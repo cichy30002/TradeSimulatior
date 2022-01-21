@@ -1,6 +1,7 @@
 package app.world;
 
 import app.controls.ControlPanel;
+import app.exceptions.TransactionException;
 import app.valuables.Valuable;
 
 import java.util.ArrayList;
@@ -45,5 +46,8 @@ public class InvestmentFound extends MarketClient{
             result.add(nextValuable);
         }
         return result;
+    }
+    public void addFunds(String currencyName, Integer amount) throws TransactionException {
+        this.addToWallet(currencyName, amount);
     }
 }
