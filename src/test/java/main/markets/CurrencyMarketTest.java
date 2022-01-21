@@ -53,6 +53,8 @@ public class CurrencyMarketTest {
         currencies.add(currency3.getName());
         prices = new ArrayList<>();
         prices.add("1");
+        prices.add("1");
+        prices.add("1");
         try {
             currencyMarket = new CurrencyMarket("monetki", 2.0f, "zloty", currencies, prices);
         } catch (WrongMarketParamException e) {

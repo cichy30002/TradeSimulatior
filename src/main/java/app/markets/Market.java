@@ -2,18 +2,18 @@ package app.markets;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 import app.controls.ControlPanel;
+import app.exceptions.MarketCollectionException;
 import app.exceptions.WrongMarketParamException;
-import app.valuables.Valuable;
 
 public abstract class Market {
     private final String name;
     private float marginFee;
     private final String currency;
-    private Collection<Valuable> collectionOfProducts;
-
+    protected HashMap<String, Integer> productsWithPrices;
     protected Market(String name, float marginFee, String currency) throws WrongMarketParamException {
         if(ControlPanel.getInstance().marketExist(name))
         {
@@ -36,13 +36,6 @@ public abstract class Market {
         this.currency = currency;
     }
 
-    public void add(Valuable toAdd){
-        collectionOfProducts.add(toAdd);
-    }
-
-    public void remove(Valuable toRemove){
-        collectionOfProducts.remove(toRemove);
-    }
 
     public String getName(){
         return this.name;
@@ -60,5 +53,37 @@ public abstract class Market {
             result.add(Integer.parseInt(s));
         }
         return result;
+    }
+    protected void deepAdd(String toAdd, Integer price) throws MarketCollectionException {
+        if(productsWithPrices.containsKey(toAdd))
+        {
+            throw new MarketCollectionException("Tred to add currency that already is in the market");
+        }
+        productsWithPrices.put(toAdd, price);
+    }
+
+    protected void deepRemove(String toRemoveName) throws MarketCollectionException {
+        if(!ControlPanel.getInstance().currencyExist(toRemoveName))
+        {
+            throw new MarketCollectionException("Tried to remove currency which does not exist: "+ toRemoveName);
+        }
+        if(!this.productsWithPrices.containsKey(toRemoveName))
+        {
+            throw new MarketCollectionException("Tried to remove currency which is not in the market: " + toRemoveName);
+        }
+        productsWithPrices.remove(toRemoveName);
+    }
+
+    public boolean isProductInMarket(String valuableName)
+    {
+        return productsWithPrices.containsKey(valuableName);
+    }
+
+    public Integer getProductPrice(String productName) throws MarketCollectionException {
+        if(!isProductInMarket(productName))
+        {
+            throw new MarketCollectionException("Tried to get price of product that is ont in the market: " + productName);
+        }
+        return productsWithPrices.get(productName);
     }
 }

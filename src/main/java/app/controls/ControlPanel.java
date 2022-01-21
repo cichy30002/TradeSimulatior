@@ -54,17 +54,21 @@ public class ControlPanel {
         return ControlPanel.instance;
     }
 
-    public Boolean marketExist(String name)
+    public boolean marketExist(String name)
     {
         return stockMarkets.containsKey(name) || currencyMarkets.containsKey(name) || commodityMarkets.containsKey(name);
     }
+    public boolean valuableExist(String name)
+    {
+        return commodities.containsKey(name) || currencies.containsKey(name) || indexes.containsKey(name) || shares.containsKey(name);
+    }
 
-    public Boolean currencyExist(String name)
+    public boolean currencyExist(String name)
     {
         return currencies.containsKey(name);
     }
 
-    public Boolean commodityExist(String name)
+    public boolean commodityExist(String name)
     {
         return commodities.containsKey(name);
     }

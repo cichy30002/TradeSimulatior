@@ -48,6 +48,7 @@ public class ControlPanelTest {
     ArrayList<String> currencies;
     Commodity commodity;
     ArrayList<String> commodities;
+    ArrayList<String> prices;
 
     @Test
     void constructorTest(){
@@ -80,8 +81,8 @@ public class ControlPanelTest {
             secondStockMarket = new StockMarket("polish2 Stock", 1.0f, "zloty", shares, "Poland", "Warsaw", "idk", new ArrayList<>());
             thirdStockMarket = new StockMarket("russian Stock", 5.0f, "ruble", shares, "Russia", "Moscow", "idk", new ArrayList<>());
 
-            firstCurrencyMarket = new CurrencyMarket("abc currency market", 1.0f, "zloty", currencies, new ArrayList<>());
-            secondCurrencyMarket = new CurrencyMarket("123 currency market", 1.2f, "ruble", currencies, new ArrayList<>());
+            firstCurrencyMarket = new CurrencyMarket("abc currency market", 1.0f, "zloty", currencies, prices);
+            secondCurrencyMarket = new CurrencyMarket("123 currency market", 1.2f, "ruble", currencies, prices);
 
             firstCommodityMarket = new CommodityMarket("abc commodity market", 1.0f, "zloty", commodities, new ArrayList<>());
             secondCommodityMarket = new CommodityMarket("123 commodity market", 1.0f, "zloty", commodities, new ArrayList<>());
@@ -122,6 +123,9 @@ public class ControlPanelTest {
         currencies.add(currency2.getName());
         commodities = new ArrayList<>();
         commodities.add(commodity.getName());
+        prices = new ArrayList<>();
+        prices.add("1");
+        prices.add("1");
     }
 
     void removeFewMarkets()
