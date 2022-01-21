@@ -7,6 +7,7 @@ import java.util.List;
 import app.controls.ControlPanel;
 import app.exceptions.MarketCollectionException;
 import app.exceptions.WrongMarketParamException;
+import app.valuables.Valuable;
 
 public abstract class Market {
     private final String name;
@@ -85,5 +86,21 @@ public abstract class Market {
             throw new MarketCollectionException("Tried to get price of product that is ont in the market: " + productName);
         }
         return productsWithPrices.get(productName);
+    }
+
+    public void updatePrices()
+    {
+        productsWithPrices.replaceAll((p, v) -> calculateUpdatedPrice(p));
+    }
+
+    private Integer calculateUpdatedPrice(String productName)
+    {
+        Valuable product = ControlPanel.getInstance().getValuable(productName);
+        Integer productValue = product.getPrice();
+        Integer currencyValue = ControlPanel.getInstance().getCurrency(currency).getPrice();
+        Float withTaxes = 1f + marginFee;
+        Float productPriceWithTaxes = productValue*withTaxes;
+        float productPriceInCurrency = productPriceWithTaxes/currencyValue;
+        return (int)Math.ceil(productPriceInCurrency);
     }
 }

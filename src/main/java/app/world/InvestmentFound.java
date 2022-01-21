@@ -47,7 +47,4 @@ public class InvestmentFound extends MarketClient{
         }
         return result;
     }
-    public void addFunds(String currencyName, Integer amount) throws TransactionException {
-        this.addToWallet(currencyName, amount);
-    }
 }

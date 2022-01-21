@@ -1,6 +1,7 @@
 package main.markets;
 
 import app.controls.ControlPanel;
+import app.exceptions.MarketCollectionException;
 import app.exceptions.WrongMarketParamException;
 import app.exceptions.WrongValuableParamException;
 import app.markets.StockMarket;
@@ -12,8 +13,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class StockMarketTest {
     StockMarket stockMarket;
@@ -52,11 +53,11 @@ public class StockMarketTest {
         companies.add("not CD Projekt SA");
         try {
             share1 = new Share("CD Projekt SA", 50);
-            share2 = new Share("not CD Projekt SA", 30);
+            share2 = new Share("not CD Projekt SA", 34);
             index = new Index("CD Projekt SA x2", 200, companies);
             ArrayList<String> countries = new ArrayList<>();
             countries.add("Poland");
-            currency = new Currency("zloty", 20, countries);
+            currency = new Currency("zloty", 5, countries);
         } catch (WrongValuableParamException e) {
             System.out.println("Failed makeStockMarket");
         }
@@ -67,7 +68,7 @@ public class StockMarketTest {
         indexes.add(index.getName());
 
         try {
-            stockMarket = new StockMarket("polish Stock", 1.0f, currency.getName(), shares, "Poland", "Warsaw", "idk", indexes);
+            stockMarket = new StockMarket("polish Stock", 0.08f, currency.getName(), shares, "Poland", "Warsaw", "idk", indexes);
         } catch (WrongMarketParamException e) {
             System.out.println("Failed makeStockMarket");
         }
@@ -81,5 +82,19 @@ public class StockMarketTest {
         ControlPanel.getInstance().removeIndex(index.getName());
         ControlPanel.getInstance().removeCurrency(currency.getName());
         ControlPanel.getInstance().removeStockMarket(stockMarket.getName());
+    }
+    @Test
+    public void updateTest()
+    {
+        makeStockMarket();
+
+        try {
+            assertEquals(1, stockMarket.getProductPrice(share2.getName()));
+            stockMarket.updatePrices();
+            assertEquals(8, stockMarket.getProductPrice(share2.getName()));
+        } catch (MarketCollectionException e) {
+            e.printStackTrace();
+        }
+        clearStockMarket();
     }
 }

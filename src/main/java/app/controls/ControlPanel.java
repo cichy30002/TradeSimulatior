@@ -4,10 +4,7 @@ import app.markets.CommodityMarket;
 import app.markets.CurrencyMarket;
 import app.markets.Market;
 import app.markets.StockMarket;
-import app.valuables.Commodity;
-import app.valuables.Currency;
-import app.valuables.Index;
-import app.valuables.Share;
+import app.valuables.*;
 import app.world.Company;
 import app.world.InvestmentFound;
 import app.world.Investor;
@@ -149,11 +146,29 @@ public class ControlPanel {
     }
 
 
+    public Valuable getValuable(String name) {
+        if(currencyExist(name))
+        {
+            return currencies.get(name);
+        }
+        if(commodityExist(name))
+        {
+            return commodities.get(name);
+        }
+        if(indexExist(name))
+        {
+            return indexes.get(name);
+        }
+        if(shareExist(name))
+        {
+            return shares.get(name);
+        }
+        return null;
+    }
     public Currency getCurrency(String name)
     {
         return currencies.get(name);
     }
-    public void forceBuyOut(){}
 
     public Company getCompany(String name) {
         return companies.get(name);
@@ -215,4 +230,6 @@ public class ControlPanel {
     {
         this.investmentFounds.remove(investmentFoundName);
     }
+
+
 }

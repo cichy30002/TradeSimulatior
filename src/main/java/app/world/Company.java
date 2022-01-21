@@ -35,7 +35,5 @@ public class Company extends MarketClient{
 
         ControlPanel.getInstance().addCompany(this);
     }
-    public void addFunds(String currencyName, Integer amount) throws TransactionException {
-        this.addToWallet(currencyName, amount);
-    }
+
 }

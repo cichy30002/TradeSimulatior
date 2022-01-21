@@ -4,14 +4,12 @@ import app.controls.ControlPanel;
 import app.exceptions.TransactionException;
 import app.exceptions.WrongMarketParamException;
 import app.exceptions.WrongValuableParamException;
-import app.markets.CurrencyMarket;
 import app.markets.StockMarket;
 import app.valuables.Commodity;
 import app.valuables.Currency;
 import app.valuables.Index;
 import app.valuables.Share;
 import app.world.Company;
-import app.world.Investor;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -62,10 +60,10 @@ public class CompanyTest {
         assertThrows(TransactionException.class, () -> company1.addFunds("zloty", -10));
         assertDoesNotThrow(() -> company1.addFunds(currency.getName(), 10));
         assertEquals(company1.getAvailableValuableAmount("zloty"), 10);
-        assertThrows(TransactionException.class, () -> company1.transaction("xd", share1, 10, stockMarket));
-        assertThrows(TransactionException.class, () -> company1.transaction("zloty", commodity, 10, stockMarket));
-        assertThrows(TransactionException.class, () -> company1.transaction("zloty", share1, -10, stockMarket));
-        assertThrows(TransactionException.class, () -> company1.transaction("zloty", share1, 0, stockMarket));
+        assertThrows(TransactionException.class, () -> company1.transactionBuy("xd", share1, 10, stockMarket));
+        assertThrows(TransactionException.class, () -> company1.transactionBuy("zloty", commodity, 10, stockMarket));
+        assertThrows(TransactionException.class, () -> company1.transactionBuy("zloty", share1, -10, stockMarket));
+        assertThrows(TransactionException.class, () -> company1.transactionBuy("zloty", share1, 0, stockMarket));
 
         clearStockMarket();
     }
@@ -122,12 +120,15 @@ public class CompanyTest {
         assertThrows(TransactionException.class, () -> company1.addFunds("xd", 10));
         assertDoesNotThrow(() -> company1.addFunds(currency.getName(), 10));
         assertEquals(company1.getAvailableValuableAmount("zloty"), 10);
-        assertThrows(TransactionException.class, () -> company1.transaction("zloty", share1, 11, stockMarket));
+        assertThrows(TransactionException.class, () -> company1.transactionBuy("zloty", share1, 11, stockMarket));
         assertEquals(company1.getAvailableValuableAmount("zloty"), 10);
-        assertDoesNotThrow(() -> company1.transaction("zloty", share2, 1, stockMarket));
+        assertDoesNotThrow(() -> company1.transactionBuy("zloty", share2, 1, stockMarket));
         assertEquals(company1.getAvailableValuableAmount("zloty"), 8);
         assertEquals(company1.getAvailableValuableAmount(share2.getName()), 1);
 
+        assertDoesNotThrow(() -> company1.transactionSell( share2, 1, stockMarket));
+        assertEquals(company1.getAvailableValuableAmount("zloty"), 10);
+        assertEquals(company1.getAvailableValuableAmount(share2.getName()), 0);
         clearStockMarket();
     }
 }

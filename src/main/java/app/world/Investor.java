@@ -16,6 +16,6 @@ public class Investor extends MarketClient
     }
 
     public void bonusFounds(String currencyName, Integer amount) throws TransactionException {
-        this.addToWallet(currencyName, amount);
+        this.addFunds(currencyName, amount);
     }
 }

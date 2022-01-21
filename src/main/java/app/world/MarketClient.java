@@ -26,7 +26,7 @@ public abstract class MarketClient {
         this.wallet = new HashMap<>();
     }
 
-    public void transaction(String currencyName, Valuable valuableToBuy, Integer amount,  Market market) throws TransactionException {
+    public void transactionBuy(String currencyName, Valuable valuableToBuy, Integer amount, Market market) throws TransactionException {
         if(!ControlPanel.getInstance().currencyExist(currencyName) || !Objects.equals(market.getCurrency(), currencyName))
         {
             throw new TransactionException("Tried to make transaction with currency not matching markets currency");
@@ -55,6 +55,34 @@ public abstract class MarketClient {
         addToWallet(valuableToBuy.getName(), amount);
         try {
             removeFromWallet(market.getCurrency(), market.getProductPrice(valuableToBuy.getName()) * amount);
+        } catch (MarketCollectionException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void transactionSell(Valuable valuableToSell, Integer amount, Market market) throws TransactionException {
+        if(!ControlPanel.getInstance().valuableExist(valuableToSell.getName()))
+        {
+            throw new TransactionException("Tried to buy valuable that does not exist");
+        }
+        if(!market.isProductInMarket(valuableToSell.getName()))
+        {
+            throw new TransactionException("Tried to buy valuable which is not available in this market: " + valuableToSell.getName());
+        }
+        if(amount <= 0)
+        {
+            throw new TransactionException("Tried to buy invalid amount!");
+        }
+        Integer availableAmountOfGivenValuable = getAvailableValuableAmount(valuableToSell.getName());
+
+        if(availableAmountOfGivenValuable < amount)
+        {
+            throw new TransactionException("Not enough founds in clients wallet!");
+        }
+
+        removeFromWallet(valuableToSell.getName(), amount);
+        try {
+            addToWallet(market.getCurrency(), market.getProductPrice(valuableToSell.getName()) * amount);
         } catch (MarketCollectionException e) {
             e.printStackTrace();
         }
@@ -107,5 +135,8 @@ public abstract class MarketClient {
     public Integer getAvailableValuableAmount(String valuableName)
     {
         return wallet.getOrDefault(valuableName, 0);
+    }
+    public void addFunds(String currencyName, Integer amount) throws TransactionException {
+        this.addToWallet(currencyName, amount);
     }
 }

@@ -1,6 +1,7 @@
 package main.markets;
 
 import app.controls.ControlPanel;
+import app.exceptions.MarketCollectionException;
 import app.exceptions.WrongMarketParamException;
 import app.exceptions.WrongValuableParamException;
 import app.markets.CurrencyMarket;
@@ -9,8 +10,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CurrencyMarketTest {
     CurrencyMarket currencyMarket;
@@ -42,7 +43,7 @@ public class CurrencyMarketTest {
         countries.add("Poland");
         try {
             currency1 = new Currency("zloty", 20, countries);
-            currency2 = new Currency("ruble", 30, countries);
+            currency2 = new Currency("ruble", 307, countries);
             currency3 = new Currency("euro", 40, countries);
         } catch (WrongValuableParamException e) {
             System.out.println("Failed makeCurrencyMarket");
@@ -56,7 +57,7 @@ public class CurrencyMarketTest {
         prices.add("1");
         prices.add("1");
         try {
-            currencyMarket = new CurrencyMarket("monetki", 2.0f, "zloty", currencies, prices);
+            currencyMarket = new CurrencyMarket("monetki", 0.05f, "zloty", currencies, prices);
         } catch (WrongMarketParamException e) {
             System.out.println("Failed makeCurrencyMarket");
         }
@@ -67,5 +68,18 @@ public class CurrencyMarketTest {
         ControlPanel.getInstance().removeCurrency(currency2.getName());
         ControlPanel.getInstance().removeCurrency(currency3.getName());
         ControlPanel.getInstance().removeCurrencyMarket(currencyMarket.getName());
+    }
+    @Test
+    public void updateTest()
+    {
+        makeCurrencyMarket();
+        try {
+            assertEquals(1, currencyMarket.getProductPrice(currency2.getName()));
+            currencyMarket.updatePrices();
+            assertEquals(17, currencyMarket.getProductPrice(currency2.getName()));
+        } catch (MarketCollectionException e) {
+            e.printStackTrace();
+        }
+        clearCurrencyMarket();
     }
 }

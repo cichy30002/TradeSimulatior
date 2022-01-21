@@ -55,12 +55,12 @@ public class InvestorTest {
         assertThrows(TransactionException.class, () -> investor.bonusFounds(currency1.getName(), -10));
         assertDoesNotThrow(() -> investor.bonusFounds(currency1.getName(), 10));
         assertEquals(investor.getAvailableValuableAmount("zloty"), 10);
-        assertThrows(TransactionException.class, () -> investor.transaction("xd", currency1, 10, currencyMarket));
-        assertThrows(TransactionException.class, () -> investor.transaction("ruble", currency1, 10, currencyMarket));
-        assertThrows(TransactionException.class, () -> investor.transaction("zloty", commodity, 10, currencyMarket));
-        assertThrows(TransactionException.class, () -> investor.transaction("zloty", currency3, 10, currencyMarket));
-        assertThrows(TransactionException.class, () -> investor.transaction("zloty", currency1, -10, currencyMarket));
-        assertThrows(TransactionException.class, () -> investor.transaction("zloty", currency1, 0, currencyMarket));
+        assertThrows(TransactionException.class, () -> investor.transactionBuy("xd", currency1, 10, currencyMarket));
+        assertThrows(TransactionException.class, () -> investor.transactionBuy("ruble", currency1, 10, currencyMarket));
+        assertThrows(TransactionException.class, () -> investor.transactionBuy("zloty", commodity, 10, currencyMarket));
+        assertThrows(TransactionException.class, () -> investor.transactionBuy("zloty", currency3, 10, currencyMarket));
+        assertThrows(TransactionException.class, () -> investor.transactionBuy("zloty", currency1, -10, currencyMarket));
+        assertThrows(TransactionException.class, () -> investor.transactionBuy("zloty", currency1, 0, currencyMarket));
 
         clearCurrencyMarket();
     }
@@ -104,11 +104,15 @@ public class InvestorTest {
         assertThrows(TransactionException.class, () -> investor.bonusFounds("xd", 10));
         assertDoesNotThrow(() -> investor.bonusFounds(currency1.getName(), 10));
         assertEquals(investor.getAvailableValuableAmount("zloty"), 10);
-        assertThrows(TransactionException.class, () -> investor.transaction("zloty", currency1, 11, currencyMarket));
+        assertThrows(TransactionException.class, () -> investor.transactionBuy("zloty", currency1, 11, currencyMarket));
         assertEquals(investor.getAvailableValuableAmount("zloty"), 10);
-        assertDoesNotThrow(() -> investor.transaction("zloty", currency2, 1, currencyMarket));
+        assertDoesNotThrow(() -> investor.transactionBuy("zloty", currency2, 1, currencyMarket));
         assertEquals(investor.getAvailableValuableAmount("zloty"), 8);
         assertEquals(investor.getAvailableValuableAmount("ruble"), 1);
+
+        assertDoesNotThrow(() -> investor.transactionSell(currency2, 1, currencyMarket));
+        assertEquals(investor.getAvailableValuableAmount("zloty"), 10);
+        assertEquals(investor.getAvailableValuableAmount("ruble"), 0);
 
         clearCurrencyMarket();
     }

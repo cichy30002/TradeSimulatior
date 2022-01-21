@@ -1,6 +1,7 @@
 package main.markets;
 
 import app.controls.ControlPanel;
+import app.exceptions.MarketCollectionException;
 import app.exceptions.WrongMarketParamException;
 import app.exceptions.WrongValuableParamException;
 import app.markets.CommodityMarket;
@@ -11,8 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class CommodityMarketTest {
     CommodityMarket commodityMarket;
@@ -43,8 +43,8 @@ public class CommodityMarketTest {
         ArrayList<String> countries = new ArrayList<>();
         countries.add("Poland");
         try {
-            currency = new Currency("zloty", 20, countries);
-            commodity1 = new Commodity("gold", 40000, "ounce", 30000, 50000);
+            currency = new Currency("zloty", 100, countries);
+            commodity1 = new Commodity("gold", 44587, "ounce", 30000, 50000);
             commodity2 = new Commodity("silver", 4000, "ounce", 3000, 5000);
         } catch (WrongValuableParamException e) {
             System.out.println("Failed makeCurrencyMarket");
@@ -56,7 +56,7 @@ public class CommodityMarketTest {
         prices.add("1");
         prices.add("2");
         try {
-            commodityMarket = new CommodityMarket("blyskotki", 1f, "zloty", commodities, prices);
+            commodityMarket = new CommodityMarket("blyskotki", 0.02f, "zloty", commodities, prices);
         } catch (WrongMarketParamException e) {
             System.out.println("Failed makeCurrencyMarket");
         }
@@ -67,5 +67,19 @@ public class CommodityMarketTest {
         ControlPanel.getInstance().removeCommodity(commodity1.getName());
         ControlPanel.getInstance().removeCommodity(commodity2.getName());
         ControlPanel.getInstance().removeCommodityMarket(commodityMarket.getName());
+    }
+    @Test
+    public void updateTest()
+    {
+        makeCommodityMarket();
+
+        try {
+            assertEquals(1, commodityMarket.getProductPrice(commodity1.getName()));
+            commodityMarket.updatePrices();
+            assertEquals(455, commodityMarket.getProductPrice(commodity1.getName()));
+        } catch (MarketCollectionException e) {
+            e.printStackTrace();
+        }
+        clearCommodityMarket();
     }
 }

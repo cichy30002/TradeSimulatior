@@ -5,11 +5,9 @@ import app.exceptions.TransactionException;
 import app.exceptions.WrongMarketParamException;
 import app.exceptions.WrongValuableParamException;
 import app.markets.CommodityMarket;
-import app.markets.CurrencyMarket;
 import app.valuables.Commodity;
 import app.valuables.Currency;
 import app.world.InvestmentFound;
-import app.world.Investor;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -57,11 +55,11 @@ public class InvestmentFoundTest {
         assertThrows(TransactionException.class, () -> investmentFound.addFunds(currency.getName(), -10));
         assertDoesNotThrow(() -> investmentFound.addFunds(currency.getName(), 10));
         assertEquals(investmentFound.getAvailableValuableAmount("zloty"), 10);
-        assertThrows(TransactionException.class, () -> investmentFound.transaction("xd", commodity1, 10, commodityMarket));
-        assertThrows(TransactionException.class, () -> investmentFound.transaction("zloty", currency, 10, commodityMarket));
-        assertThrows(TransactionException.class, () -> investmentFound.transaction("zloty", commodity3, 10, commodityMarket));
-        assertThrows(TransactionException.class, () -> investmentFound.transaction("zloty", commodity1, -10, commodityMarket));
-        assertThrows(TransactionException.class, () -> investmentFound.transaction("zloty", commodity1, 0, commodityMarket));
+        assertThrows(TransactionException.class, () -> investmentFound.transactionBuy("xd", commodity1, 10, commodityMarket));
+        assertThrows(TransactionException.class, () -> investmentFound.transactionBuy("zloty", currency, 10, commodityMarket));
+        assertThrows(TransactionException.class, () -> investmentFound.transactionBuy("zloty", commodity3, 10, commodityMarket));
+        assertThrows(TransactionException.class, () -> investmentFound.transactionBuy("zloty", commodity1, -10, commodityMarket));
+        assertThrows(TransactionException.class, () -> investmentFound.transactionBuy("zloty", commodity1, 0, commodityMarket));
 
         clearCurrencyMarket();
     }
@@ -106,11 +104,15 @@ public class InvestmentFoundTest {
         assertThrows(TransactionException.class, () -> investmentFound.addFunds("xd", 10));
         assertDoesNotThrow(() -> investmentFound.addFunds(currency.getName(), 10));
         assertEquals(investmentFound.getAvailableValuableAmount("zloty"), 10);
-        assertThrows(TransactionException.class, () -> investmentFound.transaction("zloty", commodity1, 11, commodityMarket));
+        assertThrows(TransactionException.class, () -> investmentFound.transactionBuy("zloty", commodity1, 11, commodityMarket));
         assertEquals(investmentFound.getAvailableValuableAmount("zloty"), 10);
-        assertDoesNotThrow(() -> investmentFound.transaction("zloty", commodity1, 1, commodityMarket));
+        assertDoesNotThrow(() -> investmentFound.transactionBuy("zloty", commodity1, 1, commodityMarket));
         assertEquals(investmentFound.getAvailableValuableAmount("zloty"), 9);
         assertEquals(investmentFound.getAvailableValuableAmount(commodity1.getName()), 1);
+
+        assertDoesNotThrow(() -> investmentFound.transactionSell(commodity1,1,commodityMarket));
+        assertEquals(investmentFound.getAvailableValuableAmount("zloty"), 10);
+        assertEquals(investmentFound.getAvailableValuableAmount(commodity1.getName()), 0);
 
         clearCurrencyMarket();
     }
