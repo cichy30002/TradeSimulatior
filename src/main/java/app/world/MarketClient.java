@@ -4,12 +4,11 @@ import app.controls.ControlPanel;
 import app.exceptions.MarketCollectionException;
 import app.exceptions.TransactionException;
 import app.markets.Market;
-import app.valuables.Currency;
 import app.valuables.Valuable;
+import javafx.util.Pair;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Objects;
 
 public abstract class MarketClient {
@@ -138,5 +137,14 @@ public abstract class MarketClient {
     }
     public void addFunds(String currencyName, Integer amount) throws TransactionException {
         this.addToWallet(currencyName, amount);
+    }
+    public ArrayList<Pair<String, Integer>> getWallet()
+    {
+        ArrayList<Pair<String, Integer>> result = new ArrayList<>();
+        for(String valuable: wallet.keySet())
+        {
+            result.add(new Pair<>(valuable, wallet.get(valuable)));
+        }
+        return result;
     }
 }

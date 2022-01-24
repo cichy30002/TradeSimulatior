@@ -8,6 +8,7 @@ import app.controls.ControlPanel;
 import app.exceptions.MarketCollectionException;
 import app.exceptions.WrongMarketParamException;
 import app.valuables.Valuable;
+import javafx.util.Pair;
 
 public abstract class Market {
     private final String name;
@@ -41,8 +42,16 @@ public abstract class Market {
     public String getName(){
         return this.name;
     }
-
-
+    public Float getMarginFee(){return this.marginFee;}
+    public ArrayList<Pair<String, Integer>> getProductsWithPrices()
+    {
+        ArrayList<Pair<String, Integer>> result = new ArrayList<>();
+        for(String product: productsWithPrices.keySet())
+        {
+            result.add(new Pair<>(product, productsWithPrices.get(product)));
+        }
+        return result;
+    }
     public String getCurrency() {
         return currency;
     }
@@ -103,4 +112,6 @@ public abstract class Market {
         float productPriceInCurrency = productPriceWithTaxes/currencyValue;
         return (int)Math.ceil(productPriceInCurrency);
     }
+
+
 }

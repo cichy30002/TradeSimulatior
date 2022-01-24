@@ -2,6 +2,9 @@ package app.valuables;
 
 import app.exceptions.WrongValuableParamException;
 
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+
 public abstract class Valuable {
     private final String name;
     private Integer price;
@@ -29,7 +32,13 @@ public abstract class Valuable {
         return price;
     }
 
-    public void setPrice(Integer price) {
-        this.price = price;
+    public void updatePrice()
+    {
+        this.price = calculateUpdatedPrice();
+    }
+
+    private Integer calculateUpdatedPrice()
+    {
+        return this.price + ThreadLocalRandom.current().nextInt(-1, 2);
     }
 }

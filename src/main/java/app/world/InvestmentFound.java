@@ -10,8 +10,8 @@ import java.util.List;
 public class InvestmentFound extends MarketClient{
     private List<Valuable> toBuy;
     private Integer investorsNeeded;
-    private String managerName;
-    private String managerSurname;
+    private final String managerName;
+    private final String managerSurname;
 
     public InvestmentFound(String name, List<String> toBuyNames, Integer investorsNeeded, String managerName, String managerSurname) {
         super(name);
@@ -46,5 +46,30 @@ public class InvestmentFound extends MarketClient{
             result.add(nextValuable);
         }
         return result;
+    }
+
+    public List<String> getToBuy() {
+        ArrayList<String> result  = new ArrayList<>();
+        for(Valuable valuable:toBuy)
+        {
+            result.add(valuable.getName());
+        }
+        return result;
+    }
+
+    public Integer getInvestorsNeeded() {
+        return investorsNeeded;
+    }
+
+    public void setInvestorsNeeded(Integer investorsNeeded) {
+        this.investorsNeeded = investorsNeeded;
+    }
+
+    public String getManagerName() {
+        return managerName;
+    }
+
+    public String getManagerSurname() {
+        return managerSurname;
     }
 }

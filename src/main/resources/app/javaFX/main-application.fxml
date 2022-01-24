@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox minHeight="1080" minWidth="1920" spacing="20.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.javaFX.ApplicationController">
+   <children>
+      <BorderPane prefHeight="800.0" prefWidth="200.0">
+         <center>
+            <TabPane id="MainTabs" prefHeight="800.0" prefWidth="200.0" style="-fx-background-color: lightblue;" BorderPane.alignment="CENTER">
+              <tabs>
+                <Tab closable="false" text="Main">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                  </content>
+                </Tab>
+                  <Tab text="Test">
+                      <content>
+                          <VBox>
+                           <children>
+                              <ListView prefHeight="200.0" prefWidth="200.0" />
+                              <TableView prefHeight="200.0" prefWidth="200.0">
+                                <columns>
+                                  <TableColumn prefWidth="75.0" text="C1" />
+                                  <TableColumn prefWidth="75.0" text="C2" />
+                                </columns>
+                              </TableView>
+                           </children></VBox>
+                      </content>
+                  </Tab>
+              </tabs>
+            </TabPane>
+         </center>
+         <right>
+            <TabPane prefHeight="800.0" prefWidth="302.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+              <tabs>
+                <Tab text="Investors">
+                  <content>
+                      <ListView fx:id="InvestorList" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+                  </content>
+                </Tab>
+                <Tab text="Companies">
+                  <content>
+                      <ListView fx:id="CompanyList" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+                  </content>
+                </Tab>
+                  <Tab text="Investment Founds">
+                      <content>
+                          <ListView fx:id="InvestmentFoundList" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+                      </content>
+                  </Tab>
+              </tabs>
+            </TabPane>
+         </right>
+         <left>
+            <ListView fx:id="MarketList" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+         </left>
+      </BorderPane>
+      <HBox alignment="CENTER" prefHeight="280.0" prefWidth="200.0" spacing="30.0">
+         <children>
+            <Button alignment="CENTER" mnemonicParsing="false" text="add Investor" textAlignment="CENTER">
+               <padding>
+                  <Insets bottom="50.0" left="20.0" right="20.0" top="50.0" />
+               </padding>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Button>
+            <Button alignment="CENTER" layoutX="906.0" layoutY="88.0" mnemonicParsing="false" text="add Company" textAlignment="CENTER">
+               <padding>
+                  <Insets bottom="50.0" left="20.0" right="20.0" top="50.0" />
+               </padding>
+               <font>
+                  <Font size="16.0" />
+               </font>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </Button>
+            <Button alignment="CENTER" layoutX="990.0" layoutY="88.0" mnemonicParsing="false" text="add Investment Found" textAlignment="CENTER">
+               <padding>
+                  <Insets bottom="50.0" left="20.0" right="20.0" top="50.0" />
+               </padding>
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Button>
+            <Button alignment="CENTER" layoutX="1064.0" layoutY="88.0" mnemonicParsing="false" text="add Currency" textAlignment="CENTER">
+               <padding>
+                  <Insets bottom="50.0" left="20.0" right="20.0" top="50.0" />
+               </padding>
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Button>
+            <Button alignment="CENTER" layoutX="1143.0" layoutY="88.0" mnemonicParsing="false" text="add Commodity" textAlignment="CENTER">
+               <padding>
+                  <Insets bottom="50.0" left="20.0" right="20.0" top="50.0" />
+               </padding>
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Button>
+            <Button alignment="CENTER" layoutX="1222.0" layoutY="88.0" mnemonicParsing="false" text="add Index" textAlignment="CENTER">
+               <padding>
+                  <Insets bottom="50.0" left="20.0" right="20.0" top="50.0" />
+               </padding>
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Button>
+            <Button alignment="CENTER" layoutX="1368.0" layoutY="88.0" mnemonicParsing="false" text="add Market" textAlignment="CENTER">
+               <padding>
+                  <Insets bottom="50.0" left="20.0" right="20.0" top="50.0" />
+               </padding>
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Button>
+            <Button alignment="CENTER" layoutX="1432.0" layoutY="88.0" mnemonicParsing="false" text="change World Properies" textAlignment="CENTER">
+               <padding>
+                  <Insets bottom="50.0" left="20.0" right="20.0" top="50.0" />
+               </padding>
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Button>
+         </children>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+      </HBox>
+   </children>
+</VBox>

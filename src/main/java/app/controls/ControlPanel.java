@@ -9,7 +9,9 @@ import app.world.Company;
 import app.world.InvestmentFound;
 import app.world.Investor;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class ControlPanel {
     private static ControlPanel instance;
@@ -231,5 +233,47 @@ public class ControlPanel {
         this.investmentFounds.remove(investmentFoundName);
     }
 
+    public ArrayList<String> getAllMarketNames() {
+        ArrayList<String> result = new ArrayList<>();
+        result.addAll(currencyMarkets.keySet());
+        result.addAll(commodityMarkets.keySet());
+        result.addAll(stockMarkets.keySet());
+        return result;
+    }
 
+    public ArrayList<String> getAllInvestorNames() {
+        return new ArrayList<>(investors.keySet());
+    }
+
+    public ArrayList<String> getAllCompanyNames() {
+        return new ArrayList<>(companies.keySet());
+    }
+
+    public ArrayList<String> getAllInvestmentFoundNames() {
+        return new ArrayList<>(investmentFounds.keySet());
+    }
+
+    public Market getMarket(String marketName) {
+        if(currencyMarkets.containsKey(marketName))
+        {
+            return currencyMarkets.get(marketName);
+        }
+        if(commodityMarkets.containsKey(marketName))
+        {
+            return  commodityMarkets.get(marketName);
+        }
+        if(stockMarkets.containsKey(marketName))
+        {
+            return stockMarkets.get(marketName);
+        }
+        return null;
+    }
+
+    public Investor getInvestor(String investorName) {
+        return investors.get(investorName);
+    }
+
+    public InvestmentFound getInvestmentFound(String investmentFoundName) {
+        return investmentFounds.get(investmentFoundName);
+    }
 }
