@@ -1,5 +1,6 @@
 package app.controls;
 
+import app.exceptions.AppInputException;
 import app.markets.CommodityMarket;
 import app.markets.CurrencyMarket;
 import app.markets.Market;
@@ -11,14 +12,14 @@ import app.world.Investor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class ControlPanel {
     private static ControlPanel instance;
     private HashMap<String, StockMarket> stockMarkets;
     private HashMap<String, CurrencyMarket> currencyMarkets;
     private HashMap<String, CommodityMarket> commodityMarkets;
-    private Float bearBullRatio;
+    private Float bullBearRatio;
+    private Integer transactionsPerSecond;
     private HashMap<String, Investor> investors;
     private HashMap<String, Company> companies;
     private HashMap<String, InvestmentFound> investmentFounds;
@@ -26,12 +27,14 @@ public class ControlPanel {
     private HashMap<String, Currency> currencies;
     private HashMap<String, Index> indexes;
     private HashMap<String, Share> shares;
+    private Generator generator;
 
     public ControlPanel() {
         this.stockMarkets = new HashMap<>();
         this.currencyMarkets = new HashMap<>();
         this.commodityMarkets = new HashMap<>();
-        this.bearBullRatio = 1.0f;
+        this.bullBearRatio = 1.0f;
+        this.transactionsPerSecond = 5;
         this.investors = new HashMap<>();
         this.companies = new HashMap<>();
         this.commodities = new HashMap<>();
@@ -39,6 +42,7 @@ public class ControlPanel {
         this.indexes = new HashMap<>();
         this.shares = new HashMap<>();
         this.investmentFounds = new HashMap<>();
+        this.generator = new Generator();
     }
 
     public static ControlPanel getInstance()
@@ -275,5 +279,48 @@ public class ControlPanel {
 
     public InvestmentFound getInvestmentFound(String investmentFoundName) {
         return investmentFounds.get(investmentFoundName);
+    }
+
+    public void setTransactionsPerSecond(String value) throws AppInputException {
+        int transactions;
+        try{
+            transactions = Integer.parseInt(value);
+        }catch(NumberFormatException e)
+        {
+            throw new AppInputException("Input is not a correct number!");
+        }
+        if(transactions <= 0 || transactions >= 100)
+        {
+            throw new AppInputException("Number is out of range (0, 100)");
+        }
+        this.transactionsPerSecond = transactions;
+    }
+
+    public Integer getTransactionsPerSecond()
+    {
+        return this.transactionsPerSecond;
+    }
+    public void setBullBearRatio(String value) throws AppInputException
+    {
+        float ratio;
+        try {
+            ratio = Float.parseFloat(value);
+        }catch(NullPointerException | NumberFormatException e2)
+        {
+            throw new AppInputException("Input is not a correct number!");
+        }
+        if(ratio < -100f || ratio > 100f)
+        {
+            throw new AppInputException("Number is out of range (-100, 100)");
+        }
+        this.bullBearRatio = ratio;
+    }
+
+    public Float getBullBearRatio() {
+        return this.bullBearRatio;
+    }
+
+    public Generator getGenerator() {
+        return generator;
     }
 }

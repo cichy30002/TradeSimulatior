@@ -3,7 +3,6 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 
 <VBox minHeight="1080" minWidth="1920" spacing="20.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.javaFX.ApplicationController">
    <children>
@@ -16,20 +15,6 @@
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                   </content>
                 </Tab>
-                  <Tab text="Test">
-                      <content>
-                          <VBox>
-                           <children>
-                              <ListView prefHeight="200.0" prefWidth="200.0" />
-                              <TableView prefHeight="200.0" prefWidth="200.0">
-                                <columns>
-                                  <TableColumn prefWidth="75.0" text="C1" />
-                                  <TableColumn prefWidth="75.0" text="C2" />
-                                </columns>
-                              </TableView>
-                           </children></VBox>
-                      </content>
-                  </Tab>
               </tabs>
             </TabPane>
          </center>
@@ -58,82 +43,225 @@
             <ListView fx:id="MarketList" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
          </left>
       </BorderPane>
-      <HBox alignment="CENTER" prefHeight="280.0" prefWidth="200.0" spacing="30.0">
-         <children>
-            <Button alignment="CENTER" mnemonicParsing="false" text="add Investor" textAlignment="CENTER">
-               <padding>
-                  <Insets bottom="50.0" left="20.0" right="20.0" top="50.0" />
-               </padding>
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Button>
-            <Button alignment="CENTER" layoutX="906.0" layoutY="88.0" mnemonicParsing="false" text="add Company" textAlignment="CENTER">
-               <padding>
-                  <Insets bottom="50.0" left="20.0" right="20.0" top="50.0" />
-               </padding>
-               <font>
-                  <Font size="16.0" />
-               </font>
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
-            </Button>
-            <Button alignment="CENTER" layoutX="990.0" layoutY="88.0" mnemonicParsing="false" text="add Investment Found" textAlignment="CENTER">
-               <padding>
-                  <Insets bottom="50.0" left="20.0" right="20.0" top="50.0" />
-               </padding>
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Button>
-            <Button alignment="CENTER" layoutX="1064.0" layoutY="88.0" mnemonicParsing="false" text="add Currency" textAlignment="CENTER">
-               <padding>
-                  <Insets bottom="50.0" left="20.0" right="20.0" top="50.0" />
-               </padding>
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Button>
-            <Button alignment="CENTER" layoutX="1143.0" layoutY="88.0" mnemonicParsing="false" text="add Commodity" textAlignment="CENTER">
-               <padding>
-                  <Insets bottom="50.0" left="20.0" right="20.0" top="50.0" />
-               </padding>
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Button>
-            <Button alignment="CENTER" layoutX="1222.0" layoutY="88.0" mnemonicParsing="false" text="add Index" textAlignment="CENTER">
-               <padding>
-                  <Insets bottom="50.0" left="20.0" right="20.0" top="50.0" />
-               </padding>
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Button>
-            <Button alignment="CENTER" layoutX="1368.0" layoutY="88.0" mnemonicParsing="false" text="add Market" textAlignment="CENTER">
-               <padding>
-                  <Insets bottom="50.0" left="20.0" right="20.0" top="50.0" />
-               </padding>
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Button>
-            <Button alignment="CENTER" layoutX="1432.0" layoutY="88.0" mnemonicParsing="false" text="change World Properies" textAlignment="CENTER">
-               <padding>
-                  <Insets bottom="50.0" left="20.0" right="20.0" top="50.0" />
-               </padding>
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Button>
-         </children>
-         <VBox.margin>
-            <Insets />
-         </VBox.margin>
-      </HBox>
+      <TabPane prefHeight="280.0" prefWidth="1920.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+            <Tab text="World Settings">
+                <content>
+                    <VBox spacing="20.0">
+                        <HBox spacing="10.0">
+                            <Label text="Transactions per second: " />
+                            <TextField fx:id="TransactionsPerSecond" />
+                            <Button fx:id="TransactionsPerSecondButton" onAction="#transactionPerSecondConfirmClicked">Confirm</Button>
+                            <Label fx:id="TransactionsPerSecondMessage" text="" />
+                        </HBox>
+                        <HBox spacing="10.0">
+                            <Label text="Bull-Bear ratio: " />
+                            <TextField fx:id="BullBearRatio" />
+                            <Button fx:id="BullBearRatioButton" onAction="#bullBearRatioConfirmClicked">Confirm</Button>
+                            <Label fx:id="BullBearRatioMessage" text="" />
+                        </HBox>
+                     <padding>
+                        <Insets left="20.0" top="20.0" />
+                     </padding>
+                    </VBox>
+                </content>
+            </Tab>
+          <Tab text="Add Stock Market">
+            <content>
+                <VBox spacing="10.0">
+                    <HBox spacing="10.0">
+                        <Label text="Name: " />
+                        <TextField fx:id="StockMarketName" />
+                        <Label fx:id="StockMarketNameMessage" text="" />
+                    </HBox>
+                    <HBox spacing="10.0">
+                        <Label text="Margin fee (optional): " />
+                        <TextField fx:id="StockMarketMarginFee" />
+                        <Label fx:id="StockMarketMarginFeeMessage" text="" />
+                    </HBox>
+                    <HBox spacing="10.0">
+                        <Label text="Currency (optional): " />
+                        <TextField fx:id="StockMarketCurrency" />
+                        <Label fx:id="StockMarketCurrencyMessage" text="" />
+                    </HBox>
+                     <padding>
+                        <Insets left="20.0" top="20.0" />
+                     </padding>
+                    <Button fx:id="StockMarketButton" onAction="#addStockMarketClicked">Add Stock Market</Button>
+                </VBox>
+            </content>
+          </Tab>
+            <Tab text="Add Currency Market">
+                <content>
+                    <VBox spacing="10.0">
+                        <HBox spacing="10.0">
+                            <Label text="Name: " />
+                            <TextField fx:id="CurrencyMarketName" />
+                            <Label fx:id="CurrencyMarketNameMessage" text="" />
+                        </HBox>
+                        <HBox spacing="10.0">
+                            <Label text="Margin fee (optional): " />
+                            <TextField fx:id="CurrencyMarketMarginFee" />
+                            <Label fx:id="CurrencyMarketMarginFeeMessage" text="" />
+                        </HBox>
+                        <HBox spacing="10.0">
+                            <Label text="Currency (optional): " />
+                            <TextField fx:id="CurrencyMarketCurrency" />
+                            <Label fx:id="CurrencyMarketCurrencyMessage" text="" />
+                        </HBox>
+                        <padding>
+                            <Insets left="20.0" top="20.0" />
+                        </padding>
+                        <Button fx:id="CurrencyMarketButton" onAction="#addCurrencyMarketClicked">Add Currency Market</Button>
+                    </VBox>
+                </content>
+            </Tab>
+            <Tab text="Add Commodity Market">
+                <content>
+                    <VBox spacing="10.0">
+                        <HBox spacing="10.0">
+                            <Label text="Name: " />
+                            <TextField fx:id="CommodityMarketName" />
+                            <Label fx:id="CommodityMarketNameMessage" text="" />
+                        </HBox>
+                        <HBox spacing="10.0">
+                            <Label text="Margin fee (optional): " />
+                            <TextField fx:id="CommodityMarketMarginFee" />
+                            <Label fx:id="CommodityMarketMarginFeeMessage" text="" />
+                        </HBox>
+                        <HBox spacing="10.0">
+                            <Label text="Currency (optional): " />
+                            <TextField fx:id="CommodityMarketCurrency" />
+                            <Label fx:id="CommodityMarketCurrencyMessage" text="" />
+                        </HBox>
+                        <padding>
+                            <Insets left="20.0" top="20.0" />
+                        </padding>
+                        <Button fx:id="CommodityMarketButton" onAction="#addCommodityMarketClicked">Add Commodity Market</Button>
+                    </VBox>
+                </content>
+            </Tab>
+            <Tab text="Add Investor">
+                <content>
+                    <VBox spacing="10.0">
+                        <HBox spacing="10.0">
+                            <Label text="Name: " />
+                            <TextField fx:id="InvestorName" />
+                            <Label fx:id="InvestorNameMessage" text="" />
+                        </HBox>
+                        <padding>
+                            <Insets left="20.0" top="20.0" />
+                        </padding>
+                        <Button fx:id="InvestorButton" onAction="#addInvestorClicked">Add Investor</Button>
+                    </VBox>
+                </content>
+            </Tab>
+            <Tab text="Add Company">
+                <content>
+                    <VBox spacing="10.0">
+                        <HBox spacing="10.0">
+                            <Label text="Name: " />
+                            <TextField fx:id="CompanyName" />
+                            <Label fx:id="CompanyNameMessage" text="" />
+                        </HBox>
+                        <padding>
+                            <Insets left="20.0" top="20.0" />
+                        </padding>
+                        <Button fx:id="CompanyButton" onAction="#addCompanyClicked">Add Company</Button>
+                    </VBox>
+                </content>
+            </Tab>
+            <Tab text="Add Investment Found">
+                <content>
+                    <VBox spacing="10.0">
+                        <HBox spacing="10.0">
+                            <Label text="Name: " />
+                            <TextField fx:id="InvestmentFoundName" />
+                            <Label fx:id="InvestmentFoundNameMessage" text="" />
+                        </HBox>
+                        <padding>
+                            <Insets left="20.0" top="20.0" />
+                        </padding>
+                        <Button fx:id="InvestmentFoundButton" onAction="#addInvestmentFoundClicked">Add Investment Found</Button>
+                    </VBox>
+                </content>
+            </Tab>
+            <Tab text="Add Currency">
+                <content>
+                    <VBox spacing="10.0">
+                        <HBox spacing="10.0">
+                            <Label text="Name: " />
+                            <TextField fx:id="CurrencyName" />
+                            <Label fx:id="CurrencyNameMessage" text="" />
+                        </HBox>
+                        <HBox spacing="10.0">
+                            <Label text="Price: " />
+                            <TextField fx:id="CurrencyPrice" />
+                            <Label fx:id="CurrencyPriceMessage" text="" />
+                        </HBox>
+                        <padding>
+                            <Insets left="20.0" top="20.0" />
+                        </padding>
+                        <Button fx:id="CurrencyButton" onAction="#addCurrencyClicked">Add Currency</Button>
+                    </VBox>
+                </content>
+            </Tab>
+            <Tab text="Add Commodity">
+                <content>
+                    <VBox spacing="10.0">
+                        <HBox spacing="10.0">
+                            <Label text="Name: " />
+                            <TextField fx:id="CommodityName" />
+                            <Label fx:id="CommodityNameMessage" text="" />
+                        </HBox>
+                        <HBox spacing="10.0">
+                            <Label text="Price: " />
+                            <TextField fx:id="CommodityPrice" />
+                            <Label fx:id="CommodityPriceMessage" text="" />
+                        </HBox>
+                        <HBox spacing="10.0">
+                            <Label text="Trading unit: " />
+                            <TextField fx:id="CommodityUnit" />
+                            <Label fx:id="CommodityUnitMessage" text="" />
+                        </HBox>
+                        <padding>
+                            <Insets left="20.0" top="20.0" />
+                        </padding>
+                        <Button fx:id="CommodityButton" onAction="#addCommodityClicked">Add Commodity</Button>
+                    </VBox>
+                </content>
+            </Tab>
+            <Tab text="Add Index">
+                <content>
+                    <VBox spacing="10.0">
+                        <HBox spacing="10.0">
+                            <Label text="Name: " />
+                            <TextField fx:id="IndexName" />
+                            <Label fx:id="IndexNameMessage" text="" />
+                        </HBox>
+                        <HBox spacing="10.0">
+                            <Label text="Price: " />
+                            <TextField fx:id="IndexPrice" />
+                            <Label fx:id="IndexPriceMessage" text="" />
+                        </HBox>
+                        <HBox spacing="10.0">
+                            <Label text="Market name: " />
+                            <TextField fx:id="IndexMarketName" />
+                            <Label fx:id="IndexMarketNameMessage" text="" />
+                        </HBox>
+                        <HBox spacing="10.0">
+                            <Label text="Number of companies: " />
+                            <TextField fx:id="IndexNOCompanies" />
+                            <Label fx:id="IndexNOCompaniesMessage" text="" />
+                        </HBox>
+                        <padding>
+                            <Insets left="20.0" top="20.0" />
+                        </padding>
+                        <Button fx:id="IndexButton" onAction="#addIndexClicked">Add Index</Button>
+                    </VBox>
+                </content>
+            </Tab>
+        </tabs>
+      </TabPane>
    </children>
 </VBox>

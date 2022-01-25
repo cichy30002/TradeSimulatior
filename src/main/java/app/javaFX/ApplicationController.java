@@ -2,6 +2,7 @@ package app.javaFX;
 
 import app.controls.ControlPanel;
 import app.controls.FileInput;
+import app.exceptions.AppInputException;
 import app.markets.Market;
 import app.valuables.Valuable;
 import app.world.Company;
@@ -12,6 +13,9 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -21,22 +25,24 @@ import javafx.util.Pair;
 public class ApplicationController
 {
     private static TabPane mainTabs;
+    private static Scene mainScene;
 
     public static void Init(Scene scene)
     {
+        mainScene = scene;
         FileInput.readFromBasicFile();
-        mainTabs = (TabPane) scene.lookup("#MainTabs");
-        initMarketsList(scene);
-        initInvestorsList(scene);
-        initCompaniesList(scene);
-        initInvestorFoundsList(scene);
+        mainTabs = (TabPane) mainScene.lookup("#MainTabs");
+        initMarketsList();
+        initInvestorsList();
+        initCompaniesList();
+        initInvestorFoundsList();
     }
 
-    private static void initMarketsList(Scene scene)
+    private static void initMarketsList()
     {
         ObservableList<String> items = FXCollections.observableArrayList();
         items.addAll(ControlPanel.getInstance().getAllMarketNames());
-        ListView list = (ListView) scene.lookup("#MarketList");
+        ListView list = (ListView) mainScene.lookup("#MarketList");
         list.setItems(items);
 
         list.getSelectionModel().selectedItemProperty().addListener(
@@ -63,8 +69,10 @@ public class ApplicationController
         TableView table = new TableView();
         TableColumn name = new TableColumn("Valuable name");
         name.setCellValueFactory(new PropertyValueFactory<ProductWithPrice, String>("productName"));
+        name.setPrefWidth(300);
         TableColumn price = new TableColumn("Price");
         price.setCellValueFactory(new PropertyValueFactory<ProductWithPrice, String>("price"));
+        price.setPrefWidth(200);
 
         ObservableList<ProductWithPrice> data = FXCollections.observableArrayList();
         for(Pair<String, Integer> pair : market.getProductsWithPrices())
@@ -76,11 +84,11 @@ public class ApplicationController
         table.getColumns().addAll(name, price);
         return new VBox(listView, table);
     }
-    private static void initInvestorsList(Scene scene)
+    private static void initInvestorsList()
     {
         ObservableList<String> items = FXCollections.observableArrayList();
         items.addAll(ControlPanel.getInstance().getAllInvestorNames());
-        ListView list = (ListView) scene.lookup("#InvestorList");
+        ListView list = (ListView) mainScene.lookup("#InvestorList");
         list.setItems(items);
         list.getSelectionModel().selectedItemProperty().addListener(
                 (ChangeListener<String>) (ov, old_val, new_val) -> mainTabs.getTabs().add(makeInvestorTab(new_val)));
@@ -109,11 +117,11 @@ public class ApplicationController
         return new VBox(listView, table);
     }
 
-    private static void initCompaniesList(Scene scene)
+    private static void initCompaniesList()
     {
         ObservableList<String> items = FXCollections.observableArrayList();
         items.addAll(ControlPanel.getInstance().getAllCompanyNames());
-        ListView list = (ListView) scene.lookup("#CompanyList");
+        ListView list = (ListView) mainScene.lookup("#CompanyList");
         list.setItems(items);
         list.getSelectionModel().selectedItemProperty().addListener(
                 (ChangeListener<String>) (ov, old_val, new_val) -> mainTabs.getTabs().add(makeCompanyTab(new_val)));
@@ -150,11 +158,11 @@ public class ApplicationController
 
         return new VBox(listView, table);
     }
-    private static void initInvestorFoundsList(Scene scene)
+    private static void initInvestorFoundsList()
     {
         ObservableList<String> items = FXCollections.observableArrayList();
         items.addAll(ControlPanel.getInstance().getAllInvestmentFoundNames());
-        ListView list = (ListView) scene.lookup("#InvestmentFoundList");
+        ListView list = (ListView) mainScene.lookup("#InvestmentFoundList");
         list.setItems(items);
         list.getSelectionModel().selectedItemProperty().addListener(
                 (ChangeListener<String>) (ov, old_val, new_val) -> mainTabs.getTabs().add(makeInvestmentFoundTab(new_val)));
@@ -183,6 +191,184 @@ public class ApplicationController
         TableView table = makeMarketClientWallet(investmentFound);
 
         return new VBox(listView, table);
+    }
+
+    @FXML
+    public void transactionPerSecondConfirmClicked(Event e)
+    {
+        TextField textField = (TextField)mainScene.lookup("#TransactionsPerSecond");
+        Label message = (Label) mainScene.lookup("#TransactionsPerSecondMessage");
+        message.setText("");
+        try {
+            ControlPanel.getInstance().setTransactionsPerSecond(textField.getText());
+            message.setText("Correctly changed transactions per second to: " + ControlPanel.getInstance().getTransactionsPerSecond());
+        }catch(Exception exception)
+        {
+            message.setText(exception.getMessage());
+        }
+        textField.clear();
+        textField.setText(ControlPanel.getInstance().getTransactionsPerSecond().toString());
+    }
+
+    @FXML
+    public void bullBearRatioConfirmClicked(Event e)
+    {
+        TextField textField = (TextField)mainScene.lookup("#BullBearRatio");
+        Label message = (Label) mainScene.lookup("#BullBearRatioMessage");
+        message.setText("");
+        try {
+            ControlPanel.getInstance().setBullBearRatio(textField.getText());
+            message.setText("Correctly changed bull-bear ratio to: " + ControlPanel.getInstance().getBullBearRatio());
+        }catch(Exception exception)
+        {
+            message.setText(exception.getMessage());
+        }
+        textField.clear();
+        textField.setText(ControlPanel.getInstance().getBullBearRatio().toString());
+    }
+    @FXML
+    public void addCurrencyMarketClicked(ActionEvent actionEvent) {
+        addMarket("Currency");
+    }
+    @FXML
+    public void addStockMarketClicked(ActionEvent actionEvent) {
+        addMarket("Stock");
+    }
+    @FXML
+    public void addCommodityMarketClicked(ActionEvent actionEvent) {
+        addMarket("Commodity");
+    }
+    private void addMarket(String type)
+    {
+        TextField nameField = (TextField) mainScene.lookup("#" + type + "MarketName");
+        Label nameMessage = (Label) mainScene.lookup("#" + type + "MarketNameMessage");
+        nameMessage.setText("");
+        TextField marginFeeField = (TextField) mainScene.lookup("#" + type + "MarketMarginFee");
+        Label marginFeeMessage = (Label) mainScene.lookup("#" + type + "MarketMarginFeeMessage");
+        marginFeeMessage.setText("");
+        TextField currencyField = (TextField) mainScene.lookup("#" + type + "MarketCurrency");
+        Label currencyMessage = (Label) mainScene.lookup("#" + type + "MarketCurrencyMessage");
+        currencyMessage.setText("");
+        try{
+            switch (type)
+            {
+                case "Stock" -> ControlPanel.getInstance().getGenerator().generateStockMarket(nameField.getText(), marginFeeField.getText(), currencyField.getText());
+                case "Currency" -> ControlPanel.getInstance().getGenerator().generateCurrencyMarket(nameField.getText(), marginFeeField.getText(), currencyField.getText());
+                case "Commodity" -> ControlPanel.getInstance().getGenerator().generateCommodityMarket(nameField.getText(), marginFeeField.getText(), currencyField.getText());
+            }
+
+            nameField.clear();
+            marginFeeField.clear();
+            currencyField.clear();
+        }catch (AppInputException exception)
+        {
+            switch (exception.field) {
+                case "name" -> nameMessage.setText(exception.getMessage());
+                case "currency" -> currencyMessage.setText(exception.getMessage());
+                case "marginFee" -> marginFeeMessage.setText(exception.getMessage());
+                default -> nameMessage.setText("invalid exception: " + exception.getMessage());
+            }
+        }
+    }
+    @FXML
+    public void addInvestorClicked(ActionEvent actionEvent) {
+        addMarketClient("Investor");
+    }
+    @FXML
+    public void addCompanyClicked(ActionEvent actionEvent) {
+        addMarketClient("Company");
+    }
+    @FXML
+    public void addInvestmentFoundClicked(ActionEvent actionEvent) {
+        addMarketClient("InvestmentFound");
+    }
+    private void addMarketClient(String type)
+    {
+        TextField field = (TextField) mainScene.lookup("#" + type + "Name");
+        Label message = (Label) mainScene.lookup("#" + type + "NameMessage");
+        message.setText("");
+        try{
+            switch (type)
+            {
+                case "Investor" -> ControlPanel.getInstance().getGenerator().generateInvestor(field.getText());
+                case "Company" -> ControlPanel.getInstance().getGenerator().generateCompany(field.getText());
+                case "InvestmentFound" -> ControlPanel.getInstance().getGenerator().generateInvestmentFound(field.getText());
+            }
+            field.clear();
+        }catch (AppInputException exception)
+        {
+            message.setText(exception.getMessage());
+        }
+    }
+    @FXML
+    public void addCurrencyClicked(ActionEvent actionEvent) {
+        TextField nameField = (TextField)mainScene.lookup("#CurrencyName");
+        Label nameMessage = (Label) mainScene.lookup("#CurrencyNameMessage");
+        nameMessage.setText("");
+        TextField priceField = (TextField)mainScene.lookup("#CurrencyPrice");
+        Label priceMessage = (Label) mainScene.lookup("#CurrencyPriceMessage");
+        nameMessage.setText("");
+        try{
+            ControlPanel.getInstance().getGenerator().generateCurrency(nameField.getText(), priceField.getText());
+        }catch (AppInputException exception)
+        {
+            switch (exception.field) {
+                case "name" -> nameMessage.setText(exception.getMessage());
+                case "price" -> priceMessage.setText(exception.getMessage());
+                default -> nameMessage.setText("invalid exception: " + exception.getMessage());
+            }
+        }
+
+    }
+    @FXML
+    public void addCommodityClicked(ActionEvent actionEvent) {
+        TextField nameField = (TextField)mainScene.lookup("#CommodityName");
+        Label nameMessage = (Label) mainScene.lookup("#CommodityNameMessage");
+        nameMessage.setText("");
+        TextField priceField = (TextField)mainScene.lookup("#CommodityPrice");
+        Label priceMessage = (Label) mainScene.lookup("#CommodityPriceMessage");
+        nameMessage.setText("");
+        TextField unitField = (TextField)mainScene.lookup("#CommodityUnit");
+        Label unitMessage = (Label) mainScene.lookup("#CommodityUnitMessage");
+        nameMessage.setText("");
+        try{
+            ControlPanel.getInstance().getGenerator().generateCommodity(nameField.getText(), priceField.getText(), unitField.getText());
+        }catch (AppInputException exception)
+        {
+            switch (exception.field) {
+                case "name" -> nameMessage.setText(exception.getMessage());
+                case "price" -> priceMessage.setText(exception.getMessage());
+                case "unit" -> unitMessage.setText(exception.getMessage());
+                default -> nameMessage.setText("invalid exception: " + exception.getMessage());
+            }
+        }
+    }
+    @FXML
+    public void addIndexClicked(ActionEvent actionEvent) {
+        TextField nameField = (TextField)mainScene.lookup("#IndexName");
+        Label nameMessage = (Label) mainScene.lookup("#IndexNameMessage");
+        nameMessage.setText("");
+        TextField priceField = (TextField)mainScene.lookup("#IndexPrice");
+        Label priceMessage = (Label) mainScene.lookup("#IndexPriceMessage");
+        nameMessage.setText("");
+        TextField marketField = (TextField)mainScene.lookup("#IndexMarketName");
+        Label marketMessage = (Label) mainScene.lookup("#IndexMarketNameMessage");
+        nameMessage.setText("");
+        TextField noCompaniesField = (TextField)mainScene.lookup("#IndexNOCompanies");
+        Label noCompaniesMessage = (Label) mainScene.lookup("#IndexNOCompaniesMessage");
+        nameMessage.setText("");
+        try{
+            ControlPanel.getInstance().getGenerator().generateIndex(nameField.getText(), priceField.getText(), marketField.getText(), noCompaniesField.getText());
+        }catch (AppInputException exception)
+        {
+            switch (exception.field) {
+                case "name" -> nameMessage.setText(exception.getMessage());
+                case "price" -> priceMessage.setText(exception.getMessage());
+                case "market" -> marketMessage.setText(exception.getMessage());
+                case "noCompanies" -> noCompaniesMessage.setText(exception.getMessage());
+                default -> nameMessage.setText("invalid exception: " + exception.getMessage());
+            }
+        }
     }
 
     public static class ProductWithPrice
@@ -216,12 +402,16 @@ public class ApplicationController
         TableView table = new TableView();
         TableColumn name = new TableColumn("Valuable name");
         name.setCellValueFactory(new PropertyValueFactory<WalletData, String>("valuableName"));
+        name.setPrefWidth(200);
         TableColumn amount = new TableColumn("Amount");
         amount.setCellValueFactory(new PropertyValueFactory<WalletData, String>("amount"));
+        amount.setPrefWidth(200);
         TableColumn price = new TableColumn("Price");
         price.setCellValueFactory(new PropertyValueFactory<WalletData, String>("price"));
+        price.setPrefWidth(200);
         TableColumn totalPrice = new TableColumn("Total price");
         totalPrice.setCellValueFactory(new PropertyValueFactory<WalletData, String>("totalPrice"));
+        totalPrice.setPrefWidth(200);
 
         ObservableList<WalletData> data = FXCollections.observableArrayList();
         for(Pair<String, Integer> pair : marketClient.getWallet())
