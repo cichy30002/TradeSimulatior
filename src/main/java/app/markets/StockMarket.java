@@ -24,42 +24,24 @@ public class StockMarket extends Market{
         this.listOfIndexes = findIndexes(listOfIndexesNames);
         this.listOfShares = findShares(listOfProductsNames);
         ControlPanel.getInstance().addStockMarket(this);
-        generateInitialPrices();
+        updatePricesStock();
     }
 
-    private void generateInitialPrices() {
+    private void putSharesAndIndexesToProducts()
+    {
         for(Share share : this.listOfShares)
         {
-            this.productsWithPrices.put(share.getName(), generatePrice(share));
+            this.productsWithPrices.put(share.getName(), 0);
         }
         for(Index index: this.listOfIndexes)
         {
-            this.productsWithPrices.put(index.getName(), generatePrice(index));
+            this.productsWithPrices.put(index.getName(), 0);
         }
     }
-
-    private Integer generatePrice(Valuable valuable) {
-        return 1;
-    }
-
-
-    public StockMarket(String name, float marginFee, String currency, List<String> listOfShareNames, ArrayList<String> listOfSharePrices, String country, String city, String address, List<String> listOfIndexesNames, ArrayList<String> listOfIndexesPrices) throws WrongMarketParamException {
-        this(name, marginFee, currency, listOfShareNames, country, city, address, listOfIndexesNames);
-        if(listOfSharePrices.size() != listOfShareNames.size() || listOfIndexesNames.size() != listOfIndexesPrices.size())
-        {
-            throw new WrongMarketParamException("Wrong list of prices for stock market");
-        }
-        List<Integer> sharePrices = parseList(listOfSharePrices);
-        List<Integer> indexPrices = parseList(listOfIndexesPrices);
-        for(int i=0;i<this.listOfShares.size();i++)
-        {
-            this.productsWithPrices.put(listOfShareNames.get(i), sharePrices.get(i));
-        }
-        for(int i=0;i<this.listOfIndexes.size();i++)
-        {
-            this.productsWithPrices.put(listOfIndexesNames.get(i), indexPrices.get(i));
-        }
-
+    public void updatePricesStock()
+    {
+        putSharesAndIndexesToProducts();
+        updatePrices();
     }
     private List<Share> findShares(List<String> listOfProductsNames) throws WrongMarketParamException {
         List<Share> result = new ArrayList<>();

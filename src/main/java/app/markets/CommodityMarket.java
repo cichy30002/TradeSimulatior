@@ -4,16 +4,19 @@ import app.controls.ControlPanel;
 import app.exceptions.WrongMarketParamException;
 import app.valuables.Commodity;
 import app.valuables.Currency;
+import app.valuables.Valuable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 public class CommodityMarket extends Market{
     private List<Integer> listOfPrices;
-    public CommodityMarket(String name, float marginFee, String currency, ArrayList<String> listOfProductNames, List<String> listOfPrices) throws WrongMarketParamException {
+    public CommodityMarket(String name, float marginFee, String currency, ArrayList<String> listOfCommodityNames) throws WrongMarketParamException {
         super(name, marginFee, currency);
-        this.productsWithPrices = makeProductsWithPrices(findCommodities(listOfProductNames), parseList(listOfPrices));
+        this.productsWithPrices = makeProductsWithPrices(findCommodities(listOfCommodityNames));
+        updatePrices();
         ControlPanel.getInstance().addCommodityMarket(this);
     }
 
@@ -36,15 +39,10 @@ public class CommodityMarket extends Market{
 
     }
 
-    private HashMap<String, Integer> makeProductsWithPrices(List<Commodity> commodities, List<Integer> prices) throws WrongMarketParamException {
-        if(commodities.size() != prices.size())
-        {
-            throw new WrongMarketParamException("List of currencies does not match list of prices!");
-        }
+    private HashMap<String, Integer> makeProductsWithPrices(List<Commodity> commodities){
         HashMap<String,Integer> result = new HashMap<>();
-        for(int i=0;i<commodities.size();i++)
-        {
-            result.put(commodities.get(i).getName(), prices.get(i));
+        for (Commodity commodity : commodities) {
+            result.put(commodity.getName(), 0);
         }
         return result;
     }

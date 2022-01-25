@@ -32,13 +32,13 @@ public class ApplicationController
         mainScene = scene;
         FileInput.readFromBasicFile();
         mainTabs = (TabPane) mainScene.lookup("#MainTabs");
-        initMarketsList();
+        updateMarketsList();
         initInvestorsList();
         initCompaniesList();
         initInvestorFoundsList();
     }
 
-    private static void initMarketsList()
+    private static void updateMarketsList()
     {
         ObservableList<String> items = FXCollections.observableArrayList();
         items.addAll(ControlPanel.getInstance().getAllMarketNames());
@@ -269,6 +269,7 @@ public class ApplicationController
                 default -> nameMessage.setText("invalid exception: " + exception.getMessage());
             }
         }
+        updateMarketsList();
     }
     @FXML
     public void addInvestorClicked(ActionEvent actionEvent) {

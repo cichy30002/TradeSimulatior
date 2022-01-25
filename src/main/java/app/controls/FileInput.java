@@ -85,12 +85,12 @@ public class FileInput {
         {
             case "Currency":
                 CurrencyMarket newCurrencyMarket = new CurrencyMarket(params[0], Float.parseFloat(params[1]), params[2],
-                        new ArrayList<>(List.of(params[3].split(";"))), new ArrayList<>(List.of(params[4].split(";"))));
+                        new ArrayList<>(List.of(params[3].split(";"))));
                 break;
             case "Commodity":
 
                 CommodityMarket newCommodityMarket = new CommodityMarket(params[0], Float.parseFloat(params[1]), params[2],
-                        new ArrayList<>(List.of(params[3].split(";"))), new ArrayList<>(List.of(params[4].split(";"))));
+                        new ArrayList<>(List.of(params[3].split(";"))));
                 break;
             case "Stock":
                 StockMarket newStockMarket = new StockMarket(params[0], Float.parseFloat(params[1]), params[2],

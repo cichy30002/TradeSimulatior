@@ -323,4 +323,17 @@ public class ControlPanel {
     public Generator getGenerator() {
         return generator;
     }
+
+    public ArrayList<String> getAllCurrencies() {
+        return new ArrayList<>(currencies.keySet());
+    }
+    public ArrayList<String> getAllCommodities() {
+        return new ArrayList<>(commodities.keySet());
+    }
+    public ArrayList<String> getAllShares() {
+        return new ArrayList<>(shares.keySet());
+    }
+    public ArrayList<String> getAllIndexes() {
+        return new ArrayList<>(indexes.keySet());
+    }
 }

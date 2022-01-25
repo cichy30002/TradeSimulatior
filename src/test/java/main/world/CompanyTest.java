@@ -96,7 +96,7 @@ public class CompanyTest {
         ArrayList<String> indexPrices = new ArrayList<>();
         indexPrices.add("1");
         try {
-            stockMarket = new StockMarket("polish Stock", 1.0f, currency.getName(), shares,sharePrices, "Poland", "Warsaw", "idk", indexes,indexPrices);
+            stockMarket = new StockMarket("polish Stock", 1.0f, currency.getName(), shares, "Poland", "Warsaw", "idk", indexes);
         } catch (WrongMarketParamException e) {
             System.out.println("Failed makeStockMarket");
         }
@@ -123,7 +123,7 @@ public class CompanyTest {
         assertThrows(TransactionException.class, () -> company1.transactionBuy("zloty", share1, 11, stockMarket));
         assertEquals(company1.getAvailableValuableAmount("zloty"), 10);
         assertDoesNotThrow(() -> company1.transactionBuy("zloty", share2, 1, stockMarket));
-        assertEquals(company1.getAvailableValuableAmount("zloty"), 8);
+        assertTrue(company1.getAvailableValuableAmount("zloty") <= 8);
         assertEquals(company1.getAvailableValuableAmount(share2.getName()), 1);
 
         assertDoesNotThrow(() -> company1.transactionSell( share2, 1, stockMarket));

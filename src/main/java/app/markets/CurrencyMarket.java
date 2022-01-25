@@ -14,22 +14,18 @@ import java.util.List;
 
 public class CurrencyMarket extends Market{
 
-    public CurrencyMarket(String name, float marginFee, String currency, List<String> listOfProductsNames, List<String> listOfBuySellPrices) throws WrongMarketParamException {
+    public CurrencyMarket(String name, float marginFee, String currency, List<String> listOfProductsNames) throws WrongMarketParamException {
         super(name, marginFee, currency);
-        this.productsWithPrices = makeProductsWithPrices(findCurrencies(listOfProductsNames), parseList(listOfBuySellPrices));
-
+        this.productsWithPrices = makeProductsWithPrices(findCurrencies(listOfProductsNames));
+        updatePrices();
         ControlPanel.getInstance().addCurrencyMarket(this);
     }
 
-    private HashMap<String, Integer> makeProductsWithPrices(List<Currency> currencies, List<Integer> prices) throws WrongMarketParamException {
-        if(currencies.size() != prices.size())
-        {
-            throw new WrongMarketParamException("List of currencies does not match list of prices!");
-        }
+    private HashMap<String, Integer> makeProductsWithPrices(List<Currency> currencies){
         HashMap<String,Integer> result = new HashMap<>();
-        for(int i=0;i<currencies.size();i++)
+        for(Currency currency: currencies)
         {
-            result.put(currencies.get(i).getName(), prices.get(i));
+            result.put(currency.getName(), 0);
         }
         return result;
     }

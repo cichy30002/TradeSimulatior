@@ -26,14 +26,14 @@ public class CurrencyMarketTest {
     {
         makeCurrencyMarket();
 
-        assertThrows(WrongMarketParamException.class, ()-> new CurrencyMarket("monetki", 2.0f, "zloty", currencies, prices));
-        assertDoesNotThrow(()-> new CurrencyMarket("monetki2", 2.0f, "zloty", currencies, prices));
+        assertThrows(WrongMarketParamException.class, ()-> new CurrencyMarket("monetki", 2.0f, "zloty", currencies));
+        assertDoesNotThrow(()-> new CurrencyMarket("monetki2", 2.0f, "zloty", currencies));
         ControlPanel.getInstance().removeCurrencyMarket("monetki2");
-        assertThrows(WrongMarketParamException.class, ()-> new CurrencyMarket("monetki2", -2.0f, "zloty", currencies, prices));
-        assertThrows(WrongMarketParamException.class, ()-> new CurrencyMarket("monetki2", 2.0f, "xd", currencies, prices));
-        assertThrows(WrongMarketParamException.class, ()-> new CurrencyMarket("", 2.0f, "zloty", currencies, prices));
+        assertThrows(WrongMarketParamException.class, ()-> new CurrencyMarket("monetki2", -2.0f, "zloty", currencies));
+        assertThrows(WrongMarketParamException.class, ()-> new CurrencyMarket("monetki2", 2.0f, "xd", currencies));
+        assertThrows(WrongMarketParamException.class, ()-> new CurrencyMarket("", 2.0f, "zloty", currencies));
 
-        assertThrows(WrongMarketParamException.class, ()-> new CurrencyMarket("monetki2", 2.0f, "zloty", new ArrayList<>(), prices));
+        assertThrows(WrongMarketParamException.class, ()-> new CurrencyMarket("monetki2", 2.0f, "zloty", new ArrayList<>()));
 
         clearCurrencyMarket();
     }
@@ -57,7 +57,7 @@ public class CurrencyMarketTest {
         prices.add("1");
         prices.add("1");
         try {
-            currencyMarket = new CurrencyMarket("monetki", 0.05f, "zloty", currencies, prices);
+            currencyMarket = new CurrencyMarket("monetki", 0.05f, "zloty", currencies);
         } catch (WrongMarketParamException e) {
             System.out.println("Failed makeCurrencyMarket");
         }
@@ -74,9 +74,7 @@ public class CurrencyMarketTest {
     {
         makeCurrencyMarket();
         try {
-            assertEquals(1, currencyMarket.getProductPrice(currency2.getName()));
-            currencyMarket.updatePrices();
-            assertEquals(17, currencyMarket.getProductPrice(currency2.getName()));
+            assertTrue(17 <= currencyMarket.getProductPrice(currency2.getName()));
         } catch (MarketCollectionException e) {
             e.printStackTrace();
         }

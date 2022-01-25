@@ -22,7 +22,6 @@ public class InvestmentFoundTest {
     Commodity commodity2;
     Commodity commodity3;
     ArrayList<String> commodities;
-    ArrayList<String> prices;
 
     @Test
     public void constructorTest()
@@ -69,20 +68,17 @@ public class InvestmentFoundTest {
         countries.add("Poland");
         try {
             currency = new Currency("zloty", 20, countries);
-            commodity1 = new Commodity("gold", 123456, "ounce", 123000, 124000);
-            commodity2 = new Commodity("silver", 12345, "ounce", 12300, 12400);
-            commodity3 = new Commodity("platinum", 1234567, "ounce", 1230000, 1240000);
+            commodity1 = new Commodity("gold", 1, "ounce", 1, 5);
+            commodity2 = new Commodity("silver", 2, "ounce", 1, 5);
+            commodity3 = new Commodity("platinum", 3, "ounce", 1, 5);
         } catch (WrongValuableParamException e) {
-            System.out.println("Failed makeCurrencyMarket");
+            System.out.println("Failed makeCurrencyMarket" + e.getMessage());
         }
         commodities = new ArrayList<>();
         commodities.add(commodity1.getName());
         commodities.add(commodity2.getName());
-        prices = new ArrayList<>();
-        prices.add("1");
-        prices.add("2");
         try {
-            commodityMarket = new CommodityMarket("kamyki", 2f, currency.getName(), commodities, prices);
+            commodityMarket = new CommodityMarket("kamyki", 2f, currency.getName(), commodities);
         } catch (WrongMarketParamException e) {
             System.out.println("Failed makeCommodityMarket: " + e.getMessage());
         }

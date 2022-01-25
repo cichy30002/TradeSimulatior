@@ -27,14 +27,14 @@ public class CommodityMarketTest {
     {
         makeCommodityMarket();
 
-        assertThrows(WrongMarketParamException.class, ()-> new CommodityMarket("blyskotki", 1f, "zloty", commodities, prices));
-        assertDoesNotThrow(()-> new CommodityMarket("blyskotkiw", 1f, "zloty", commodities, prices));
+        assertThrows(WrongMarketParamException.class, ()-> new CommodityMarket("blyskotki", 1f, "zloty", commodities));
+        assertDoesNotThrow(()-> new CommodityMarket("blyskotkiw", 1f, "zloty", commodities));
         ControlPanel.getInstance().removeCommodityMarket("blyskotki2");
-        assertThrows(WrongMarketParamException.class, ()-> new CommodityMarket("blyskotki2", -1f, "zloty", commodities, prices));
-        assertThrows(WrongMarketParamException.class, ()-> new CommodityMarket("blyskotki2", 1f, "xd", commodities, prices));
-        assertThrows(WrongMarketParamException.class, ()-> new CommodityMarket("", 1f, "zloty", commodities, prices));
+        assertThrows(WrongMarketParamException.class, ()-> new CommodityMarket("blyskotki2", -1f, "zloty", commodities));
+        assertThrows(WrongMarketParamException.class, ()-> new CommodityMarket("blyskotki2", 1f, "xd", commodities));
+        assertThrows(WrongMarketParamException.class, ()-> new CommodityMarket("", 1f, "zloty", commodities));
 
-        assertThrows(WrongMarketParamException.class, ()-> new CommodityMarket("blyskotki", 1f, "zloty", new ArrayList<>(), prices));
+        assertThrows(WrongMarketParamException.class, ()-> new CommodityMarket("blyskotki", 1f, "zloty", new ArrayList<>()));
 
         clearCommodityMarket();
     }
@@ -56,7 +56,7 @@ public class CommodityMarketTest {
         prices.add("1");
         prices.add("2");
         try {
-            commodityMarket = new CommodityMarket("blyskotki", 0.02f, "zloty", commodities, prices);
+            commodityMarket = new CommodityMarket("blyskotki", 0.02f, "zloty", commodities);
         } catch (WrongMarketParamException e) {
             System.out.println("Failed makeCurrencyMarket");
         }
@@ -74,9 +74,7 @@ public class CommodityMarketTest {
         makeCommodityMarket();
 
         try {
-            assertEquals(1, commodityMarket.getProductPrice(commodity1.getName()));
-            commodityMarket.updatePrices();
-            assertEquals(455, commodityMarket.getProductPrice(commodity1.getName()));
+            assertTrue(455 < commodityMarket.getProductPrice(commodity1.getName()));
         } catch (MarketCollectionException e) {
             e.printStackTrace();
         }

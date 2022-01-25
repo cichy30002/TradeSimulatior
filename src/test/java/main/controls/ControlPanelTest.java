@@ -55,7 +55,6 @@ public class ControlPanelTest {
     void constructorTest(){
         assertNotEquals(ControlPanel.getInstance(), null);
         assertEquals(ControlPanel.getInstance(), ControlPanel.getInstance());
-
     }
     @Test
     void marketCollectionsTest()
@@ -82,11 +81,11 @@ public class ControlPanelTest {
             secondStockMarket = new StockMarket("polish2 Stock", 1.0f, "zloty", shares, "Poland", "Warsaw", "idk", new ArrayList<>());
             thirdStockMarket = new StockMarket("russian Stock", 5.0f, "ruble", shares, "Russia", "Moscow", "idk", new ArrayList<>());
 
-            firstCurrencyMarket = new CurrencyMarket("abc currency market", 1.0f, "zloty", currencies, prices);
-            secondCurrencyMarket = new CurrencyMarket("123 currency market", 1.2f, "ruble", currencies, prices);
+            firstCurrencyMarket = new CurrencyMarket("abc currency market", 1.0f, "zloty", currencies);
+            secondCurrencyMarket = new CurrencyMarket("123 currency market", 1.2f, "ruble", currencies);
 
-            firstCommodityMarket = new CommodityMarket("abc commodity market", 1.0f, "zloty", commodities, prices1);
-            secondCommodityMarket = new CommodityMarket("123 commodity market", 1.0f, "zloty", commodities, prices1);
+            firstCommodityMarket = new CommodityMarket("abc commodity market", 1.0f, "zloty", commodities);
+            secondCommodityMarket = new CommodityMarket("123 commodity market", 1.0f, "zloty", commodities);
         }catch (WrongMarketParamException e)
         {
             System.out.println(e.getMessage());

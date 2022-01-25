@@ -70,9 +70,9 @@ public class InvestorTest {
         countries.add("Poland");
         try {
             currency1 = new Currency("zloty", 20, countries);
-            currency2 = new Currency("ruble", 30, countries);
-            currency3 = new Currency("euro", 40, countries);
-            commodity = new Commodity("gold", 123456, "ounce", 123000, 124000);
+            currency2 = new Currency("ruble", 1, countries);
+            currency3 = new Currency("euro", 2, countries);
+            commodity = new Commodity("gold", 3, "ounce", 1, 5);
         } catch (WrongValuableParamException e) {
             System.out.println("Failed makeCurrencyMarket");
         }
@@ -83,7 +83,7 @@ public class InvestorTest {
         prices.add("1");
         prices.add("2");
         try {
-            currencyMarket = new CurrencyMarket("monetki", 2.0f, "zloty", currencies, prices);
+            currencyMarket = new CurrencyMarket("monetki", 2.0f, "zloty", currencies);
         } catch (WrongMarketParamException e) {
             System.out.println("Failed makeCurrencyMarket");
         }
@@ -107,7 +107,7 @@ public class InvestorTest {
         assertThrows(TransactionException.class, () -> investor.transactionBuy("zloty", currency1, 11, currencyMarket));
         assertEquals(investor.getAvailableValuableAmount("zloty"), 10);
         assertDoesNotThrow(() -> investor.transactionBuy("zloty", currency2, 1, currencyMarket));
-        assertEquals(investor.getAvailableValuableAmount("zloty"), 8);
+        assertEquals(investor.getAvailableValuableAmount("zloty"), 9);
         assertEquals(investor.getAvailableValuableAmount("ruble"), 1);
 
         assertDoesNotThrow(() -> investor.transactionSell(currency2, 1, currencyMarket));
