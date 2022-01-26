@@ -36,8 +36,8 @@ public class ShareTest {
 
     void setUpValid()
     {
-           company  = new Company("CD Projekt SA", "13.09.1775", 30, 40, 50, 30, 687.9f, 789.0f,56.8f, 300, 132.4f);
         try {
+            company  = new Company("CD Projekt SA", "13.09.1775", 30, 40, 50, 30, 687.9f, 789.0f,56.8f, 300, 132.4f);
             share = new Share("CD Projekt SA", 100);
         } catch (WrongValuableParamException e) {
             System.out.println("failed set up valid");

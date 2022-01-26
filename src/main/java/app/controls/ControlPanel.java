@@ -9,6 +9,8 @@ import app.valuables.*;
 import app.world.Company;
 import app.world.InvestmentFound;
 import app.world.Investor;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,30 +20,50 @@ public class ControlPanel {
     private HashMap<String, StockMarket> stockMarkets;
     private HashMap<String, CurrencyMarket> currencyMarkets;
     private HashMap<String, CommodityMarket> commodityMarkets;
+    private ObservableList<String> marketNames;
     private Float bullBearRatio;
     private Integer transactionsPerSecond;
     private HashMap<String, Investor> investors;
+    private ObservableList<String> investorNames;
     private HashMap<String, Company> companies;
+    private ObservableList<String> companyNames;
     private HashMap<String, InvestmentFound> investmentFounds;
+    private ObservableList<String> investmentFoundNames;
     private HashMap<String, Commodity> commodities;
+    private ObservableList<String> commodityNames;
     private HashMap<String, Currency> currencies;
+    private ObservableList<String> currencyNames;
     private HashMap<String, Index> indexes;
+    private ObservableList<String> indexNames;
     private HashMap<String, Share> shares;
+    private ObservableList<String> shareNames;
     private Generator generator;
 
     public ControlPanel() {
         this.stockMarkets = new HashMap<>();
         this.currencyMarkets = new HashMap<>();
         this.commodityMarkets = new HashMap<>();
+        this.marketNames = FXCollections.observableArrayList();
+
         this.bullBearRatio = 1.0f;
         this.transactionsPerSecond = 5;
+
         this.investors = new HashMap<>();
+        this.investorNames = FXCollections.observableArrayList();
         this.companies = new HashMap<>();
-        this.commodities = new HashMap<>();
-        this.currencies = new HashMap<>();
-        this.indexes = new HashMap<>();
-        this.shares = new HashMap<>();
+        this.companyNames = FXCollections.observableArrayList();
         this.investmentFounds = new HashMap<>();
+        this.investmentFoundNames = FXCollections.observableArrayList();
+
+        this.commodities = new HashMap<>();
+        this.commodityNames = FXCollections.observableArrayList();
+        this.currencies = new HashMap<>();
+        this.currencyNames = FXCollections.observableArrayList();
+        this.indexes = new HashMap<>();
+        this.indexNames = FXCollections.observableArrayList();
+        this.shares = new HashMap<>();
+        this.shareNames = FXCollections.observableArrayList();
+
         this.generator = new Generator();
     }
 
@@ -91,20 +113,24 @@ public class ControlPanel {
     }
     public void addStockMarket(StockMarket stockMarket){
         this.stockMarkets.put(stockMarket.getName(), stockMarket);
+        this.marketNames.add(stockMarket.getName());
     }
 
     public void addCurrencyMarket(CurrencyMarket currencyMarket){
         this.currencyMarkets.put(currencyMarket.getName(), currencyMarket);
+        this.marketNames.add(currencyMarket.getName());
     }
 
     public void addCommodityMarket(CommodityMarket commodityMarket){
         this.commodityMarkets.put(commodityMarket.getName(), commodityMarket);
+        this.marketNames.add(commodityMarket.getName());
     }
 
     public void addCurrency(Currency currency){
         if(!currencyExist(currency.getName()))
         {
             this.currencies.put(currency.getName(), currency);
+            this.currencyNames.add(currency.getName());
         }
     }
 
@@ -112,6 +138,7 @@ public class ControlPanel {
         if(!commodityExist(commodity.getName()))
         {
             this.commodities.put(commodity.getName(), commodity);
+            this.commodityNames.add(commodity.getName());
         }
     }
 
@@ -119,6 +146,7 @@ public class ControlPanel {
     {
         if(!investorExist(investor.getName())) {
             this.investors.put(investor.getName(), investor);
+            this.investorNames.add(investor.getName());
         }
     }
 
@@ -126,6 +154,7 @@ public class ControlPanel {
         if(!companyExist(company.getName()))
         {
             this.companies.put(company.getName(), company);
+            this.companyNames.add(company.getName());
         }
     }
 
@@ -134,6 +163,7 @@ public class ControlPanel {
         if(!investmentFoundExist(investmentFound.getName()))
         {
             this.investmentFounds.put(investmentFound.getName(), investmentFound);
+            this.investmentFoundNames.add(investmentFound.getName());
         }
     }
 
@@ -141,6 +171,7 @@ public class ControlPanel {
         if(!getInstance().indexExist(index.getName()))
         {
             this.indexes.put(index.getName(), index);
+            this.indexNames.add(index.getName());
         }
     }
 
@@ -148,6 +179,7 @@ public class ControlPanel {
         if(!getInstance().shareExist(share.getName()))
         {
             this.shares.put(share.getName(), share);
+            this.shareNames.add(share.getName());
         }
     }
 
@@ -199,14 +231,17 @@ public class ControlPanel {
 
     public void removeStockMarket(String stockMarketName){
         this.stockMarkets.remove(stockMarketName);
+        this.marketNames.remove(stockMarketName);
     }
 
     public void removeCurrencyMarket(String currencyMarketName){
         this.currencyMarkets.remove(currencyMarketName);
+        this.marketNames.remove(currencyMarketName);
     }
 
     public void removeCommodityMarket(String commodityMarketName){
         this.commodityMarkets.remove(commodityMarketName);
+        this.marketNames.remove(commodityMarketName);
     }
 
     public void removeCurrency(String currencyName){
@@ -226,15 +261,18 @@ public class ControlPanel {
 
     public void removeCompany(String companyName) {
         this.companies.remove(companyName);
+        this.companyNames.remove(companyName);
     }
 
     public void removeInvestor(String investorName) {
         this.investors.remove(investorName);
+        this.investorNames.remove(investorName);
     }
 
     public void removeInvestmentFound(String investmentFoundName)
     {
         this.investmentFounds.remove(investmentFoundName);
+        this.investmentFoundNames.remove(investmentFoundName);
     }
 
     public ArrayList<String> getAllMarketNames() {
@@ -280,7 +318,9 @@ public class ControlPanel {
     public InvestmentFound getInvestmentFound(String investmentFoundName) {
         return investmentFounds.get(investmentFoundName);
     }
-
+    public StockMarket getStockMarket(String market) {
+        return this.stockMarkets.get(market);
+    }
     public void setTransactionsPerSecond(String value) throws AppInputException {
         int transactions;
         try{
@@ -335,5 +375,44 @@ public class ControlPanel {
     }
     public ArrayList<String> getAllIndexes() {
         return new ArrayList<>(indexes.keySet());
+    }
+
+    public ArrayList<String> getAllValuables() {
+        ArrayList<String> result = new ArrayList<>(getAllCurrencies());
+        result.addAll(getAllCommodities());
+        result.addAll(getAllIndexes());
+        result.addAll(getAllShares());
+        return result;
+    }
+    public ObservableList<String> getMarketNames() {
+        return this.marketNames;
+    }
+
+    public ObservableList<String> getInvestorNames() {
+        return investorNames;
+    }
+
+    public ObservableList<String> getCompanyNames() {
+        return companyNames;
+    }
+
+    public ObservableList<String> getInvestmentFoundNames() {
+        return investmentFoundNames;
+    }
+
+    public ObservableList<String> getShareNames() {
+        return shareNames;
+    }
+
+    public ObservableList<String> getIndexNames() {
+        return indexNames;
+    }
+
+    public ObservableList<String> getCurrencyNames() {
+        return currencyNames;
+    }
+
+    public ObservableList<String> getCommodityNames() {
+        return commodityNames;
     }
 }

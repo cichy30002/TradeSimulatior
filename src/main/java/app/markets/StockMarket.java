@@ -90,6 +90,7 @@ public class StockMarket extends Market{
     public List<Index> getListOfIndexes() {
         return listOfIndexes;
     }
+    public List<Share> getListOfShares(){return listOfShares;}
 
     public void addIndex(Index toAdd)
     {

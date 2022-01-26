@@ -28,7 +28,6 @@ public class FileInput {
 
             readInput(reader, "Valuable", "Currency");
             readInput(reader, "Valuable", "Commodity");
-            readInput(reader, "Valuable", "Share");
             readInput(reader, "Valuable", "Index");
 
             readInput(reader, "Market", "Currency");
@@ -63,9 +62,14 @@ public class FileInput {
         switch (type)
         {
             case "Company":
+                try {
                 Company company = new Company(params[0], params[1], Integer.parseInt(params[2]), Integer.parseInt(params[3]),
                         Integer.parseInt(params[4]), Integer.parseInt(params[5]), Float.parseFloat(params[6]), Float.parseFloat(params[7]),
                         Float.parseFloat(params[8]), Integer.parseInt(params[9]), Float.parseFloat(params[10]));
+                }catch (WrongValuableParamException e)
+                {
+                    System.out.println(e.getMessage());
+                }
                 break;
             case "Investor":
                 Investor investor = new Investor(params[0]);

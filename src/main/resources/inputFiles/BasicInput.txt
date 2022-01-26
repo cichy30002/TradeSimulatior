@@ -1,9 +1,20 @@
-3
+10
 Orlen 12.07.1998 1300 50 100 20 1700.00 2300.00 3000.00 1300 2300.00
 Lotos 08.12.1997 1500 60 120 30 1500.00 2100.00 2800.00 1600 2550.00
 Orlen&Lotos 31.02.2022 2800 110 220 50 3200.00 4400.00 5800.00 2900 4850.00
-1
+CD_Projekt_Red 31.02.2022 2800 110 220 50 3200.00 4400.00 5800.00 2900 4850.00
+PZU 31.02.2022 2800 110 220 50 3200.00 4400.00 5800.00 2900 4850.00
+Allegro 31.02.2022 2800 110 220 50 3200.00 4400.00 5800.00 2900 4850.00
+CCC 31.02.2022 2800 110 220 50 3200.00 4400.00 5800.00 2900 4850.00
+Amazon 31.02.2022 2800 110 220 50 3200.00 4400.00 5800.00 2900 4850.00
+Microsoft 31.02.2022 2800 110 220 50 3200.00 4400.00 5800.00 2900 4850.00
+Apple 31.02.2022 2800 110 220 50 3200.00 4400.00 5800.00 2900 4850.00
+5
 Jan_Kiwlenko
+Anon
+Linijkarz
+Cejrowski
+Najman
 5
 zloty 22 Poland
 euro 100 Austria;Belgium;Cyprus;Estonia;Finland;France;Germany;Greece;Ireland;Italy;Latvia;Lithuania;Luxembourg;Malta;Netherlands;Portugal;Slovakia;Slovenia;Spain
@@ -17,17 +28,15 @@ platinum 98300 ounce 70000 130000
 palladium 191600 ounce 160000 250000
 oil 8246 barrel 3000 20000
 uranium 4550 250_Pfund_U308 1000 10000
-3
-Orlen 56
-Lotos 66
-Orlen&Lotos 121
-1
+2
 pap3 300 Orlen;Lotos;Orlen&Lotos
+pap1 500 Apple
 1
 coins 0.03 euro zloty;euro;franc;dollar
 1
 stuff 0.04 dollar silver;gold;oil;uranium
-1
-papers 0.05 zloty Orlen Poland Poznan Roosevelta_143/25 pap3
+2
+papiery 0.05 zloty Orlen;Lotos;CCC;Allegro;PZU;CD_Projekt_Red Poland Poznan Roosevelta_143/25 pap3
+papers 0.03 dollar Amazon;Microsoft;Apple USA New_York Great_avenue_89/12 pap1
 1
 great_idea gold;dollar;Orlen 10 Mateusz Stawski

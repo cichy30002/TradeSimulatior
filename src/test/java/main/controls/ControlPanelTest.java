@@ -105,7 +105,12 @@ public class ControlPanelTest {
     }
 
     private void addValuablesForMarkets() {
-        company  = new Company("CD Projekt SA", "13.09.1775", 30, 40, 50, 30, 687.9f, 789.0f,56.8f, 300, 132.4f);
+        try{
+            company  = new Company("CD Projekt SA", "13.09.1775", 30, 40, 50, 30, 687.9f, 789.0f,56.8f, 300, 132.4f);
+        }catch (WrongValuableParamException e)
+        {
+            System.out.println(e.getMessage());
+        }
         try {
             ArrayList<String> countries = new ArrayList<>();
             countries.add("Poland");
@@ -239,8 +244,13 @@ public class ControlPanelTest {
         firstInvestor = new Investor("Jan_Kiwlenko");
         secondInvestor = new Investor("Jakub_Cichy");
 
-        firstCompany = new Company("Orlen", "", 1, 1, 10, 1, 1f,2f, 3f, 2, 4f);
-        secondCompany = new Company("Lotos", "", 1, 1, 10, 1, 1f,2f, 3f, 2, 4f);
+        try{
+            firstCompany = new Company("Orlen", "", 1, 1, 10, 1, 1f,2f, 3f, 2, 4f);
+            secondCompany = new Company("Lotos", "", 1, 1, 10, 1, 1f,2f, 3f, 2, 4f);
+        }catch (WrongValuableParamException e)
+        {
+            System.out.println(e.getMessage());
+        }
         try {
             firstShare = new Share("Orlen", 56);
             secondShare = new Share("Lotos", 56);

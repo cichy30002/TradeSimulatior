@@ -1,13 +1,22 @@
 package app.controls;
 
 import app.exceptions.AppInputException;
+import app.exceptions.TransactionException;
 import app.exceptions.WrongMarketParamException;
+import app.exceptions.WrongValuableParamException;
 import app.markets.CommodityMarket;
 import app.markets.CurrencyMarket;
 import app.markets.StockMarket;
+import app.valuables.Commodity;
+import app.valuables.Currency;
+import app.valuables.Index;
+import app.valuables.Share;
+import app.world.Company;
+import app.world.InvestmentFound;
+import app.world.Investor;
+import app.world.MarketClient;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -16,13 +25,19 @@ public class Generator {
     private ArrayList<String> countries;
     private ArrayList<String> addresses;
     private HashMap<String, ArrayList<String>> cities;
-    private float chanceForValuable;
+    private final float chanceForValuable;
+    private final int maxWalletAmount;
+    private final float chanceForWallet;
+    private final float foundChance;
 
     public Generator()
     {
         RNG = new Random();
         makeAddresses();
         chanceForValuable = 0.7f;
+        chanceForWallet = 0.3f;
+        foundChance = 0.5f;
+        maxWalletAmount = 10000;
     }
 
     private void makeAddresses() {
@@ -47,7 +62,7 @@ public class Generator {
         {
             currency = ControlPanel.getInstance().getAllCurrencies().get(RNG.nextInt(ControlPanel.getInstance().getAllCurrencies().size()));
         }
-        checkInput(name, marginFee, currency);
+        checkInputMarket(name, marginFee, currency);
         float marginFeeFloat = Float.parseFloat(marginFee);
         ArrayList<String> listOfShares = generateListOfValuable("Share");
         String country = generateCountry();
@@ -61,7 +76,7 @@ public class Generator {
         }
     }
 
-    private void checkInput(String name, String marginFee, String currency) throws AppInputException {
+    private void checkInputMarket(String name, String marginFee, String currency) throws AppInputException {
         if(ControlPanel.getInstance().marketExist(name))
         {
             throw new AppInputException("That market already exist!", "name");
@@ -130,7 +145,7 @@ public class Generator {
         {
             currency = ControlPanel.getInstance().getAllCurrencies().get(RNG.nextInt(ControlPanel.getInstance().getAllCurrencies().size()));
         }
-        checkInput(name, marginFee, currency);
+        checkInputMarket(name, marginFee, currency);
         float marginFeeFloat = Float.parseFloat(marginFee);
         ArrayList<String> listOfCurrencies = generateListOfValuable("Currency");
         try{
@@ -150,7 +165,7 @@ public class Generator {
         {
             currency = ControlPanel.getInstance().getAllCurrencies().get(RNG.nextInt(ControlPanel.getInstance().getAllCurrencies().size()));
         }
-        checkInput(name, marginFee, currency);
+        checkInputMarket(name, marginFee, currency);
         float marginFeeFloat = Float.parseFloat(marginFee);
         ArrayList<String> listOfCommodities = generateListOfValuable("Commodity");
         try{
@@ -163,31 +178,207 @@ public class Generator {
 
     public void generateInvestor(String name)throws AppInputException
     {
-        System.out.println("making a new investor:" + name);
+        if(ControlPanel.getInstance().investorExist(name))
+        {
+            throw new AppInputException("That investor already exist!");
+        }
+        if(name.length()==0 || name.length()>20)
+        {
+            throw new AppInputException("Wrong investors name");
+        }
+        Investor investor = new Investor(name);
+        fillMarketClientWallet(investor);
+
+    }
+
+    private void fillMarketClientWallet(MarketClient client) {
+        for(String currency : ControlPanel.getInstance().getAllCurrencies())
+        {
+            if(RNG.nextFloat()<chanceForWallet)
+            {
+                try {
+                    client.addFunds(currency, RNG.nextInt(maxWalletAmount));
+                } catch (TransactionException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
     }
 
     public void generateCompany(String name)throws AppInputException
     {
-        System.out.println("making a new company:" + name);
+        if(ControlPanel.getInstance().companyExist(name))
+        {
+            throw new AppInputException("That company already exist!");
+        }
+        if(name.length()==0 || name.length()>20)
+        {
+            throw new AppInputException("Wrong company name");
+        }
+        Company company = generateCompanyWithRandomParams(name);
+        fillMarketClientWallet(company);
+    }
+
+    private Company generateCompanyWithRandomParams(String name) throws AppInputException{
+        String ipoDate = "11.09.2001";
+        int ipoShareValue = RNG.nextInt(100, 10000);
+        int openingPrice = (int) Math.ceil((0.5f+ RNG.nextFloat()) * ipoShareValue);
+        Integer minPrice = (int) Math.ceil((1f- RNG.nextFloat()/4) * openingPrice);
+        Integer maxPrice = (int) Math.ceil((1f+ RNG.nextFloat()/4) * openingPrice);
+        Float profit = 2137f;
+        Float revenue = 2248f;
+        Float capital = 123456f;
+        Integer tradingVolume = RNG.nextInt(100) * 100;
+        Float totalSales = 456789f;
+        try {
+            return new Company(name, ipoDate, ipoShareValue, openingPrice, minPrice, maxPrice, profit, revenue,
+                    capital, tradingVolume, totalSales);
+        }catch (WrongValuableParamException e)
+        {
+            throw new AppInputException(e.getMessage());
+        }
+
     }
 
     public void generateInvestmentFound(String name)throws AppInputException
     {
-        System.out.println("making a new investment found:" + name);
+        if(ControlPanel.getInstance().investmentFoundExist(name))
+        {
+            throw new AppInputException("That investment found already exist!");
+        }
+        if(name.length()==0 || name.length()>20)
+        {
+            throw new AppInputException("Wrong investment found name");
+        }
+        InvestmentFound investmentFound = generateInvestmentFoundWithRandomParams(name);
+    }
+
+    private InvestmentFound generateInvestmentFoundWithRandomParams(String name) {
+        String managerName = "mr.";
+        String managerSurname = "Manager";
+        Integer investorsNeeded = RNG.nextInt(3, 50)*10;
+        ArrayList<String> toBuyNames = new ArrayList<>();
+        for(String valuable : ControlPanel.getInstance().getAllValuables())
+        {
+            if(foundChance > RNG.nextFloat())
+            {
+                toBuyNames.add(valuable);
+            }
+        }
+        return new InvestmentFound(name, toBuyNames, investorsNeeded, managerName, managerSurname);
     }
 
     public void generateCurrency(String name, String price) throws AppInputException
     {
-        System.out.println("making a new currency:" + name);
+        if(ControlPanel.getInstance().currencyExist(name))
+        {
+            throw new AppInputException("That currency already exist!", "name");
+        }
+        if(name.length()==0 || name.length()>20)
+        {
+            throw new AppInputException("Wrong currency name", "name");
+        }
+        int priceInt = checkPrice(price);
+
+        ArrayList<String> countries = new ArrayList<>();
+        countries.add(generateCountry());
+        try {
+            Currency currency = new Currency(name, priceInt, countries);
+        } catch (WrongValuableParamException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private int checkPrice(String price) throws AppInputException{
+        int result;
+        if(price.length()==0)
+        {
+            return RNG.nextInt(1000);
+        }
+        try {
+            result = Integer.parseInt(price);
+        }catch (NullPointerException | NumberFormatException e)
+        {
+            throw new AppInputException("Price is not a number!", "price");
+        }
+        if(result <= 0)
+        {
+            throw new AppInputException("Wrong price value", "price");
+        }
+        return result;
     }
 
     public void generateCommodity(String name, String price, String tradingUnit) throws AppInputException
     {
-        System.out.println("making a new commodity:" + name);
+        if(ControlPanel.getInstance().commodityExist(name))
+        {
+            throw new AppInputException("That commodity already exist!", "name");
+        }
+        if(name.length()==0 || name.length()>20)
+        {
+            throw new AppInputException("Wrong commodity name", "name");
+        }
+        int priceInt = checkPrice(price);
+        if(tradingUnit.length()==0 || tradingUnit.length()>20)
+        {
+            throw new AppInputException("Wrong trading unit", "tradingUnit");
+        }
+        Integer minPrice = (int) (priceInt * (1f - RNG.nextFloat()/2));
+        Integer maxPrice = (int) (priceInt * (1f + RNG.nextFloat()/2));
+        try {
+            Commodity commodity = new Commodity(name, priceInt, tradingUnit, minPrice, maxPrice);
+        } catch (WrongValuableParamException e) {
+            System.out.println("Failed commodity generation " + e.getMessage());
+        }
     }
 
     public void generateIndex(String name, String price, String market, String noCompanies) throws AppInputException
     {
-        System.out.println("making a new index:" + name);
+        if(ControlPanel.getInstance().indexExist(name))
+        {
+            throw new AppInputException("That index already exist!", "name");
+        }
+        if(name.length()==0 || name.length()>20)
+        {
+            throw new AppInputException("Wrong index name", "name");
+        }
+        int priceInt = checkPrice(price);
+        ArrayList<String> listOfCompaniesNames = new ArrayList<>();
+        StockMarket stockMarket = ControlPanel.getInstance().getStockMarket(market);
+        if(stockMarket==null)
+        {
+            throw new AppInputException("Wrong market name!", "market");
+        }
+        int noCompaniesInt;
+        try {
+            noCompaniesInt = Integer.parseInt(noCompanies);
+        }catch (NumberFormatException e)
+        {
+            throw new AppInputException("Number of companies is not a number!", "noCompanies");
+        }
+        ArrayList<Share> listOfShares = new ArrayList<>(stockMarket.getListOfShares());
+        if(listOfShares.size()/2 < noCompaniesInt)
+        {
+            throw new AppInputException("Wrong number of companies! (max 50% of markets companies)", "noCompanies");
+        }
+        int i = 0;
+        while(listOfCompaniesNames.size() < noCompaniesInt)
+        {
+            if(RNG.nextFloat() < (float)noCompaniesInt/listOfShares.size())
+            {
+                listOfCompaniesNames.add(listOfShares.get(i).getCompany().getName());
+            }
+            i++;
+            if(i==listOfShares.size())
+            {
+                i=0;
+            }
+        }
+        try {
+            Index index = new Index(name, priceInt, listOfCompaniesNames);
+        } catch (WrongValuableParamException e) {
+            System.out.println("Failed commodity generation " + e.getMessage());
+        }
     }
 }

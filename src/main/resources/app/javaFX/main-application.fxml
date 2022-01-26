@@ -19,8 +19,11 @@
             </TabPane>
          </center>
          <right>
-            <TabPane prefHeight="800.0" prefWidth="302.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+            <TabPane prefHeight="800.0" prefWidth="350.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
               <tabs>
+                  <Tab text="Markets">
+                      <ListView fx:id="MarketList" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+                  </Tab>
                 <Tab text="Investors">
                   <content>
                       <ListView fx:id="InvestorList" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
@@ -40,7 +43,28 @@
             </TabPane>
          </right>
          <left>
-            <ListView fx:id="MarketList" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+             <TabPane prefHeight="800.0" prefWidth="350.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+                 <tabs>
+                     <Tab text="Shares">
+                         <ListView fx:id="ShareList" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+                     </Tab>
+                     <Tab text="Indexes">
+                         <content>
+                             <ListView fx:id="IndexList" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+                         </content>
+                     </Tab>
+                     <Tab text="Currencies">
+                         <content>
+                             <ListView fx:id="CurrencyList" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+                         </content>
+                     </Tab>
+                     <Tab text="Commodities">
+                         <content>
+                             <ListView fx:id="CommodityList" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+                         </content>
+                     </Tab>
+                 </tabs>
+             </TabPane>
          </left>
       </BorderPane>
       <TabPane prefHeight="280.0" prefWidth="1920.0" tabClosingPolicy="UNAVAILABLE">
@@ -195,7 +219,7 @@
                             <Label fx:id="CurrencyNameMessage" text="" />
                         </HBox>
                         <HBox spacing="10.0">
-                            <Label text="Price: " />
+                            <Label text="Price (optional): " />
                             <TextField fx:id="CurrencyPrice" />
                             <Label fx:id="CurrencyPriceMessage" text="" />
                         </HBox>
@@ -215,7 +239,7 @@
                             <Label fx:id="CommodityNameMessage" text="" />
                         </HBox>
                         <HBox spacing="10.0">
-                            <Label text="Price: " />
+                            <Label text="Price (optional): " />
                             <TextField fx:id="CommodityPrice" />
                             <Label fx:id="CommodityPriceMessage" text="" />
                         </HBox>
@@ -240,7 +264,7 @@
                             <Label fx:id="IndexNameMessage" text="" />
                         </HBox>
                         <HBox spacing="10.0">
-                            <Label text="Price: " />
+                            <Label text="Price (optional): " />
                             <TextField fx:id="IndexPrice" />
                             <Label fx:id="IndexPriceMessage" text="" />
                         </HBox>
@@ -258,6 +282,21 @@
                             <Insets left="20.0" top="20.0" />
                         </padding>
                         <Button fx:id="IndexButton" onAction="#addIndexClicked">Add Index</Button>
+                    </VBox>
+                </content>
+            </Tab>
+            <Tab text="Multi-valuable plot">
+                <content>
+                    <VBox spacing="10.0">
+                        <HBox spacing="10.0">
+                            <Label text="Valuable names separated with ';': " />
+                            <TextField fx:id="ValuableNames" prefWidth="100"/>
+                            <Label fx:id="ValuableNamesMessage" text="" />
+                        </HBox>
+                        <padding>
+                            <Insets left="20.0" top="20.0" />
+                        </padding>
+                        <Button fx:id="MultiPlotButton" onAction="#makeMultiPlot">Make plot</Button>
                     </VBox>
                 </content>
             </Tab>

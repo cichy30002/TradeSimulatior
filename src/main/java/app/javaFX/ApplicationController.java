@@ -4,6 +4,7 @@ import app.controls.ControlPanel;
 import app.controls.FileInput;
 import app.exceptions.AppInputException;
 import app.markets.Market;
+import app.valuables.Index;
 import app.valuables.Valuable;
 import app.world.Company;
 import app.world.InvestmentFound;
@@ -17,10 +18,17 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.util.Pair;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ApplicationController
 {
@@ -32,16 +40,135 @@ public class ApplicationController
         mainScene = scene;
         FileInput.readFromBasicFile();
         mainTabs = (TabPane) mainScene.lookup("#MainTabs");
-        updateMarketsList();
+        initLists();
+    }
+
+    private static void initLists() {
+        initMarketsList();
         initInvestorsList();
         initCompaniesList();
         initInvestorFoundsList();
+        initShareList();
+        initIndexList();
+        initCommodityList();
+        initCurrencyList();
     }
 
-    private static void updateMarketsList()
+    private static void initShareList()
     {
-        ObservableList<String> items = FXCollections.observableArrayList();
-        items.addAll(ControlPanel.getInstance().getAllMarketNames());
+        ObservableList<String> items = ControlPanel.getInstance().getShareNames();
+        ListView list = (ListView) mainScene.lookup("#ShareList");
+        list.setItems(items);
+
+        list.getSelectionModel().selectedItemProperty().addListener(
+                (ChangeListener<String>) (ov, old_val, new_val) -> mainTabs.getTabs().add(makePlotTab(new_val)));
+    }
+
+    private static void initIndexList()
+    {
+        ObservableList<String> items = ControlPanel.getInstance().getIndexNames();
+        ListView list = (ListView) mainScene.lookup("#IndexList");
+        list.setItems(items);
+
+        list.getSelectionModel().selectedItemProperty().addListener(
+                (ChangeListener<String>) (ov, old_val, new_val) -> mainTabs.getTabs().add(makePlotTab(new_val)));
+    }
+
+    private static void initCurrencyList()
+    {
+        ObservableList<String> items = ControlPanel.getInstance().getCurrencyNames();
+        ListView list = (ListView) mainScene.lookup("#CurrencyList");
+        list.setItems(items);
+
+        list.getSelectionModel().selectedItemProperty().addListener(
+                (ChangeListener<String>) (ov, old_val, new_val) -> mainTabs.getTabs().add(makePlotTab(new_val)));
+    }
+    private static void initCommodityList()
+    {
+        ObservableList<String> items = ControlPanel.getInstance().getCommodityNames();
+        ListView list = (ListView) mainScene.lookup("#CommodityList");
+        list.setItems(items);
+
+        list.getSelectionModel().selectedItemProperty().addListener(
+                (ChangeListener<String>) (ov, old_val, new_val) -> mainTabs.getTabs().add(makePlotTab(new_val)));
+    }
+    private static Tab makePlotTab(String valuableName) {
+        Tab tab = new Tab();
+        tab.setText(valuableName + "plot");
+
+        tab.setContent(drawSinglePlot(valuableName));
+        return tab;
+    }
+    private static LineChart<Number, Number> drawSinglePlot(String valuableName)
+    {
+        final NumberAxis xAxis = new NumberAxis();
+        final NumberAxis yAxis = new NumberAxis();
+        final LineChart<Number,Number> lineChart =
+                new LineChart<>(xAxis, yAxis);
+        lineChart.setTitle(valuableName);
+        XYChart.Series series = new XYChart.Series();
+        series.setName("Price");
+        Valuable valuable = ControlPanel.getInstance().getValuable(valuableName);
+        for (int i=0;i<100;i++)
+        {
+            valuable.updatePrice();
+        }
+        ArrayList<Integer> priceHistory = valuable.getPriceHistory();
+        for(int i=0;i<priceHistory.size();i++)
+        {
+            series.getData().add(new XYChart.Data(i, priceHistory.get(i)));
+        }
+
+        lineChart.getData().add(series);
+        return lineChart;
+    }
+    public void makeMultiPlot(ActionEvent actionEvent) {
+        TextField field = (TextField) mainScene.lookup("#ValuableNames");
+        Label message = (Label) mainScene.lookup("#ValuableNamesMessage");
+        message.setText("");
+        ArrayList<String> valuableNames = new ArrayList<>(Arrays.asList(field.getText().split(";")));
+        try {
+            mainTabs.getTabs().add(makeMultiPlotTab(valuableNames));
+            field.clear();
+        }catch (AppInputException e)
+        {
+            message.setText(e.getMessage());
+        }
+    }
+
+    private Tab makeMultiPlotTab(ArrayList<String> valuableNames) throws AppInputException {
+        Tab tab = new Tab();
+        tab.setText("Multi plot");
+        for (String valuableName : valuableNames)
+        {
+            if(!ControlPanel.getInstance().valuableExist(valuableName))
+            {
+                throw new AppInputException("One of valuables does not exist: " + valuableName);
+            }
+        }
+        LineChart<Number, Number> plot = drawSinglePlot(valuableNames.get(0));
+        for(String valuableName : valuableNames)
+        {
+            XYChart.Series series = new XYChart.Series();
+            Valuable valuable = ControlPanel.getInstance().getValuable(valuableName);
+            for (int i=0;i<101;i++)
+            {
+                valuable.updatePrice();
+            }
+            ArrayList<Integer> priceHistory = valuable.getPriceHistory();
+            for(int i=0;i<priceHistory.size();i++)
+            {
+                series.getData().add(new XYChart.Data(i, priceHistory.get(i)));
+            }
+            plot.getData().add(series);
+        }
+        tab.setContent(plot);
+        return tab;
+    }
+
+    private static void initMarketsList()
+    {
+        ObservableList<String> items = ControlPanel.getInstance().getMarketNames();
         ListView list = (ListView) mainScene.lookup("#MarketList");
         list.setItems(items);
 
@@ -86,8 +213,7 @@ public class ApplicationController
     }
     private static void initInvestorsList()
     {
-        ObservableList<String> items = FXCollections.observableArrayList();
-        items.addAll(ControlPanel.getInstance().getAllInvestorNames());
+        ObservableList<String> items = ControlPanel.getInstance().getInvestorNames();
         ListView list = (ListView) mainScene.lookup("#InvestorList");
         list.setItems(items);
         list.getSelectionModel().selectedItemProperty().addListener(
@@ -119,8 +245,7 @@ public class ApplicationController
 
     private static void initCompaniesList()
     {
-        ObservableList<String> items = FXCollections.observableArrayList();
-        items.addAll(ControlPanel.getInstance().getAllCompanyNames());
+        ObservableList<String> items = ControlPanel.getInstance().getCompanyNames();
         ListView list = (ListView) mainScene.lookup("#CompanyList");
         list.setItems(items);
         list.getSelectionModel().selectedItemProperty().addListener(
@@ -160,8 +285,7 @@ public class ApplicationController
     }
     private static void initInvestorFoundsList()
     {
-        ObservableList<String> items = FXCollections.observableArrayList();
-        items.addAll(ControlPanel.getInstance().getAllInvestmentFoundNames());
+        ObservableList<String> items = ControlPanel.getInstance().getInvestmentFoundNames();
         ListView list = (ListView) mainScene.lookup("#InvestmentFoundList");
         list.setItems(items);
         list.getSelectionModel().selectedItemProperty().addListener(
@@ -269,7 +393,6 @@ public class ApplicationController
                 default -> nameMessage.setText("invalid exception: " + exception.getMessage());
             }
         }
-        updateMarketsList();
     }
     @FXML
     public void addInvestorClicked(ActionEvent actionEvent) {
@@ -308,9 +431,11 @@ public class ApplicationController
         nameMessage.setText("");
         TextField priceField = (TextField)mainScene.lookup("#CurrencyPrice");
         Label priceMessage = (Label) mainScene.lookup("#CurrencyPriceMessage");
-        nameMessage.setText("");
+        priceMessage.setText("");
         try{
             ControlPanel.getInstance().getGenerator().generateCurrency(nameField.getText(), priceField.getText());
+            nameField.clear();
+            priceField.clear();
         }catch (AppInputException exception)
         {
             switch (exception.field) {
@@ -319,7 +444,6 @@ public class ApplicationController
                 default -> nameMessage.setText("invalid exception: " + exception.getMessage());
             }
         }
-
     }
     @FXML
     public void addCommodityClicked(ActionEvent actionEvent) {
@@ -328,12 +452,15 @@ public class ApplicationController
         nameMessage.setText("");
         TextField priceField = (TextField)mainScene.lookup("#CommodityPrice");
         Label priceMessage = (Label) mainScene.lookup("#CommodityPriceMessage");
-        nameMessage.setText("");
+        priceMessage.setText("");
         TextField unitField = (TextField)mainScene.lookup("#CommodityUnit");
         Label unitMessage = (Label) mainScene.lookup("#CommodityUnitMessage");
-        nameMessage.setText("");
+        unitMessage.setText("");
         try{
             ControlPanel.getInstance().getGenerator().generateCommodity(nameField.getText(), priceField.getText(), unitField.getText());
+            nameField.clear();
+            priceField.clear();
+            unitField.clear();
         }catch (AppInputException exception)
         {
             switch (exception.field) {
@@ -351,15 +478,19 @@ public class ApplicationController
         nameMessage.setText("");
         TextField priceField = (TextField)mainScene.lookup("#IndexPrice");
         Label priceMessage = (Label) mainScene.lookup("#IndexPriceMessage");
-        nameMessage.setText("");
+        priceMessage.setText("");
         TextField marketField = (TextField)mainScene.lookup("#IndexMarketName");
         Label marketMessage = (Label) mainScene.lookup("#IndexMarketNameMessage");
-        nameMessage.setText("");
+        marketMessage.setText("");
         TextField noCompaniesField = (TextField)mainScene.lookup("#IndexNOCompanies");
         Label noCompaniesMessage = (Label) mainScene.lookup("#IndexNOCompaniesMessage");
-        nameMessage.setText("");
+        noCompaniesMessage.setText("");
         try{
             ControlPanel.getInstance().getGenerator().generateIndex(nameField.getText(), priceField.getText(), marketField.getText(), noCompaniesField.getText());
+            nameField.clear();
+            priceField.clear();
+            marketField.clear();
+            noCompaniesField.clear();
         }catch (AppInputException exception)
         {
             switch (exception.field) {

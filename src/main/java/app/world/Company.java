@@ -2,6 +2,7 @@ package app.world;
 
 import app.controls.ControlPanel;
 import app.exceptions.TransactionException;
+import app.exceptions.WrongValuableParamException;
 import app.valuables.Currency;
 import app.valuables.Share;
 
@@ -21,7 +22,7 @@ public class Company extends MarketClient{
     private Share share;
 
     public Company(String name, String IPODate, Integer IPOShareValue, Integer openingPrice, Integer maxPrice,
-                   Integer minPrice, Float profit, Float revenue, Float capital, Integer tradingVolume, Float totalSales) {
+                   Integer minPrice, Float profit, Float revenue, Float capital, Integer tradingVolume, Float totalSales) throws WrongValuableParamException {
         super(name);
         this.IPODate = IPODate;
         this.IPOShareValue = IPOShareValue;
@@ -35,6 +36,7 @@ public class Company extends MarketClient{
         this.totalSales = totalSales;
 
         ControlPanel.getInstance().addCompany(this);
+        this.share = new Share(this.getName(), this.openingPrice);
     }
 
     public String getIPODate() {
