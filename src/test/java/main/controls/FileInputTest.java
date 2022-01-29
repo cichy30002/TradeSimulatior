@@ -41,7 +41,7 @@ public class FileInputTest {
         assertTrue(ControlPanel.getInstance().marketExist("stuff"));
         assertTrue(ControlPanel.getInstance().marketExist("papers"));
 
-        assertTrue(ControlPanel.getInstance().investmentFoundExist("great_idea"));
+        assertTrue(ControlPanel.getInstance().investmentFundExist("great_idea"));
 
         ControlPanel.removeInstance();
     }

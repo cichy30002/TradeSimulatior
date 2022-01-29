@@ -45,8 +45,8 @@ public class IndexTest {
     void setUpValid()
     {
         try{
-            company1  = new Company("CD Projekt SA", "13.09.1775", 30, 40, 50, 30, 687.9f, 789.0f,56.8f, 300, 132.4f);
-            company2  = new Company("not CD Projekt SA", "13.09.1775", 30, 40, 50, 30, 687.9f, 789.0f,56.8f, 300, 132.4f);
+            company1  = new Company("CD Projekt SA", "13.09.1775", 30, 40, 50, 30, 687.9f, 789.0f,56.8f, 300, 1324);
+            company2  = new Company("not CD Projekt SA", "13.09.1775", 30, 40, 50, 30, 687.9f, 789.0f,56.8f, 300, 134);
         }catch (WrongValuableParamException e)
         {
             System.out.println(e.getMessage());

@@ -12,7 +12,7 @@
               <tabs>
                 <Tab closable="false" text="Main">
                   <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                    <ProgressBar fx:id="progressBar"/>
                   </content>
                 </Tab>
               </tabs>
@@ -34,9 +34,9 @@
                       <ListView fx:id="CompanyList" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
                   </content>
                 </Tab>
-                  <Tab text="Investment Founds">
+                  <Tab text="Investment Funds">
                       <content>
-                          <ListView fx:id="InvestmentFoundList" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+                          <ListView fx:id="InvestmentFundList" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
                       </content>
                   </Tab>
               </tabs>
@@ -195,18 +195,18 @@
                     </VBox>
                 </content>
             </Tab>
-            <Tab text="Add Investment Found">
+            <Tab text="Add Investment Fund">
                 <content>
                     <VBox spacing="10.0">
                         <HBox spacing="10.0">
                             <Label text="Name: " />
-                            <TextField fx:id="InvestmentFoundName" />
-                            <Label fx:id="InvestmentFoundNameMessage" text="" />
+                            <TextField fx:id="InvestmentFundName"/>
+                            <Label fx:id="InvestmentFundNameMessage" text="" />
                         </HBox>
                         <padding>
                             <Insets left="20.0" top="20.0" />
                         </padding>
-                        <Button fx:id="InvestmentFoundButton" onAction="#addInvestmentFoundClicked">Add Investment Found</Button>
+                        <Button fx:id="InvestmentFundButton" onAction="#addInvestmentFundClicked">Add Investment Fund</Button>
                     </VBox>
                 </content>
             </Tab>
@@ -264,11 +264,6 @@
                             <Label fx:id="IndexNameMessage" text="" />
                         </HBox>
                         <HBox spacing="10.0">
-                            <Label text="Price (optional): " />
-                            <TextField fx:id="IndexPrice" />
-                            <Label fx:id="IndexPriceMessage" text="" />
-                        </HBox>
-                        <HBox spacing="10.0">
                             <Label text="Market name: " />
                             <TextField fx:id="IndexMarketName" />
                             <Label fx:id="IndexMarketNameMessage" text="" />
@@ -289,7 +284,7 @@
                 <content>
                     <VBox spacing="10.0">
                         <HBox spacing="10.0">
-                            <Label text="Valuable names separated with ';': " />
+                            <Label text="Valuable names separated with ';':&#xA;(UX is my passion)" />
                             <TextField fx:id="ValuableNames" prefWidth="100"/>
                             <Label fx:id="ValuableNamesMessage" text="" />
                         </HBox>

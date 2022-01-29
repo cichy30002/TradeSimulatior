@@ -4,10 +4,9 @@ import app.controls.ControlPanel;
 import app.controls.FileInput;
 import app.exceptions.AppInputException;
 import app.markets.Market;
-import app.valuables.Index;
 import app.valuables.Valuable;
 import app.world.Company;
-import app.world.InvestmentFound;
+import app.world.InvestmentFund;
 import app.world.Investor;
 import app.world.MarketClient;
 import javafx.beans.property.SimpleStringProperty;
@@ -26,7 +25,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.util.Pair;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -47,7 +45,7 @@ public class ApplicationController
         initMarketsList();
         initInvestorsList();
         initCompaniesList();
-        initInvestorFoundsList();
+        initInvestorFundsList();
         initShareList();
         initIndexList();
         initCommodityList();
@@ -96,10 +94,10 @@ public class ApplicationController
         Tab tab = new Tab();
         tab.setText(valuableName + "plot");
 
-        tab.setContent(drawSinglePlot(valuableName));
+        tab.setContent(drawSinglePlot(valuableName, ControlPanel.getInstance().getValuable(valuableName).getPriceHistory()));
         return tab;
     }
-    private static LineChart<Number, Number> drawSinglePlot(String valuableName)
+    private static LineChart<Number, Number> drawSinglePlot(String valuableName, ArrayList<Integer> data)
     {
         final NumberAxis xAxis = new NumberAxis();
         final NumberAxis yAxis = new NumberAxis();
@@ -108,15 +106,9 @@ public class ApplicationController
         lineChart.setTitle(valuableName);
         XYChart.Series series = new XYChart.Series();
         series.setName("Price");
-        Valuable valuable = ControlPanel.getInstance().getValuable(valuableName);
-        for (int i=0;i<100;i++)
+        for(int i=0;i<data.size();i++)
         {
-            valuable.updatePrice();
-        }
-        ArrayList<Integer> priceHistory = valuable.getPriceHistory();
-        for(int i=0;i<priceHistory.size();i++)
-        {
-            series.getData().add(new XYChart.Data(i, priceHistory.get(i)));
+            series.getData().add(new XYChart.Data(i, data.get(i)));
         }
 
         lineChart.getData().add(series);
@@ -146,26 +138,37 @@ public class ApplicationController
                 throw new AppInputException("One of valuables does not exist: " + valuableName);
             }
         }
-        LineChart<Number, Number> plot = drawSinglePlot(valuableNames.get(0));
-        for(String valuableName : valuableNames)
+        final NumberAxis xAxis = new NumberAxis();
+        final NumberAxis yAxis = new NumberAxis();
+        final LineChart<Number,Number> lineChart =
+                new LineChart<>(xAxis, yAxis);
+        lineChart.setTitle("Multi-plot");
+        for(String valuableName:valuableNames)
         {
+            ArrayList<Integer> data = ControlPanel.getInstance().getValuable(valuableName).getPriceHistory();
             XYChart.Series series = new XYChart.Series();
-            Valuable valuable = ControlPanel.getInstance().getValuable(valuableName);
-            for (int i=0;i<101;i++)
+            ArrayList<Float> percentageData = changeDataToPercentScale(data);
+
+            for(int i=0;i<percentageData.size();i++)
             {
-                valuable.updatePrice();
+                series.getData().add(new XYChart.Data(i, percentageData.get(i)));
             }
-            ArrayList<Integer> priceHistory = valuable.getPriceHistory();
-            for(int i=0;i<priceHistory.size();i++)
-            {
-                series.getData().add(new XYChart.Data(i, priceHistory.get(i)));
-            }
-            plot.getData().add(series);
+            series.setName(valuableName);
+            lineChart.getData().add(series);
         }
-        tab.setContent(plot);
+        tab.setContent(lineChart);
         return tab;
     }
 
+    private ArrayList<Float> changeDataToPercentScale(ArrayList<Integer> data)
+    {
+        ArrayList<Float> result = new ArrayList<>();
+        for(int i= 1; i<data.size();i++)
+        {
+            result.add(((float)data.get(i)/(float)data.get(i-1) - 1) * 100);
+        }
+        return result;
+    }
     private static void initMarketsList()
     {
         ObservableList<String> items = ControlPanel.getInstance().getMarketNames();
@@ -283,36 +286,33 @@ public class ApplicationController
 
         return new VBox(listView, table);
     }
-    private static void initInvestorFoundsList()
+    private static void initInvestorFundsList()
     {
-        ObservableList<String> items = ControlPanel.getInstance().getInvestmentFoundNames();
-        ListView list = (ListView) mainScene.lookup("#InvestmentFoundList");
+        ObservableList<String> items = ControlPanel.getInstance().getInvestmentFundNames();
+        ListView list = (ListView) mainScene.lookup("#InvestmentFundList");
         list.setItems(items);
         list.getSelectionModel().selectedItemProperty().addListener(
-                (ChangeListener<String>) (ov, old_val, new_val) -> mainTabs.getTabs().add(makeInvestmentFoundTab(new_val)));
+                (ChangeListener<String>) (ov, old_val, new_val) -> mainTabs.getTabs().add(makeInvestmentFundTab(new_val)));
     }
 
-    private static Tab makeInvestmentFoundTab(String investmentFoundName) {
+    private static Tab makeInvestmentFundTab(String investmentFundName) {
         Tab tab = new Tab();
-        tab.setText(investmentFoundName);
+        tab.setText(investmentFundName);
 
-        InvestmentFound investmentFound = ControlPanel.getInstance().getInvestmentFound(investmentFoundName);
-        VBox vBox = prepareInvestmentFoundTabContent(investmentFound);
+        InvestmentFund investmentFund = ControlPanel.getInstance().getInvestmentFund(investmentFundName);
+        VBox vBox = prepareInvestmentFundTabContent(investmentFund);
 
         tab.setContent(vBox);
         return tab;
     }
 
-    private static VBox prepareInvestmentFoundTabContent(InvestmentFound investmentFound) {
+    private static VBox prepareInvestmentFundTabContent(InvestmentFund investmentFund) {
         ObservableList<String> items = FXCollections.observableArrayList();
-        items.add("Name: " + investmentFound.getName());
-        items.add("ClientID: " + investmentFound.getClientID());
-        items.add("Manager: " + investmentFound.getManagerName() + " " + investmentFound.getManagerSurname());
-        items.add("Investors needed: " + investmentFound.getInvestorsNeeded());
-        items.add("To buy list: " + investmentFound.getToBuy().toString());
+        items.add("Name: " + investmentFund.getName());
+        items.add("ClientID: " + investmentFund.getClientID());
+        items.add("Manager: " + investmentFund.getManagerName() + " " + investmentFund.getManagerSurname());
         ListView listView = new ListView(items);
-
-        TableView table = makeMarketClientWallet(investmentFound);
+        TableView table = makeMarketClientWallet(investmentFund);
 
         return new VBox(listView, table);
     }
@@ -403,8 +403,8 @@ public class ApplicationController
         addMarketClient("Company");
     }
     @FXML
-    public void addInvestmentFoundClicked(ActionEvent actionEvent) {
-        addMarketClient("InvestmentFound");
+    public void addInvestmentFundClicked(ActionEvent actionEvent) {
+        addMarketClient("InvestmentFund");
     }
     private void addMarketClient(String type)
     {
@@ -416,7 +416,7 @@ public class ApplicationController
             {
                 case "Investor" -> ControlPanel.getInstance().getGenerator().generateInvestor(field.getText());
                 case "Company" -> ControlPanel.getInstance().getGenerator().generateCompany(field.getText());
-                case "InvestmentFound" -> ControlPanel.getInstance().getGenerator().generateInvestmentFound(field.getText());
+                case "InvestmentFund" -> ControlPanel.getInstance().getGenerator().generateInvestmentFund(field.getText());
             }
             field.clear();
         }catch (AppInputException exception)
@@ -476,9 +476,6 @@ public class ApplicationController
         TextField nameField = (TextField)mainScene.lookup("#IndexName");
         Label nameMessage = (Label) mainScene.lookup("#IndexNameMessage");
         nameMessage.setText("");
-        TextField priceField = (TextField)mainScene.lookup("#IndexPrice");
-        Label priceMessage = (Label) mainScene.lookup("#IndexPriceMessage");
-        priceMessage.setText("");
         TextField marketField = (TextField)mainScene.lookup("#IndexMarketName");
         Label marketMessage = (Label) mainScene.lookup("#IndexMarketNameMessage");
         marketMessage.setText("");
@@ -486,16 +483,15 @@ public class ApplicationController
         Label noCompaniesMessage = (Label) mainScene.lookup("#IndexNOCompaniesMessage");
         noCompaniesMessage.setText("");
         try{
-            ControlPanel.getInstance().getGenerator().generateIndex(nameField.getText(), priceField.getText(), marketField.getText(), noCompaniesField.getText());
+            ControlPanel.getInstance().getGenerator().generateIndex(nameField.getText(), marketField.getText(), noCompaniesField.getText());
             nameField.clear();
-            priceField.clear();
+
             marketField.clear();
             noCompaniesField.clear();
         }catch (AppInputException exception)
         {
             switch (exception.field) {
                 case "name" -> nameMessage.setText(exception.getMessage());
-                case "price" -> priceMessage.setText(exception.getMessage());
                 case "market" -> marketMessage.setText(exception.getMessage());
                 case "noCompanies" -> noCompaniesMessage.setText(exception.getMessage());
                 default -> nameMessage.setText("invalid exception: " + exception.getMessage());

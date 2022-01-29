@@ -7,37 +7,41 @@ import app.markets.Market;
 import app.markets.StockMarket;
 import app.valuables.*;
 import app.world.Company;
-import app.world.InvestmentFound;
+import app.world.InvestmentFund;
 import app.world.Investor;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 public class ControlPanel {
     private static ControlPanel instance;
-    private HashMap<String, StockMarket> stockMarkets;
-    private HashMap<String, CurrencyMarket> currencyMarkets;
-    private HashMap<String, CommodityMarket> commodityMarkets;
-    private ObservableList<String> marketNames;
+    private final HashMap<String, StockMarket> stockMarkets;
+    private final HashMap<String, CurrencyMarket> currencyMarkets;
+    private final HashMap<String, CommodityMarket> commodityMarkets;
+    private final ObservableList<String> marketNames;
     private Float bullBearRatio;
     private Integer transactionsPerSecond;
-    private HashMap<String, Investor> investors;
-    private ObservableList<String> investorNames;
-    private HashMap<String, Company> companies;
-    private ObservableList<String> companyNames;
-    private HashMap<String, InvestmentFound> investmentFounds;
-    private ObservableList<String> investmentFoundNames;
-    private HashMap<String, Commodity> commodities;
-    private ObservableList<String> commodityNames;
-    private HashMap<String, Currency> currencies;
-    private ObservableList<String> currencyNames;
-    private HashMap<String, Index> indexes;
-    private ObservableList<String> indexNames;
-    private HashMap<String, Share> shares;
-    private ObservableList<String> shareNames;
-    private Generator generator;
+    private final HashMap<String, Investor> investors;
+    private final ObservableList<String> investorNames;
+    private final HashMap<String, Company> companies;
+    private final ObservableList<String> companyNames;
+    private final HashMap<String, InvestmentFund> investmentFunds;
+    private final ObservableList<String> investmentFundNames;
+    private final HashMap<String, Commodity> commodities;
+    private final ObservableList<String> commodityNames;
+    private final HashMap<String, Currency> currencies;
+    private final ObservableList<String> currencyNames;
+    private final HashMap<String, Index> indexes;
+    private final ObservableList<String> indexNames;
+    private final HashMap<String, Share> shares;
+    private final ObservableList<String> shareNames;
+    private final Generator generator;
+    private final Simulation simulation;
+    private Boolean simulationState;
 
     public ControlPanel() {
         this.stockMarkets = new HashMap<>();
@@ -52,8 +56,8 @@ public class ControlPanel {
         this.investorNames = FXCollections.observableArrayList();
         this.companies = new HashMap<>();
         this.companyNames = FXCollections.observableArrayList();
-        this.investmentFounds = new HashMap<>();
-        this.investmentFoundNames = FXCollections.observableArrayList();
+        this.investmentFunds = new HashMap<>();
+        this.investmentFundNames = FXCollections.observableArrayList();
 
         this.commodities = new HashMap<>();
         this.commodityNames = FXCollections.observableArrayList();
@@ -65,6 +69,8 @@ public class ControlPanel {
         this.shareNames = FXCollections.observableArrayList();
 
         this.generator = new Generator();
+        this.simulation = new Simulation();
+        this.simulationState = false;
     }
 
     public static ControlPanel getInstance()
@@ -98,8 +104,8 @@ public class ControlPanel {
         return investors.containsKey(name);
     }
 
-    public boolean investmentFoundExist(String name) {
-        return investmentFounds.containsKey(name);
+    public boolean investmentFundExist(String name) {
+        return investmentFunds.containsKey(name);
     }
     public boolean companyExist(String name)
     {
@@ -158,12 +164,12 @@ public class ControlPanel {
         }
     }
 
-    public void addInvestmentFound(InvestmentFound investmentFound)
+    public void addInvestmentFund(InvestmentFund investmentFund)
     {
-        if(!investmentFoundExist(investmentFound.getName()))
+        if(!investmentFundExist(investmentFund.getName()))
         {
-            this.investmentFounds.put(investmentFound.getName(), investmentFound);
-            this.investmentFoundNames.add(investmentFound.getName());
+            this.investmentFunds.put(investmentFund.getName(), investmentFund);
+            this.investmentFundNames.add(investmentFund.getName());
         }
     }
 
@@ -269,10 +275,10 @@ public class ControlPanel {
         this.investorNames.remove(investorName);
     }
 
-    public void removeInvestmentFound(String investmentFoundName)
+    public void removeInvestmentFund(String investmentFundName)
     {
-        this.investmentFounds.remove(investmentFoundName);
-        this.investmentFoundNames.remove(investmentFoundName);
+        this.investmentFunds.remove(investmentFundName);
+        this.investmentFundNames.remove(investmentFundName);
     }
 
     public ArrayList<String> getAllMarketNames() {
@@ -291,8 +297,8 @@ public class ControlPanel {
         return new ArrayList<>(companies.keySet());
     }
 
-    public ArrayList<String> getAllInvestmentFoundNames() {
-        return new ArrayList<>(investmentFounds.keySet());
+    public ArrayList<String> getAllInvestmentFundNames() {
+        return new ArrayList<>(investmentFunds.keySet());
     }
 
     public Market getMarket(String marketName) {
@@ -315,8 +321,8 @@ public class ControlPanel {
         return investors.get(investorName);
     }
 
-    public InvestmentFound getInvestmentFound(String investmentFoundName) {
-        return investmentFounds.get(investmentFoundName);
+    public InvestmentFund getInvestmentFund(String investmentFundName) {
+        return investmentFunds.get(investmentFundName);
     }
     public StockMarket getStockMarket(String market) {
         return this.stockMarkets.get(market);
@@ -396,8 +402,8 @@ public class ControlPanel {
         return companyNames;
     }
 
-    public ObservableList<String> getInvestmentFoundNames() {
-        return investmentFoundNames;
+    public ObservableList<String> getInvestmentFundNames() {
+        return investmentFundNames;
     }
 
     public ObservableList<String> getShareNames() {
@@ -414,5 +420,29 @@ public class ControlPanel {
 
     public ObservableList<String> getCommodityNames() {
         return commodityNames;
+    }
+
+    public Collection<Investor> getAllInvestors() {
+        return this.investors.values();
+    }
+
+    public Collection<Company> getAllCompanies() {
+        return this.companies.values();
+    }
+
+    public Collection<InvestmentFund> getAllInvestmentFunds() {
+        return this.investmentFunds.values();
+    }
+
+    public Boolean getSimulationState() {
+        return simulationState;
+    }
+
+    public void setSimulationState(Boolean simulationState) {
+        this.simulationState = simulationState;
+    }
+
+    public Simulation getSimulation() {
+        return this.simulation;
     }
 }

@@ -9,7 +9,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public abstract class Valuable {
     private final String name;
     private Integer price;
-    private ArrayList<Integer> priceHistory;
+    private final ArrayList<Integer> priceHistory;
 
     protected Valuable(String name, Integer price) throws WrongValuableParamException {
         if(name.length()==0 || name.length()>20)
@@ -32,7 +32,7 @@ public abstract class Valuable {
     public Integer getPrice() {
         return price;
     }
-    private void setPrice(Integer newPrice)
+    void setPrice(Integer newPrice)
     {
         this.price = newPrice;
         this.priceHistory.add(this.price);
@@ -43,13 +43,20 @@ public abstract class Valuable {
         this.setPrice(calculateUpdatedPrice());
     }
 
-    private Integer calculateUpdatedPrice()
+     Integer calculateUpdatedPrice()
     {
-        return this.price + ThreadLocalRandom.current().nextInt(-3, 4);
+        return this.price + ThreadLocalRandom.current().nextInt((int) (-1*this.price*0.1), (int) (this.price*0.1));
     }
 
     public ArrayList<Integer> getPriceHistory()
     {
         return new ArrayList<>(this.priceHistory);
+    }
+
+    public abstract void bought(Integer amount);
+
+    public boolean canBuy(Integer amount)
+    {
+        return true;
     }
 }

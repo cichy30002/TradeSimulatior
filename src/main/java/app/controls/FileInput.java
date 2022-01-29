@@ -1,5 +1,6 @@
 package app.controls;
 
+import app.exceptions.TransactionException;
 import app.exceptions.WrongMarketParamException;
 import app.exceptions.WrongValuableParamException;
 import app.markets.CommodityMarket;
@@ -10,7 +11,7 @@ import app.valuables.Currency;
 import app.valuables.Index;
 import app.valuables.Share;
 import app.world.Company;
-import app.world.InvestmentFound;
+import app.world.InvestmentFund;
 import app.world.Investor;
 
 import java.io.BufferedReader;
@@ -34,9 +35,17 @@ public class FileInput {
             readInput(reader, "Market", "Commodity");
             readInput(reader, "Market", "Stock");
 
-            readInput(reader, "MarketClient", "InvestmentFound");
+            readInput(reader, "MarketClient", "InvestmentFund");
         } catch (IOException | WrongValuableParamException | WrongMarketParamException e) {
             e.printStackTrace();
+        }
+        for(Investor investor : ControlPanel.getInstance().getAllInvestors())
+        {
+            ControlPanel.getInstance().getGenerator().fillMarketClientWallet(investor);
+        }
+        for(Company company : ControlPanel.getInstance().getAllCompanies())
+        {
+            ControlPanel.getInstance().getGenerator().fillMarketClientWallet(company);
         }
     }
 
@@ -65,7 +74,7 @@ public class FileInput {
                 try {
                 Company company = new Company(params[0], params[1], Integer.parseInt(params[2]), Integer.parseInt(params[3]),
                         Integer.parseInt(params[4]), Integer.parseInt(params[5]), Float.parseFloat(params[6]), Float.parseFloat(params[7]),
-                        Float.parseFloat(params[8]), Integer.parseInt(params[9]), Float.parseFloat(params[10]));
+                        Float.parseFloat(params[8]), Integer.parseInt(params[9]), Integer.parseInt(params[10]));
                 }catch (WrongValuableParamException e)
                 {
                     System.out.println(e.getMessage());
@@ -74,8 +83,8 @@ public class FileInput {
             case "Investor":
                 Investor investor = new Investor(params[0]);
                 break;
-            case "InvestmentFound":
-                InvestmentFound investmentFound = new InvestmentFound(params[0], new ArrayList<>(List.of(params[1].split(";"))),Integer.parseInt(params[2]) ,params[3],params[4]);
+            case "InvestmentFund":
+                InvestmentFund investmentFund = new InvestmentFund(params[0],params[1],params[2]);
                 break;
             default:
                 System.out.println("failed switch in file input");

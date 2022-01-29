@@ -47,8 +47,8 @@ public class StockMarketTest {
     void makeStockMarket()
     {
         try {
-            company1  = new Company("CD Projekt SA", "13.09.1775", 30, 40, 50, 30, 687.9f, 789.0f,56.8f, 300, 132.4f);
-            company2  = new Company("not CD Projekt SA", "13.09.1775", 30, 40, 50, 30, 687.9f, 789.0f,56.8f, 300, 132.4f);
+            company1  = new Company("CD Projekt SA", "13.09.1775", 30, 40, 50, 30, 687.9f, 789.0f,56.8f, 300, 1324);
+            company2  = new Company("not CD Projekt SA", "13.09.1775", 30, 40, 50, 30, 687.9f, 789.0f,56.8f, 300, 1324);
         }catch (WrongValuableParamException e)
         {
             System.out.println(e.getMessage());
@@ -94,7 +94,7 @@ public class StockMarketTest {
         makeStockMarket();
 
         try {
-            assertTrue(8 <= stockMarket.getProductPrice(share2.getName()));
+            assertTrue(7 <= stockMarket.getProductPriceBuy(share2.getName()));
         } catch (MarketCollectionException e) {
             e.printStackTrace();
         }

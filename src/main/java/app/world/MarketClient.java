@@ -5,17 +5,22 @@ import app.exceptions.MarketCollectionException;
 import app.exceptions.TransactionException;
 import app.markets.Market;
 import app.valuables.Valuable;
+import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.util.Pair;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ThreadLocalRandom;
 
-public abstract class MarketClient {
+public abstract class MarketClient extends Task<Integer> {
     private static Integer lastID = 1000;
-    private String name;
-    private String clientID;
-    private HashMap<String, Integer> wallet;
+    private final String name;
+    private final String clientID;
+    private final HashMap<String, Integer> wallet;
+    private ObservableList<Pair<String,Integer>> observableWallet;
 
 
     protected MarketClient(String name) {
@@ -30,63 +35,61 @@ public abstract class MarketClient {
         {
             throw new TransactionException("Tried to make transaction with currency not matching markets currency");
         }
-        if(!ControlPanel.getInstance().valuableExist(valuableToBuy.getName()))
-        {
-            throw new TransactionException("Tried to buy valuable that does not exist");
-        }
-        if(!market.isProductInMarket(valuableToBuy.getName()))
-        {
-            throw new TransactionException("Tried to buy valuable which is not available in this market: " + valuableToBuy.getName());
-        }
-        if(amount <= 0)
-        {
-            throw new TransactionException("Tried to buy invalid amount!");
-        }
+        transactionChecks(valuableToBuy, amount, market);
         Integer availableMoney = getAvailableValuableAmount(currencyName);
         try {
-            if(availableMoney < market.getProductPrice(valuableToBuy.getName()) * amount)
+            if(availableMoney < market.getProductPriceBuy(valuableToBuy.getName()) * amount)
             {
-                throw new TransactionException("Not enough founds in clients wallet!");
+                throw new TransactionException("Not enough funds in clients wallet!");
             }
         } catch (MarketCollectionException e) {
             e.printStackTrace();
         }
+        if(!valuableToBuy.canBuy(amount))
+        {
+            return;
+        }
         addToWallet(valuableToBuy.getName(), amount);
         try {
-            removeFromWallet(market.getCurrency(), market.getProductPrice(valuableToBuy.getName()) * amount);
+            removeFromWallet(market.getCurrency(), market.getProductPriceBuy(valuableToBuy.getName()) * amount);
         } catch (MarketCollectionException e) {
             e.printStackTrace();
         }
+        valuableToBuy.bought(amount);
     }
 
     public void transactionSell(Valuable valuableToSell, Integer amount, Market market) throws TransactionException {
-        if(!ControlPanel.getInstance().valuableExist(valuableToSell.getName()))
+        transactionChecks(valuableToSell, amount, market);
+        Integer availableAmountOfGivenValuable = getAvailableValuableAmount(valuableToSell.getName());
+
+        if(availableAmountOfGivenValuable < amount)
+        {
+            throw new TransactionException("Not enough funds in clients wallet!");
+        }
+
+        removeFromWallet(valuableToSell.getName(), amount);
+        try {
+            addToWallet(market.getCurrency(), market.getProductPriceSell(valuableToSell.getName()) * amount);
+        } catch (MarketCollectionException e) {
+            e.printStackTrace();
+        }
+        valuableToSell.bought(amount);
+    }
+    private void transactionChecks(Valuable valuable, Integer amount, Market market) throws TransactionException
+    {
+        if(!ControlPanel.getInstance().valuableExist(valuable.getName()))
         {
             throw new TransactionException("Tried to buy valuable that does not exist");
         }
-        if(!market.isProductInMarket(valuableToSell.getName()))
+        if(!market.isProductInMarket(valuable.getName()))
         {
-            throw new TransactionException("Tried to buy valuable which is not available in this market: " + valuableToSell.getName());
+            throw new TransactionException("Tried to buy valuable which is not available in this market: " + valuable.getName());
         }
         if(amount <= 0)
         {
             throw new TransactionException("Tried to buy invalid amount!");
         }
-        Integer availableAmountOfGivenValuable = getAvailableValuableAmount(valuableToSell.getName());
-
-        if(availableAmountOfGivenValuable < amount)
-        {
-            throw new TransactionException("Not enough founds in clients wallet!");
-        }
-
-        removeFromWallet(valuableToSell.getName(), amount);
-        try {
-            addToWallet(market.getCurrency(), market.getProductPrice(valuableToSell.getName()) * amount);
-        } catch (MarketCollectionException e) {
-            e.printStackTrace();
-        }
     }
-
     public String getName() {
         return this.name;
     }
@@ -146,5 +149,63 @@ public abstract class MarketClient {
             result.add(new Pair<>(valuable, wallet.get(valuable)));
         }
         return result;
+    }
+    public Boolean isValuableInWallet(String valuableName)
+    {
+        return wallet.containsKey(valuableName) && wallet.get(valuableName) > 0;
+    }
+
+    void tryTransactionBuy(Market randomMarket)
+    {
+        try {
+            ArrayList<Pair<String, Integer>> productsWithPrices = randomMarket.getProductsWithPrices();
+            Pair<String, Integer> randomProduct = productsWithPrices.get(ThreadLocalRandom.current().nextInt(productsWithPrices.size()));
+            int maxAmountToBuy = (int)Math.floor((float)getAvailableValuableAmount(randomMarket.getCurrency())/(float)randomProduct.getValue());
+            if(maxAmountToBuy == 0) return;
+            transactionBuy(randomMarket.getCurrency(), ControlPanel.getInstance().getValuable(randomProduct.getKey()),
+                    ThreadLocalRandom.current().nextInt(1,maxAmountToBuy),randomMarket );
+        } catch (TransactionException e) {
+            e.printStackTrace();
+        }
+    }
+    void tryTransactionSell(Market randomMarket)
+    {
+        try{
+            ArrayList<Pair<String, Integer>> possibleToSell = new ArrayList<>();
+            ArrayList<Pair<String, Integer>> productsWithPrices = randomMarket.getProductsWithPrices();
+            for (Pair<String, Integer> product : productsWithPrices)
+            {
+                if(isValuableInWallet(product.getKey()))
+                {
+                    possibleToSell.add(product);
+                }
+            }
+            if(possibleToSell.size() == 0) return;
+            Pair<String, Integer> randomProduct = possibleToSell.get(ThreadLocalRandom.current().nextInt(possibleToSell.size()));
+            int maxAmountToSell = getAvailableValuableAmount(randomProduct.getKey());
+            transactionSell(ControlPanel.getInstance().getValuable(randomProduct.getKey()),
+                    ThreadLocalRandom.current().nextInt(1,maxAmountToSell), randomMarket);
+        } catch (TransactionException e) {
+            e.printStackTrace();
+        }
+    }
+    void tryToMakeTransaction() {
+        ArrayList<String> marketNames = ControlPanel.getInstance().getAllMarketNames();
+        Market randomMarket = ControlPanel.getInstance().getMarket(marketNames.get(ThreadLocalRandom.current().nextInt(marketNames.size())));
+        if(isValuableInWallet(randomMarket.getCurrency()))
+        {
+            if(ThreadLocalRandom.current().nextFloat() > 0.5)
+            {
+                tryTransactionBuy(randomMarket);
+            }
+            else
+            {
+                tryTransactionSell(randomMarket);
+            }
+        }
+        else
+        {
+            tryTransactionSell(randomMarket);
+        }
     }
 }

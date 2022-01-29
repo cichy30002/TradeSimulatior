@@ -1,11 +1,16 @@
 package app.javaFX;
 
+import app.controls.ControlPanel;
+import app.controls.Simulation;
+import app.exceptions.TransactionException;
+import app.world.Investor;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ProgressBar;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -19,6 +24,7 @@ public class MainApplication extends Application {
         stage.setTitle("Trade Simulator");
         stage.setScene(scene);
         stage.show();
+        ControlPanel.getInstance().getSimulation().startSimulation();
     }
 
     private void initApp(Scene scene) {

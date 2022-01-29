@@ -74,7 +74,7 @@ public class CurrencyMarketTest {
     {
         makeCurrencyMarket();
         try {
-            assertTrue(17 <= currencyMarket.getProductPrice(currency2.getName()));
+            assertTrue(17 <= currencyMarket.getProductPriceBuy(currency2.getName()));
         } catch (MarketCollectionException e) {
             e.printStackTrace();
         }

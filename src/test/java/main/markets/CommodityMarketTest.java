@@ -5,7 +5,6 @@ import app.exceptions.MarketCollectionException;
 import app.exceptions.WrongMarketParamException;
 import app.exceptions.WrongValuableParamException;
 import app.markets.CommodityMarket;
-import app.markets.CurrencyMarket;
 import app.valuables.Commodity;
 import app.valuables.Currency;
 import org.junit.jupiter.api.Test;
@@ -74,7 +73,7 @@ public class CommodityMarketTest {
         makeCommodityMarket();
 
         try {
-            assertTrue(455 < commodityMarket.getProductPrice(commodity1.getName()));
+            assertTrue(455 < commodityMarket.getProductPriceBuy(commodity1.getName()));
         } catch (MarketCollectionException e) {
             e.printStackTrace();
         }

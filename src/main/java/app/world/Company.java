@@ -3,8 +3,10 @@ package app.world;
 import app.controls.ControlPanel;
 import app.exceptions.TransactionException;
 import app.exceptions.WrongValuableParamException;
-import app.valuables.Currency;
 import app.valuables.Share;
+
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 
 public class Company extends MarketClient{
@@ -17,12 +19,14 @@ public class Company extends MarketClient{
     private Float revenue;
     private Float capital;
     private Integer tradingVolume;
-    private Float totalSales;
+    private Integer totalSales;
+    private Integer numberOfShares;
+    private Integer soldShares;
 
-    private Share share;
+    private final Share share;
 
     public Company(String name, String IPODate, Integer IPOShareValue, Integer openingPrice, Integer maxPrice,
-                   Integer minPrice, Float profit, Float revenue, Float capital, Integer tradingVolume, Float totalSales) throws WrongValuableParamException {
+                   Integer minPrice, Float profit, Float revenue, Float capital, Integer tradingVolume, Integer totalSales) throws WrongValuableParamException {
         super(name);
         this.IPODate = IPODate;
         this.IPOShareValue = IPOShareValue;
@@ -34,9 +38,36 @@ public class Company extends MarketClient{
         this.capital = capital;
         this.tradingVolume = tradingVolume;
         this.totalSales = totalSales;
+        this.numberOfShares = new Random().nextInt(10, 50000);
+        this.soldShares = 0;
 
         ControlPanel.getInstance().addCompany(this);
-        this.share = new Share(this.getName(), this.openingPrice);
+        this.share = new Share(this.getName(), this.IPOShareValue);
+    }
+
+    @Override
+    public Integer call() throws Exception {
+        while(ControlPanel.getInstance().getSimulationState())
+        {
+            tryToMakeAction();
+            Thread.sleep(1000);
+        }
+        System.out.println(getName() +"died");
+        return 0;
+    }
+
+    private void tryToMakeAction() {
+        int randomActionID = ThreadLocalRandom.current().nextInt(10);
+        if(randomActionID == 0)
+        {
+            increaseNumberOfShares();
+        }else {
+            tryToMakeTransaction();
+        }
+    }
+
+    private void increaseNumberOfShares() {
+        this.setNumberOfShares(this.getNumberOfShares() + ThreadLocalRandom.current().nextInt(100));
     }
 
     public String getIPODate() {
@@ -99,15 +130,47 @@ public class Company extends MarketClient{
         return tradingVolume;
     }
 
-    public void setTradingVolume(Integer tradingVolume) {
-        this.tradingVolume = tradingVolume;
+    public void resetTradingVolume() {
+        this.tradingVolume = 0;
     }
 
-    public Float getTotalSales() {
+    public void increaseTradingVolume(Integer amount)
+    {
+        this.tradingVolume+=amount;
+    }
+
+    public Integer getTotalSales() {
         return totalSales;
     }
 
-    public void setTotalSales(Float totalSales) {
-        this.totalSales = totalSales;
+    public void resetTotalSales() {
+        this.totalSales = 0;
     }
+
+    public void increaseTotalSales(Integer amount)
+    {
+        this.totalSales += amount * getShare().getPrice();
+    }
+
+    public Share getShare() {
+        return share;
+    }
+
+    public Integer getNumberOfShares() {
+        return numberOfShares;
+    }
+
+    public void setNumberOfShares(Integer numberOfShares) {
+        this.numberOfShares = numberOfShares;
+    }
+
+    public Integer getSoldShares() {
+        return soldShares;
+    }
+
+    public void increaseSoldShares(Integer soldShares) {
+        this.soldShares += soldShares;
+    }
+
+
 }

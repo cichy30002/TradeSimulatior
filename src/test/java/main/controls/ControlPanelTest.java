@@ -8,7 +8,7 @@ import app.markets.CurrencyMarket;
 import app.markets.StockMarket;
 import app.valuables.*;
 import app.world.Company;
-import app.world.InvestmentFound;
+import app.world.InvestmentFund;
 import app.world.Investor;
 import org.junit.jupiter.api.Test;
 
@@ -38,8 +38,8 @@ public class ControlPanelTest {
     Index secondIndex;
     Investor secondInvestor;
     Investor firstInvestor;
-    InvestmentFound firstInvestmentFound;
-    InvestmentFound secondInvestmentFound;
+    InvestmentFund firstInvestmentFund;
+    InvestmentFund secondInvestmentFund;
     Company company;
     Share share;
     ArrayList<String> shares;
@@ -106,7 +106,7 @@ public class ControlPanelTest {
 
     private void addValuablesForMarkets() {
         try{
-            company  = new Company("CD Projekt SA", "13.09.1775", 30, 40, 50, 30, 687.9f, 789.0f,56.8f, 300, 132.4f);
+            company  = new Company("CD Projekt SA", "13.09.1775", 30, 40, 50, 30, 687.9f, 789.0f,56.8f, 300, 132);
         }catch (WrongValuableParamException e)
         {
             System.out.println(e.getMessage());
@@ -189,8 +189,8 @@ public class ControlPanelTest {
             firstCommodity = new Commodity("gold", 1800, "ounce", 100, 10000);
             secondCommodity = new Commodity("silver", 1800, "ounce", 100, 10000);
 
-            firstCompany = new Company("Orlen", "", 1, 1, 10, 1, 1f,2f, 3f, 2, 4f);
-            secondCompany = new Company("Lotos", "", 1, 1, 10, 1, 1f,2f, 3f, 2, 4f);
+            firstCompany = new Company("Orlen", "", 1, 1, 10, 1, 1f,2f, 3f, 2, 4);
+            secondCompany = new Company("Lotos", "", 1, 1, 10, 1, 1f,2f, 3f, 2, 4);
             firstShare = new Share("Orlen", 56);
             secondShare = new Share("Lotos", 56);
 
@@ -231,12 +231,12 @@ public class ControlPanelTest {
         assertTrue(ControlPanel.getInstance().companyExist("Orlen"));
         assertTrue(ControlPanel.getInstance().companyExist("Lotos"));
 
-        assertTrue(ControlPanel.getInstance().investmentFoundExist("great_idea"));
-        assertTrue(ControlPanel.getInstance().investmentFoundExist("bad_idea"));
+        assertTrue(ControlPanel.getInstance().investmentFundExist("great_idea"));
+        assertTrue(ControlPanel.getInstance().investmentFundExist("bad_idea"));
 
         assertFalse(ControlPanel.getInstance().investorExist("xd"));
         assertFalse(ControlPanel.getInstance().companyExist("xd"));
-        assertFalse(ControlPanel.getInstance().investmentFoundExist("xd"));
+        assertFalse(ControlPanel.getInstance().investmentFundExist("xd"));
 
         removeFewMarketClients();
     }
@@ -245,8 +245,8 @@ public class ControlPanelTest {
         secondInvestor = new Investor("Jakub_Cichy");
 
         try{
-            firstCompany = new Company("Orlen", "", 1, 1, 10, 1, 1f,2f, 3f, 2, 4f);
-            secondCompany = new Company("Lotos", "", 1, 1, 10, 1, 1f,2f, 3f, 2, 4f);
+            firstCompany = new Company("Orlen", "", 1, 1, 10, 1, 1f,2f, 3f, 2, 4);
+            secondCompany = new Company("Lotos", "", 1, 1, 10, 1, 1f,2f, 3f, 2, 4);
         }catch (WrongValuableParamException e)
         {
             System.out.println(e.getMessage());
@@ -257,11 +257,8 @@ public class ControlPanelTest {
         } catch (WrongValuableParamException e) {
             e.printStackTrace();
         }
-        ArrayList<String> list = new ArrayList<>();
-        list.add("Orlen");
-        firstInvestmentFound = new InvestmentFound("great_idea", list, 3, "x", "y");
-        list.add("Lotos");
-        secondInvestmentFound = new InvestmentFound("bad_idea", list, 10, "dsf", "sdgf");
+        firstInvestmentFund = new InvestmentFund("great_idea", "x", "y");
+        secondInvestmentFund = new InvestmentFund("bad_idea",  "dsf", "sdgf");
     }
 
     private void removeFewMarketClients() {
@@ -271,8 +268,8 @@ public class ControlPanelTest {
         ControlPanel.getInstance().removeCompany(secondCompany.getName());
         ControlPanel.getInstance().removeShare(firstShare.getName());
         ControlPanel.getInstance().removeShare(secondShare.getName());
-        ControlPanel.getInstance().removeInvestmentFound(firstInvestmentFound.getName());
-        ControlPanel.getInstance().removeInvestmentFound(secondInvestmentFound.getName());
+        ControlPanel.getInstance().removeInvestmentFund(firstInvestmentFund.getName());
+        ControlPanel.getInstance().removeInvestmentFund(secondInvestmentFund.getName());
     }
 
 

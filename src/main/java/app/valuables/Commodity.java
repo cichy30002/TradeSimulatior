@@ -3,10 +3,14 @@ package app.valuables;
 import app.controls.ControlPanel;
 import app.exceptions.WrongValuableParamException;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 public class Commodity extends Valuable{
+    private static Integer tradingVolumeTotal;
     private final String tradingUnit;
     private Integer minPrice;
     private Integer maxPrice;
+    private Integer tradingVolume;
 
     public Commodity(String name, Integer price, String tradingUnit, Integer minPrice, Integer maxPrice) throws WrongValuableParamException {
         super(name, price);
@@ -20,7 +24,16 @@ public class Commodity extends Valuable{
         }
         this.minPrice = minPrice;
         this.maxPrice = maxPrice;
+        this.tradingVolume = 0;
         ControlPanel.getInstance().addCommodity(this);
+    }
+
+    public static Integer getTradingVolumeTotal() {
+        return Commodity.tradingVolumeTotal;
+    }
+
+    public static void setTradingVolumeTotal(Integer tradingVolumeTotal) {
+        Commodity.tradingVolumeTotal = tradingVolumeTotal;
     }
 
     public String getTradingUnit() {
@@ -42,4 +55,35 @@ public class Commodity extends Valuable{
     public void setMaxPrice(Integer maxPrice) {
         this.maxPrice = maxPrice;
     }
+    public Integer getTradingVolume() {
+        return tradingVolume;
+    }
+
+    public void resetTradingVolume() {
+        this.tradingVolume = 0;
+    }
+
+    public void increaseTradingVolume(Integer amount)
+    {
+        this.tradingVolume+=amount;
+    }
+
+    @Override
+    public void bought(Integer amount) {
+        increaseTradingVolume(amount);
+        setTradingVolumeTotal(getTradingVolumeTotal()+1);
+    }
+    /*
+    @Override
+    synchronized Integer calculateUpdatedPrice()
+    {
+        if(getTradingVolume() > getTradingVolumeTotal()/ControlPanel.getInstance().getAllCommodities().size())
+        {
+            return this.getPrice() + ThreadLocalRandom.current().nextInt(1, (int) (this.getPrice()*0.05));
+        }else
+        {
+            return Math.max(1, this.getPrice() + ThreadLocalRandom.current().nextInt(-1*(int) (this.getPrice()*0.05), -1));
+        }
+    }
+    */
 }

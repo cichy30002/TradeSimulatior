@@ -2,7 +2,6 @@ package app.markets;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Random;
 
 import app.controls.ControlPanel;
@@ -56,15 +55,7 @@ public abstract class Market {
     public String getCurrency() {
         return currency;
     }
-    protected List<Integer> parseList(List<String> listOfStrings)
-    {
-        List<Integer> result = new ArrayList<>();
-        for(String s : listOfStrings)
-        {
-            result.add(Integer.parseInt(s));
-        }
-        return result;
-    }
+
     protected void deepAdd(String toAdd, Integer price) throws MarketCollectionException {
         if(productsWithPrices.containsKey(toAdd))
         {
@@ -90,7 +81,7 @@ public abstract class Market {
         return productsWithPrices.containsKey(valuableName);
     }
 
-    public Integer getProductPrice(String productName) throws MarketCollectionException {
+    public Integer getProductPriceBuy(String productName) throws MarketCollectionException {
         if(!isProductInMarket(productName))
         {
             throw new MarketCollectionException("Tried to get price of product that is ont in the market: " + productName);
@@ -98,6 +89,20 @@ public abstract class Market {
         return productsWithPrices.get(productName);
     }
 
+    public Integer getProductPriceSell(String productName) throws MarketCollectionException {
+        if(!isProductInMarket(productName))
+        {
+            throw new MarketCollectionException("Tried to get price of product that is ont in the market: " + productName);
+        }
+        return calculateSellPrice(productName);
+    }
+
+    private Integer calculateSellPrice(String productName)
+    {
+        int buyPrice = productsWithPrices.get(productName);
+        int result = (int) (buyPrice*(1f-getMarginFee())/(1f+getMarginFee()));
+        return Math.max(1, result);
+    }
     public void updatePrices()
     {
         productsWithPrices.replaceAll((p, v) -> calculateUpdatedPrice(ControlPanel.getInstance().getValuable(p)));

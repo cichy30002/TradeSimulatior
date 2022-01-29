@@ -12,7 +12,7 @@ import app.valuables.Currency;
 import app.valuables.Index;
 import app.valuables.Share;
 import app.world.Company;
-import app.world.InvestmentFound;
+import app.world.InvestmentFund;
 import app.world.Investor;
 import app.world.MarketClient;
 
@@ -28,7 +28,7 @@ public class Generator {
     private final float chanceForValuable;
     private final int maxWalletAmount;
     private final float chanceForWallet;
-    private final float foundChance;
+    private final float fundChance;
 
     public Generator()
     {
@@ -36,7 +36,7 @@ public class Generator {
         makeAddresses();
         chanceForValuable = 0.7f;
         chanceForWallet = 0.3f;
-        foundChance = 0.5f;
+        fundChance = 0.5f;
         maxWalletAmount = 10000;
     }
 
@@ -188,10 +188,10 @@ public class Generator {
         }
         Investor investor = new Investor(name);
         fillMarketClientWallet(investor);
-
+        ControlPanel.getInstance().getSimulation().simulateNewTask(investor);
     }
 
-    private void fillMarketClientWallet(MarketClient client) {
+    protected void fillMarketClientWallet(MarketClient client) {
         for(String currency : ControlPanel.getInstance().getAllCurrencies())
         {
             if(RNG.nextFloat()<chanceForWallet)
@@ -218,6 +218,7 @@ public class Generator {
         }
         Company company = generateCompanyWithRandomParams(name);
         fillMarketClientWallet(company);
+        ControlPanel.getInstance().getSimulation().simulateNewTask(company);
     }
 
     private Company generateCompanyWithRandomParams(String name) throws AppInputException{
@@ -230,7 +231,7 @@ public class Generator {
         Float revenue = 2248f;
         Float capital = 123456f;
         Integer tradingVolume = RNG.nextInt(100) * 100;
-        Float totalSales = 456789f;
+        Integer totalSales = 456789;
         try {
             return new Company(name, ipoDate, ipoShareValue, openingPrice, minPrice, maxPrice, profit, revenue,
                     capital, tradingVolume, totalSales);
@@ -241,32 +242,25 @@ public class Generator {
 
     }
 
-    public void generateInvestmentFound(String name)throws AppInputException
+    public void generateInvestmentFund(String name)throws AppInputException
     {
-        if(ControlPanel.getInstance().investmentFoundExist(name))
+        if(ControlPanel.getInstance().investmentFundExist(name))
         {
-            throw new AppInputException("That investment found already exist!");
+            throw new AppInputException("That investment fund already exist!");
         }
         if(name.length()==0 || name.length()>20)
         {
-            throw new AppInputException("Wrong investment found name");
+            throw new AppInputException("Wrong investment fund name");
         }
-        InvestmentFound investmentFound = generateInvestmentFoundWithRandomParams(name);
+        InvestmentFund investmentFund = generateInvestmentFundWithRandomParams(name);
+        ControlPanel.getInstance().getSimulation().simulateNewTask(investmentFund);
     }
 
-    private InvestmentFound generateInvestmentFoundWithRandomParams(String name) {
+    private InvestmentFund generateInvestmentFundWithRandomParams(String name) {
         String managerName = "mr.";
         String managerSurname = "Manager";
-        Integer investorsNeeded = RNG.nextInt(3, 50)*10;
-        ArrayList<String> toBuyNames = new ArrayList<>();
-        for(String valuable : ControlPanel.getInstance().getAllValuables())
-        {
-            if(foundChance > RNG.nextFloat())
-            {
-                toBuyNames.add(valuable);
-            }
-        }
-        return new InvestmentFound(name, toBuyNames, investorsNeeded, managerName, managerSurname);
+
+        return new InvestmentFund(name, managerName, managerSurname);
     }
 
     public void generateCurrency(String name, String price) throws AppInputException
@@ -333,7 +327,7 @@ public class Generator {
         }
     }
 
-    public void generateIndex(String name, String price, String market, String noCompanies) throws AppInputException
+    public void generateIndex(String name, String market, String noCompanies) throws AppInputException
     {
         if(ControlPanel.getInstance().indexExist(name))
         {
@@ -343,7 +337,7 @@ public class Generator {
         {
             throw new AppInputException("Wrong index name", "name");
         }
-        int priceInt = checkPrice(price);
+        int priceInt = 1;
         ArrayList<String> listOfCompaniesNames = new ArrayList<>();
         StockMarket stockMarket = ControlPanel.getInstance().getStockMarket(market);
         if(stockMarket==null)

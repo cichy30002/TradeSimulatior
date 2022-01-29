@@ -14,6 +14,18 @@ public class Share extends Valuable{
         ControlPanel.getInstance().addShare(this);
     }
 
+    @Override
+    public void bought(Integer amount) {
+        this.company.increaseTotalSales(amount);
+        this.company.increaseTradingVolume(amount);
+        this.company.increaseSoldShares(amount);
+    }
+
+    @Override
+    public boolean canBuy(Integer amount)
+    {
+        return company.getSoldShares() + amount <= company.getNumberOfShares();
+    }
     private Company findYourCompany() throws WrongValuableParamException {
         Company yourCompany = ControlPanel.getInstance().getCompany(getName());
         if(yourCompany==null){

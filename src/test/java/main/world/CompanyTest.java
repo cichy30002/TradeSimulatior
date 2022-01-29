@@ -43,7 +43,7 @@ public class CompanyTest {
         for(int i =0; i < 1000;i++)
         {
             try {
-                tmp = new Company(String.valueOf(i), "13.09.1775", 30, 40, 50, 30, 687.9f, 789.0f,56.8f, 300, 132.4f);
+                tmp = new Company(String.valueOf(i), "13.09.1775", 30, 40, 50, 30, 687.9f, 789.0f,56.8f, 300, 1324);
                 if(clientIDs.contains(tmp.getClientID()))
                 {
                     return false;
@@ -75,8 +75,8 @@ public class CompanyTest {
     void makeStockMarket()
     {
         try{
-            company1  = new Company("CD Projekt SA", "13.09.1775", 30, 40, 50, 30, 687.9f, 789.0f,56.8f, 300, 132.4f);
-            company2  = new Company("not CD Projekt SA", "13.09.1775", 30, 40, 50, 30, 687.9f, 789.0f,56.8f, 300, 132.4f);
+            company1  = new Company("CD Projekt SA", "13.09.1775", 30, 40, 50, 30, 687.9f, 789.0f,56.8f, 300, 1324);
+            company2  = new Company("not CD Projekt SA", "13.09.1775", 30, 40, 50, 30, 687.9f, 789.0f,56.8f, 300, 1324);
         }catch (WrongValuableParamException e)
         {
             System.out.println(e.getMessage());
@@ -136,8 +136,9 @@ public class CompanyTest {
         assertTrue(company1.getAvailableValuableAmount("zloty") <= 8);
         assertEquals(company1.getAvailableValuableAmount(share2.getName()), 1);
 
+        Integer nowInWallet = company1.getAvailableValuableAmount("zloty");
         assertDoesNotThrow(() -> company1.transactionSell( share2, 1, stockMarket));
-        assertEquals(company1.getAvailableValuableAmount("zloty"), 10);
+        assertTrue(company1.getAvailableValuableAmount("zloty") > nowInWallet);
         assertEquals(company1.getAvailableValuableAmount(share2.getName()), 0);
         clearStockMarket();
     }

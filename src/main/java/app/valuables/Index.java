@@ -29,5 +29,18 @@ public class Index extends Valuable{
         ControlPanel.getInstance().addIndex(this);
     }
 
-    public void update(){}
+    @Override
+    public void updatePrice()
+    {
+        Integer result = 0;
+        for (Company company: listOfCompanies)
+        {
+            result += company.getShare().getPrice();
+        }
+        this.setPrice(result);
+    }
+
+    @Override
+    public void bought(Integer amount) {
+    }
 }
