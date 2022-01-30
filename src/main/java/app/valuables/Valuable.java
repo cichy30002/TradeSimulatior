@@ -48,13 +48,25 @@ public abstract class Valuable {
         return this.price + ThreadLocalRandom.current().nextInt((int) (-1*this.price*0.1), (int) (this.price*0.1));
     }
 
+    /**
+     * Method used to show how prices changed over time
+     * @return list of prices
+     */
     public ArrayList<Integer> getPriceHistory()
     {
         return new ArrayList<>(this.priceHistory);
     }
 
+    /**
+     * abstract method - each valuable needs to keep track how many times it was bought
+     * @param amount
+     */
     public abstract void bought(Integer amount);
 
+    /**
+     * @param amount
+     * @return true/false wether 
+     */
     public boolean canBuy(Integer amount)
     {
         return true;

@@ -46,7 +46,7 @@ public class Company extends MarketClient{
     }
 
     @Override
-    public Integer call() throws Exception {
+    protected Integer call() throws Exception {
         while(ControlPanel.getInstance().getSimulationState())
         {
             tryToMakeAction();
@@ -168,6 +168,10 @@ public class Company extends MarketClient{
         return soldShares;
     }
 
+    /**
+     * Method toupdate how many shares were sold.
+     * @param soldShares number of shares sold in given transaction.
+     */
     public void increaseSoldShares(Integer soldShares) {
         this.soldShares += soldShares;
     }

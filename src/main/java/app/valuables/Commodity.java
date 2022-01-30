@@ -68,6 +68,10 @@ public class Commodity extends Valuable{
         this.tradingVolume+=amount;
     }
 
+    /**
+     * keeps track how many times given commodity was bought and all commodities were bought.
+     * @param amount
+     */
     @Override
     public void bought(Integer amount) {
         increaseTradingVolume(amount);

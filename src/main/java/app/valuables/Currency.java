@@ -20,6 +20,10 @@ public class Currency extends Valuable{
         return legalCountries;
     }
 
+    /**
+     * Keeps track how many times this currency was bought.
+     * @param amount
+     */
     @Override
     public void bought(Integer amount) {
         increaseTradingVolume(amount);
@@ -28,10 +32,17 @@ public class Currency extends Valuable{
         return tradingVolume;
     }
 
+    /**
+     * Sets trading volume to 0.
+     */
     public void resetTradingVolume() {
         this.tradingVolume = 0;
     }
 
+    /**
+     * Increase trading volume by given amount.
+     * @param amount
+     */
     public void increaseTradingVolume(Integer amount)
     {
         this.tradingVolume+=amount;

@@ -43,6 +43,11 @@ public abstract class Market {
         return this.name;
     }
     public Float getMarginFee(){return this.marginFee;}
+
+    /**
+     * Method used to get all product names and their prices to show it on GUI.
+     * @return ArrayList<Pair<String, Integer>> list of all product in market with their sell price
+     */
     public ArrayList<Pair<String, Integer>> getProductsWithPrices()
     {
         ArrayList<Pair<String, Integer>> result = new ArrayList<>();
@@ -76,6 +81,11 @@ public abstract class Market {
         productsWithPrices.remove(toRemoveName);
     }
 
+    /**
+     * Method saying whether you can buy given product in this market.
+     * @param valuableName
+     * @return
+     */
     public boolean isProductInMarket(String valuableName)
     {
         return productsWithPrices.containsKey(valuableName);
@@ -89,6 +99,12 @@ public abstract class Market {
         return productsWithPrices.get(productName);
     }
 
+    /**
+     * Method that calculate sell price for given product and returns it.
+     * @param productName
+     * @return sell price for given product
+     * @throws MarketCollectionException
+     */
     public Integer getProductPriceSell(String productName) throws MarketCollectionException {
         if(!isProductInMarket(productName))
         {
@@ -103,6 +119,10 @@ public abstract class Market {
         int result = (int) (buyPrice*(1f-getMarginFee())/(1f+getMarginFee()));
         return Math.max(1, result);
     }
+
+    /**
+     * Method used to change prices to new ones.
+     */
     public void updatePrices()
     {
         productsWithPrices.replaceAll((p, v) -> calculateUpdatedPrice(ControlPanel.getInstance().getValuable(p)));

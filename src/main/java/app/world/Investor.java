@@ -17,11 +17,21 @@ public class Investor extends MarketClient
         ControlPanel.getInstance().addInvestor(this);
     }
 
+    /**
+     * Method which performs investor super ability: getting cash out of nowhere!
+     * Each usage of this ability gives at random 1-100 of random currency available in simulation.
+     * @throws TransactionException
+     */
     public void bonusFunds() throws TransactionException {
-        ArrayList<String> currencies = ControlPanel.getInstance().getAllCurrencies();
-        String currencyName = currencies.get(ThreadLocalRandom.current().nextInt(currencies.size()));
+        String currencyName = getRandomCurrency();
         int amount = ThreadLocalRandom.current().nextInt(1,100);
         this.addFunds(currencyName, amount);
+    }
+
+    private String getRandomCurrency() {
+        ArrayList<String> currencies = ControlPanel.getInstance().getAllCurrencies();
+        String currencyName = currencies.get(ThreadLocalRandom.current().nextInt(currencies.size()));
+        return currencyName;
     }
 
     @Override

@@ -29,6 +29,9 @@ public class Index extends Valuable{
         ControlPanel.getInstance().addIndex(this);
     }
 
+    /**
+     * Sets the index price to sum of shares prices
+     */
     @Override
     public void updatePrice()
     {
@@ -40,6 +43,10 @@ public class Index extends Valuable{
         this.setPrice(result);
     }
 
+    /**
+     * do nothin'
+     * @param amount
+     */
     @Override
     public void bought(Integer amount) {
     }

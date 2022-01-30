@@ -38,7 +38,7 @@ public class InvestmentFund extends MarketClient{
     }
 
     @Override
-    public Integer call() throws Exception {
+    protected Integer call() throws Exception {
         while(ControlPanel.getInstance().getSimulationState())
         {
             tryToMakeTransaction();
@@ -48,6 +48,13 @@ public class InvestmentFund extends MarketClient{
         return 0;
     }
 
+    /**
+     * Method allowing investors to give their money to VeRy ExPeRiEnCeD and TrUsTeD manager who will take care of their
+     * properties and hopefully increase it. The lack of "withdrawFromFund" method suggest that it is 100% legit no scam.
+     * @param newInvestor investor who wants to lose their money
+     * @param valuable type of money they wanna lose
+     * @param amount amount of money they wanna lose
+     */
     public synchronized void contributeToFund(Investor newInvestor, Valuable valuable, Integer amount)
     {
         if(clients.containsKey(newInvestor)) return;

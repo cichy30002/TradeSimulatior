@@ -10,6 +10,10 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Simulation extends Task{
     private ExecutorService executorService;
+
+    /**
+     * Start simulation with already existing world.
+     */
     public void startSimulation() {
         ArrayList<Task<Integer>> tasks = new ArrayList<>(ControlPanel.getInstance().getAllInvestors());
         tasks.addAll(ControlPanel.getInstance().getAllCompanies());
@@ -23,6 +27,10 @@ public class Simulation extends Task{
 
     }
 
+    /**
+     * Start performing newly added instance
+     * @param task market client
+     */
     public void simulateNewTask(Task task)
     {
         executorService.execute(task);

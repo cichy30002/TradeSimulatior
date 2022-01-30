@@ -21,6 +21,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FileInput {
+    /**
+     * Reads input from special file named "BasicInput.txt".
+     * Create all types of instances and add them to simulation
+     */
     public static void readFromBasicFile()
     {
         try (BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/inputFiles/BasicInput.txt"))){

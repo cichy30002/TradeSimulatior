@@ -33,6 +33,10 @@ public class ApplicationController
     private static TabPane mainTabs;
     private static Scene mainScene;
 
+    /**
+     * Initialize all javafx stuff to start application.
+     * @param scene
+     */
     public static void Init(Scene scene)
     {
         mainScene = scene;
@@ -114,6 +118,11 @@ public class ApplicationController
         lineChart.getData().add(series);
         return lineChart;
     }
+
+    /**
+     * Makes new tab with multi valuable plot and adds it to main window.
+     * @param actionEvent
+     */
     public void makeMultiPlot(ActionEvent actionEvent) {
         TextField field = (TextField) mainScene.lookup("#ValuableNames");
         Label message = (Label) mainScene.lookup("#ValuableNamesMessage");
@@ -317,6 +326,11 @@ public class ApplicationController
         return new VBox(listView, table);
     }
 
+
+    /**
+     * Handle change of transaction per second through GUI.
+     * @param e
+     */
     @FXML
     public void transactionPerSecondConfirmClicked(Event e)
     {
@@ -333,7 +347,10 @@ public class ApplicationController
         textField.clear();
         textField.setText(ControlPanel.getInstance().getTransactionsPerSecond().toString());
     }
-
+    /**
+     * Handle change of bull/bear ratio through GUI.
+     * @param e
+     */
     @FXML
     public void bullBearRatioConfirmClicked(Event e)
     {
@@ -350,18 +367,32 @@ public class ApplicationController
         textField.clear();
         textField.setText(ControlPanel.getInstance().getBullBearRatio().toString());
     }
+
+    /**
+     * handle adding new currency market through GUI
+     * @param actionEvent
+     */
     @FXML
     public void addCurrencyMarketClicked(ActionEvent actionEvent) {
         addMarket("Currency");
     }
+    /**
+     * handle adding new stock market through GUI
+     * @param actionEvent
+     */
     @FXML
     public void addStockMarketClicked(ActionEvent actionEvent) {
         addMarket("Stock");
     }
+    /**
+     * handle adding new commodity market through GUI
+     * @param actionEvent
+     */
     @FXML
     public void addCommodityMarketClicked(ActionEvent actionEvent) {
         addMarket("Commodity");
     }
+
     private void addMarket(String type)
     {
         TextField nameField = (TextField) mainScene.lookup("#" + type + "MarketName");
@@ -394,14 +425,26 @@ public class ApplicationController
             }
         }
     }
+    /**
+     * handle adding new investor through GUI
+     * @param actionEvent
+     */
     @FXML
     public void addInvestorClicked(ActionEvent actionEvent) {
         addMarketClient("Investor");
     }
+    /**
+     * handle adding new company through GUI
+     * @param actionEvent
+     */
     @FXML
     public void addCompanyClicked(ActionEvent actionEvent) {
         addMarketClient("Company");
     }
+    /**
+     * handle adding new investment fund through GUI
+     * @param actionEvent
+     */
     @FXML
     public void addInvestmentFundClicked(ActionEvent actionEvent) {
         addMarketClient("InvestmentFund");
@@ -424,6 +467,10 @@ public class ApplicationController
             message.setText(exception.getMessage());
         }
     }
+    /**
+     * handle adding new currency through GUI
+     * @param actionEvent
+     */
     @FXML
     public void addCurrencyClicked(ActionEvent actionEvent) {
         TextField nameField = (TextField)mainScene.lookup("#CurrencyName");
@@ -445,6 +492,10 @@ public class ApplicationController
             }
         }
     }
+    /**
+     * handle adding new commodity through GUI
+     * @param actionEvent
+     */
     @FXML
     public void addCommodityClicked(ActionEvent actionEvent) {
         TextField nameField = (TextField)mainScene.lookup("#CommodityName");
@@ -471,6 +522,10 @@ public class ApplicationController
             }
         }
     }
+    /**
+     * handle adding new index through GUI
+     * @param actionEvent
+     */
     @FXML
     public void addIndexClicked(ActionEvent actionEvent) {
         TextField nameField = (TextField)mainScene.lookup("#IndexName");

@@ -52,6 +52,13 @@ public class Generator {
         cities.put("Poland", tmp);
     }
 
+    /**
+     * Generate new semi-random stock market.
+     * @param name
+     * @param marginFee
+     * @param currency
+     * @throws AppInputException
+     */
     public void generateStockMarket(String name, String marginFee, String currency) throws AppInputException
     {
         if(marginFee.length() == 0)
@@ -135,6 +142,13 @@ public class Generator {
          return result;
     }
 
+    /**
+     * Generate new semi-random currency market.
+     * @param name
+     * @param marginFee
+     * @param currency
+     * @throws AppInputException
+     */
     public void generateCurrencyMarket(String name, String marginFee, String currency) throws AppInputException
     {
         if(marginFee.length() == 0)
@@ -155,6 +169,14 @@ public class Generator {
             System.out.println(e.getMessage());
         }
     }
+
+    /**
+     * Generate new semi-random commodity market.
+     * @param name
+     * @param marginFee
+     * @param currency
+     * @throws AppInputException
+     */
     public void generateCommodityMarket(String name, String marginFee, String currency) throws AppInputException
     {
         if(marginFee.length() == 0)
@@ -176,6 +198,11 @@ public class Generator {
         }
     }
 
+    /**
+     * Generate new semi-random investor.
+     * @param name
+     * @throws AppInputException
+     */
     public void generateInvestor(String name)throws AppInputException
     {
         if(ControlPanel.getInstance().investorExist(name))
@@ -206,6 +233,11 @@ public class Generator {
 
     }
 
+    /**
+     * Generate new semi-random company.
+     * @param name
+     * @throws AppInputException
+     */
     public void generateCompany(String name)throws AppInputException
     {
         if(ControlPanel.getInstance().companyExist(name))
@@ -242,6 +274,11 @@ public class Generator {
 
     }
 
+    /**
+     * Generate new semi-random investment fund.
+     * @param name
+     * @throws AppInputException
+     */
     public void generateInvestmentFund(String name)throws AppInputException
     {
         if(ControlPanel.getInstance().investmentFundExist(name))
@@ -263,6 +300,12 @@ public class Generator {
         return new InvestmentFund(name, managerName, managerSurname);
     }
 
+    /**
+     * Generate new semi-random currency.
+     * @param name
+     * @param price
+     * @throws AppInputException
+     */
     public void generateCurrency(String name, String price) throws AppInputException
     {
         if(ControlPanel.getInstance().currencyExist(name))
@@ -303,6 +346,13 @@ public class Generator {
         return result;
     }
 
+    /**
+     * Generate new semi-random commodity.
+     * @param name
+     * @param price
+     * @param tradingUnit
+     * @throws AppInputException
+     */
     public void generateCommodity(String name, String price, String tradingUnit) throws AppInputException
     {
         if(ControlPanel.getInstance().commodityExist(name))
@@ -327,6 +377,13 @@ public class Generator {
         }
     }
 
+    /**
+     * Generate new semi-random index.
+     * @param name
+     * @param market
+     * @param noCompanies
+     * @throws AppInputException
+     */
     public void generateIndex(String name, String market, String noCompanies) throws AppInputException
     {
         if(ControlPanel.getInstance().indexExist(name))

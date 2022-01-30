@@ -38,6 +38,10 @@ public class StockMarket extends Market{
             this.productsWithPrices.put(index.getName(), 0);
         }
     }
+
+    /**
+     * Changes internal structure to matching with parent class and then changes prices to new ones
+     */
     public void updatePricesStock()
     {
         putSharesAndIndexesToProducts();

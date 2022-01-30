@@ -14,6 +14,10 @@ public class Share extends Valuable{
         ControlPanel.getInstance().addShare(this);
     }
 
+    /**
+     * Updates share's company variables that keep track how many times share was bought.
+     * @param amount
+     */
     @Override
     public void bought(Integer amount) {
         this.company.increaseTotalSales(amount);
@@ -21,6 +25,10 @@ public class Share extends Valuable{
         this.company.increaseSoldShares(amount);
     }
 
+    /**
+     * @param amount amount of shares it ask for
+     * @return if there still are available shares
+     */
     @Override
     public boolean canBuy(Integer amount)
     {
