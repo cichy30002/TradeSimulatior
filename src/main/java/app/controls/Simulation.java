@@ -1,6 +1,7 @@
 package app.controls;
 
 import app.world.Company;
+import app.world.Investor;
 import javafx.concurrent.Task;
 
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ public class Simulation extends Task{
             executorService.execute(task);
         }
         executorService.execute(this);
-
+        //test();
     }
 
     /**
@@ -53,4 +54,16 @@ public class Simulation extends Task{
         }
         return 0;
     }
+    void test()
+    {
+        while(ControlPanel.getInstance().getSimulationState())
+        {
+            for(String valuableName : ControlPanel.getInstance().getAllValuables())
+            {
+                ControlPanel.getInstance().getValuable(valuableName).updatePrice();
+            }
+            System.out.println("xd");
+        }
+    }
+
 }

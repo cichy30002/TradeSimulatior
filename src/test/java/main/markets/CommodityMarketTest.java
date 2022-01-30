@@ -73,7 +73,7 @@ public class CommodityMarketTest {
         makeCommodityMarket();
 
         try {
-            assertTrue(455 < commodityMarket.getProductPriceBuy(commodity1.getName()));
+            assertTrue(100 < commodityMarket.getProductPriceBuy(commodity1.getName()));
         } catch (MarketCollectionException e) {
             e.printStackTrace();
         }

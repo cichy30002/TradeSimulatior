@@ -75,7 +75,6 @@ public class Commodity extends Valuable{
     @Override
     public void bought(Integer amount) {
         increaseTradingVolume(amount);
-        setTradingVolumeTotal(getTradingVolumeTotal()+1);
     }
     /*
     @Override

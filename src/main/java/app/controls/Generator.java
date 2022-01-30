@@ -19,6 +19,7 @@ import app.world.MarketClient;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Generator {
     private final Random RNG;
@@ -29,6 +30,7 @@ public class Generator {
     private final int maxWalletAmount;
     private final float chanceForWallet;
     private final float fundChance;
+    private int assetCounter;
 
     public Generator()
     {
@@ -38,6 +40,7 @@ public class Generator {
         chanceForWallet = 0.3f;
         fundChance = 0.5f;
         maxWalletAmount = 10000;
+        assetCounter = 0;
     }
 
     private void makeAddresses() {
@@ -224,7 +227,7 @@ public class Generator {
             if(RNG.nextFloat()<chanceForWallet)
             {
                 try {
-                    client.addFunds(currency, RNG.nextInt(maxWalletAmount));
+                    client.addFunds(currency, RNG.nextInt(1,maxWalletAmount));
                 } catch (TransactionException e) {
                     e.printStackTrace();
                 }
@@ -264,6 +267,7 @@ public class Generator {
         Float capital = 123456f;
         Integer tradingVolume = RNG.nextInt(100) * 100;
         Integer totalSales = 456789;
+        increaseAssetCounter();
         try {
             return new Company(name, ipoDate, ipoShareValue, openingPrice, minPrice, maxPrice, profit, revenue,
                     capital, tradingVolume, totalSales);
@@ -325,6 +329,7 @@ public class Generator {
         } catch (WrongValuableParamException e) {
             e.printStackTrace();
         }
+        increaseAssetCounter();
     }
 
     private int checkPrice(String price) throws AppInputException{
@@ -375,6 +380,7 @@ public class Generator {
         } catch (WrongValuableParamException e) {
             System.out.println("Failed commodity generation " + e.getMessage());
         }
+        increaseAssetCounter();
     }
 
     /**
@@ -430,6 +436,26 @@ public class Generator {
             Index index = new Index(name, priceInt, listOfCompaniesNames);
         } catch (WrongValuableParamException e) {
             System.out.println("Failed commodity generation " + e.getMessage());
+        }
+        increaseAssetCounter();
+    }
+    private void increaseAssetCounter()
+    {
+        this.assetCounter++;
+        if(this.assetCounter%9 == 0)
+        {
+            try {
+                generateInvestmentFund("automaticFound" + ThreadLocalRandom.current().nextInt(1000));
+            } catch (AppInputException e) {
+                e.printStackTrace();
+            }
+        }else if(this.assetCounter%3 == 0)
+        {
+            try {
+                generateInvestor("automaticInvestor" + ThreadLocalRandom.current().nextInt(1000));
+            } catch (AppInputException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

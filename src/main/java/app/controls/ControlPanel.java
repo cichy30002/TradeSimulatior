@@ -23,8 +23,8 @@ public class ControlPanel {
     private final HashMap<String, CurrencyMarket> currencyMarkets;
     private final HashMap<String, CommodityMarket> commodityMarkets;
     private final ObservableList<String> marketNames;
-    private Float bullBearRatio;
-    private Integer transactionsPerSecond;
+    private volatile Float bullBearRatio;
+    private volatile Integer transactionsPerSecond;
     private final HashMap<String, Investor> investors;
     private final ObservableList<String> investorNames;
     private final HashMap<String, Company> companies;
@@ -49,7 +49,7 @@ public class ControlPanel {
         this.commodityMarkets = new HashMap<>();
         this.marketNames = FXCollections.observableArrayList();
 
-        this.bullBearRatio = 1.0f;
+        this.bullBearRatio = 0.3f;
         this.transactionsPerSecond = 5;
 
         this.investors = new HashMap<>();
@@ -335,9 +335,9 @@ public class ControlPanel {
         {
             throw new AppInputException("Input is not a correct number!");
         }
-        if(transactions <= 0 || transactions >= 100)
+        if(transactions <= 0 || transactions >= 40)
         {
-            throw new AppInputException("Number is out of range (0, 100)");
+            throw new AppInputException("Number is out of range (0, 40)");
         }
         this.transactionsPerSecond = transactions;
     }
@@ -355,9 +355,9 @@ public class ControlPanel {
         {
             throw new AppInputException("Input is not a correct number!");
         }
-        if(ratio < -100f || ratio > 100f)
+        if(ratio < -1f || ratio > 1f)
         {
-            throw new AppInputException("Number is out of range (-100, 100)");
+            throw new AppInputException("Number is out of range (-1, 1)");
         }
         this.bullBearRatio = ratio;
     }
@@ -444,5 +444,12 @@ public class ControlPanel {
 
     public Simulation getSimulation() {
         return this.simulation;
+    }
+
+    /**
+     * @return return number of market clients (investors, companies and funds) in simulation
+     */
+    public int countMarketClients() {
+        return investors.keySet().size() + companies.keySet().size() + investmentFunds.keySet().size();
     }
 }

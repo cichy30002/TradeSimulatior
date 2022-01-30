@@ -10,17 +10,19 @@ Amazon 31.02.2022 2800 110 220 50 3200.00 4400.00 5800.00 2900 4850
 Microsoft 31.02.2022 2800 110 220 50 3200.00 4400.00 5800.00 2900 4850
 Apple 31.02.2022 2800 110 220 50 3200.00 4400.00 5800.00 2900 4850
 5
-Jan_Kiwlenko
+JuriOwsienko
 Anon
 Linijkarz
 Cejrowski
 Najman
-5
+7
 zloty 22 Poland
 euro 100 Austria;Belgium;Cyprus;Estonia;Finland;France;Germany;Greece;Ireland;Italy;Latvia;Lithuania;Luxembourg;Malta;Netherlands;Portugal;Slovakia;Slovenia;Spain
 franc 96 Switzerland;Liechtenstein
 dollar 87 United_States
 pound 120  United_Kingdom;Jersey;Guernsey;Isle_of_Man;Gibraltar;South_Georgia;South_Sandwich_Islands;British_Antarctic_Territory;Tristan_da_Cunha
+yen 1 Japan
+yuan 15 China
 6
 gold 182600 ounce 160000 250000
 silver 2315 ounce 1500 5000
@@ -28,15 +30,27 @@ platinum 98300 ounce 70000 130000
 palladium 191600 ounce 160000 250000
 oil 8246 barrel 3000 20000
 uranium 4550 250_Pfund_U308 1000 10000
-2
-pap3 300 Orlen;Lotos;Orlen&Lotos
-pap1 500 Apple
-1
-coins 0.03 euro zloty;euro;franc;dollar
-1
-stuff 0.04 dollar silver;gold;oil;uranium
-2
-papiery 0.05 zloty Orlen;Lotos;CCC;Allegro;PZU;CD_Projekt_Red Poland Poznan Roosevelta_143/25 pap3
+5
+pap3 5000 Orlen;Lotos;Orlen&Lotos
+pap1 3000 Apple
+g2 5000 CCC;PZU
+g2.1 4000 Lotos;Apple
+wig3 8000 CCC;Allegro;PZU
+5
+monety 0.02 zloty euro;franc;pound;yen
+coins 0.03 euro zloty;euro;franc;dollar;yuan
+banknoty 0.01 pound euro;dollar;zloty;franc
+blaszki 0.01 yen yuan;euro;dollar
+kamyki 0.02 franc pound;dollar;euro
+4
+stuff 0.04 yen silver;gold;oil;uranium
+metals 0.01 euro gold;silver;platinum;palladium
+specialForUSA 0.02 dollar oil
+otherStuff 0.03 franc uranium;palladium;platinum
+4
+gpw 0.05 zloty Orlen;Lotos;CCC;Allegro;PZU;CD_Projekt_Red Poland Poznan Roosevelta_143/25 wig3
 papers 0.03 dollar Amazon;Microsoft;Apple USA New_York Great_avenue_89/12 pap1
+gieuda 0.02 pound CCC;PZU;Lotos;Apple GB Londyn just_a_street_67 g2;g2.1
+papiery 0.01 yuan Amazon;Microsoft;Orlen;Lotos;Orlen&Lotos China Pekin ping_pong_4 pap3
 1
 great_idea Mateusz Stawski

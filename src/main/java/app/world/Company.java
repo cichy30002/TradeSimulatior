@@ -50,7 +50,7 @@ public class Company extends MarketClient{
         while(ControlPanel.getInstance().getSimulationState())
         {
             tryToMakeAction();
-            Thread.sleep(1000);
+            randomSleep();
         }
         System.out.println(getName() +"died");
         return 0;

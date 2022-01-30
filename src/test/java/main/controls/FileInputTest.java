@@ -16,7 +16,7 @@ public class FileInputTest {
         assertTrue(ControlPanel.getInstance().companyExist("Lotos"));
         assertTrue(ControlPanel.getInstance().companyExist("Orlen&Lotos"));
 
-        assertTrue(ControlPanel.getInstance().investorExist("Jan_Kiwlenko"));
+        assertTrue(ControlPanel.getInstance().investorExist("Najman"));
 
         assertTrue(ControlPanel.getInstance().currencyExist("zloty"));
         assertTrue(ControlPanel.getInstance().currencyExist("euro"));

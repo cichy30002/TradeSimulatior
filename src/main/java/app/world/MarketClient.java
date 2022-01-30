@@ -103,6 +103,7 @@ public abstract class MarketClient extends Task<Integer> {
         try {
             addToWallet(market.getCurrency(), market.getProductPriceSell(valuableToSell.getName()) * amount);
         } catch (MarketCollectionException e) {
+
             e.printStackTrace();
         }
         valuableToSell.bought(amount);
@@ -228,13 +229,13 @@ public abstract class MarketClient extends Task<Integer> {
     private int findRandomAmount(Market randomMarket, Pair<String, Integer> randomProduct) {
         int maxAmountToBuy = (int)Math.floor((float)getAvailableValuableAmount(randomMarket.getCurrency())/(float)randomProduct.getValue());
         if(maxAmountToBuy == 0) return 0;
+        if(maxAmountToBuy == 1) return 1;
         return ThreadLocalRandom.current().nextInt(1,maxAmountToBuy);
     }
 
     private Pair<String, Integer> findRandomProduct(Market randomMarket) {
         ArrayList<Pair<String, Integer>> productsWithPrices = randomMarket.getProductsWithPrices();
-        Pair<String, Integer> randomProduct = productsWithPrices.get(ThreadLocalRandom.current().nextInt(productsWithPrices.size()));
-        return randomProduct;
+        return productsWithPrices.get(ThreadLocalRandom.current().nextInt(productsWithPrices.size()));
     }
 
     void tryTransactionSell(Market randomMarket)
@@ -254,6 +255,7 @@ public abstract class MarketClient extends Task<Integer> {
     private int getRandomAmountToSell(Pair<String, Integer> randomProduct)
     {
         int maxAmountToSell = getAvailableValuableAmount(randomProduct.getKey());
+        if(maxAmountToSell == 1) return 1;
         return ThreadLocalRandom.current().nextInt(1,maxAmountToSell);
     }
     private ArrayList<Pair<String, Integer>> getAllProductAvailableToSell(Market randomMarket) {
@@ -269,7 +271,7 @@ public abstract class MarketClient extends Task<Integer> {
         return possibleToSell;
     }
 
-    void tryToMakeTransaction() {
+    synchronized void  tryToMakeTransaction() {
         ArrayList<String> marketNames = ControlPanel.getInstance().getAllMarketNames();
         Market randomMarket = ControlPanel.getInstance().getMarket(marketNames.get(ThreadLocalRandom.current().nextInt(marketNames.size())));
         if(isValuableInWallet(randomMarket.getCurrency()))
@@ -287,5 +289,11 @@ public abstract class MarketClient extends Task<Integer> {
         {
             tryTransactionSell(randomMarket);
         }
+    }
+    void randomSleep() throws InterruptedException {
+        int count = ControlPanel.getInstance().countMarketClients();
+        int trans = ControlPanel.getInstance().getTransactionsPerSecond();
+        float randomMultiplier = 0.75f + ThreadLocalRandom.current().nextFloat()/2;
+        Thread.sleep((int)(count/trans*1000*randomMultiplier));
     }
 }

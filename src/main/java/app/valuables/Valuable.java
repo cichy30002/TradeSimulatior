@@ -1,5 +1,6 @@
 package app.valuables;
 
+import app.controls.ControlPanel;
 import app.exceptions.WrongValuableParamException;
 
 import java.util.ArrayList;
@@ -8,7 +9,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class Valuable {
     private final String name;
-    private Integer price;
+    private volatile Integer price;
     private final ArrayList<Integer> priceHistory;
 
     protected Valuable(String name, Integer price) throws WrongValuableParamException {
@@ -40,12 +41,20 @@ public abstract class Valuable {
 
     public void updatePrice()
     {
-        this.setPrice(calculateUpdatedPrice());
+        this.setPrice(Math.max(1, calculateUpdatedPrice()));
     }
 
      Integer calculateUpdatedPrice()
     {
-        return this.price + ThreadLocalRandom.current().nextInt((int) (-1*this.price*0.1), (int) (this.price*0.1));
+        int randomChange = (int) (this.price*0.1) + 1;
+        if(ControlPanel.getInstance().getBullBearRatio() > 0)
+        {
+            randomChange = ThreadLocalRandom.current().nextInt((int)(randomChange*-1*(1-ControlPanel.getInstance().getBullBearRatio())) -1, randomChange + 1);
+        }else
+        {
+            randomChange = ThreadLocalRandom.current().nextInt((int)(randomChange*-1*(1-ControlPanel.getInstance().getBullBearRatio())) -1, (int)(randomChange*-1*(1+ControlPanel.getInstance().getBullBearRatio())) + 1);
+        }
+        return this.price + randomChange;
     }
 
     /**

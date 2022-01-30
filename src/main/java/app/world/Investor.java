@@ -30,8 +30,7 @@ public class Investor extends MarketClient
 
     private String getRandomCurrency() {
         ArrayList<String> currencies = ControlPanel.getInstance().getAllCurrencies();
-        String currencyName = currencies.get(ThreadLocalRandom.current().nextInt(currencies.size()));
-        return currencyName;
+        return currencies.get(ThreadLocalRandom.current().nextInt(currencies.size()));
     }
 
     @Override
@@ -39,7 +38,7 @@ public class Investor extends MarketClient
         while(ControlPanel.getInstance().getSimulationState())
         {
             tryToMakeAction();
-            Thread.sleep(1000);
+            randomSleep();
         }
         System.out.println(getName() +"died");
         return 0;
@@ -67,11 +66,11 @@ public class Investor extends MarketClient
         ArrayList<InvestmentFund> investmentFunds = new ArrayList<>(investmentFundsCol);
         ArrayList<Pair<String, Integer>> wallet = getWallet();
         Pair<String, Integer> randomPosition = wallet.get(ThreadLocalRandom.current().nextInt(wallet.size()));
-        //investmentFunds.get(ThreadLocalRandom.current().nextInt(investmentFunds.size())).contributeToFund(
-             //   this, ControlPanel.getInstance().getValuable(randomPosition.getKey()),
-             //   ThreadLocalRandom.current().nextInt(1,randomPosition.getValue()));
+        int randomAmount = randomPosition.getValue()<=1 ?  1 :  ThreadLocalRandom.current().nextInt(1,randomPosition.getValue());
+        investmentFunds.get(ThreadLocalRandom.current().nextInt(investmentFunds.size())).contributeToFund(
+                this, ControlPanel.getInstance().getValuable(randomPosition.getKey()),
+                randomAmount);
     }
-
 
 
 }

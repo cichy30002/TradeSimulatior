@@ -123,7 +123,7 @@ public abstract class Market {
     /**
      * Method used to change prices to new ones.
      */
-    public void updatePrices()
+    public synchronized void updatePrices()
     {
         productsWithPrices.replaceAll((p, v) -> calculateUpdatedPrice(ControlPanel.getInstance().getValuable(p)));
     }

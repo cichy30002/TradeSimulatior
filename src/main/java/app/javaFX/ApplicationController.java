@@ -281,9 +281,9 @@ public class ApplicationController
         items.add("ClientID: " + company.getClientID());
         items.add("IPO Date: " + company.getIPODate());
         items.add("IPO Share value: " + company.getIPOShareValue());
-        items.add("Opening price: " + String.format("%.2f",company.getOpeningPrice()/100.0));
-        items.add("Maximum price: " + String.format("%.2f",company.getMaxPrice()/100.0));
-        items.add("Minimum price: " + String.format("%.2f",company.getMinPrice()/100.0));
+        items.add("Opening price: " + company.getOpeningPrice());
+        items.add("Maximum price: " + company.getMaxPrice());
+        items.add("Minimum price: " + company.getMinPrice());
         items.add("Profit: " + company.getProfit());
         items.add("Revenue: " + company.getRevenue());
         items.add("Capital: " + company.getCapital());
@@ -360,12 +360,14 @@ public class ApplicationController
         try {
             ControlPanel.getInstance().setBullBearRatio(textField.getText());
             message.setText("Correctly changed bull-bear ratio to: " + ControlPanel.getInstance().getBullBearRatio());
+            textField.clear();
         }catch(Exception exception)
         {
             message.setText(exception.getMessage());
         }
         textField.clear();
         textField.setText(ControlPanel.getInstance().getBullBearRatio().toString());
+
     }
 
     /**
@@ -561,7 +563,7 @@ public class ApplicationController
         public ProductWithPrice(String productName, Integer price)
         {
             this.productName = new SimpleStringProperty( productName);
-            this.price = new SimpleStringProperty(String.format("%.2f",price/100.0));
+            this.price = new SimpleStringProperty(price.toString());
 
         }
 
@@ -617,8 +619,8 @@ public class ApplicationController
         {
             this.valuableName = new SimpleStringProperty(valuable.getName());
             this.amount = new SimpleStringProperty(amount.toString());
-            this.price = new SimpleStringProperty(String.format("%.2f",valuable.getPrice()/100.0));
-            this.totalPrice = new SimpleStringProperty(String.format("%.2f",valuable.getPrice()/100.0*amount));
+            this.price = new SimpleStringProperty(String.valueOf(valuable.getPrice()));
+            this.totalPrice = new SimpleStringProperty(String.valueOf(valuable.getPrice()*amount));
         }
 
         public String getValuableName() {

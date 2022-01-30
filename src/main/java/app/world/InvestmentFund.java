@@ -1,6 +1,7 @@
 package app.world;
 
 import app.controls.ControlPanel;
+import app.exceptions.TransactionException;
 import app.valuables.Valuable;
 
 import java.util.HashMap;
@@ -17,7 +18,7 @@ public class InvestmentFund extends MarketClient{
         this.managerSurname = managerSurname;
         this.clients = new HashMap<>();
         ControlPanel.getInstance().addInvestmentFund(this);
-
+        this.totalBudget = 0;
     }
 
     public String getManagerName() {
@@ -42,7 +43,7 @@ public class InvestmentFund extends MarketClient{
         while(ControlPanel.getInstance().getSimulationState())
         {
             tryToMakeTransaction();
-            Thread.sleep(1000);
+            randomSleep();
         }
         System.out.println(getName() +"died");
         return 0;
@@ -65,16 +66,18 @@ public class InvestmentFund extends MarketClient{
         }
         Integer valueToAdd = valuable.getPrice() * amount;
         tmp.put(newInvestor, valueToAdd);
-        System.out.println("xd2" + newInvestor.getName());
         this.setTotalBudget(this.getTotalBudget() + valueToAdd);
 
         clients.clear();
-        System.out.println("xd1");
         for(Investor investor : tmp.keySet())
         {
             clients.put(investor, (float)tmp.get(investor)/(float)totalBudget);
         }
-        System.out.println(newInvestor.getName() + " contributed to fund " + this.getName());
+        try {
+            addToWallet(valuable.getName(), amount);
+        } catch (TransactionException e) {
+            e.printStackTrace();
+        }
     }
 
 }

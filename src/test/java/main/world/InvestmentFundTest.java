@@ -78,7 +78,7 @@ public class InvestmentFundTest {
         commodities.add(commodity1.getName());
         commodities.add(commodity2.getName());
         try {
-            commodityMarket = new CommodityMarket("kamyki", 2f, currency.getName(), commodities);
+            commodityMarket = new CommodityMarket("kamyki3", 0.2f, currency.getName(), commodities);
         } catch (WrongMarketParamException e) {
             System.out.println("Failed makeCommodityMarket: " + e.getMessage());
         }
